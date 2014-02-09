@@ -1,0 +1,93 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>mpld3 &mdash; MPLD3: Bringing Matplotlib to the Browser</title>
+    
+    <link rel="stylesheet" href="../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/print.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/theme_extras.js"></script>
+    <link rel="top" title="MPLD3: Bringing Matplotlib to the Browser" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body>
+      <div class="header"><h1 class="heading"><a href="../index.html">
+          <span>MPLD3: Bringing Matplotlib to the Browser</span></a></h1>
+        <h2 class="heading"><span>mpld3</span></h2>
+      </div>
+      <div class="topnav">
+      
+        <p>
+        <a class="uplink" href="../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <h1>Source code for mpld3</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">mpld3: interactive D3 rendering of matplotlib images</span>
+<span class="sd">====================================================</span>
+
+<span class="sd">Functions: General Use</span>
+<span class="sd">----------------------</span>
+<span class="sd">- ``fig_to_d3`` : convert a figure to an html string</span>
+
+<span class="sd">- ``show_d3`` : save a figure to HTML, and open in a web browser window</span>
+
+
+<span class="sd">Functions: IPython Notebook</span>
+<span class="sd">---------------------------</span>
+<span class="sd">- ``display_d3`` : display a figure in an IPython notebook</span>
+
+<span class="sd">- ``enable_notebook`` : enable automatic D3 display of figures</span>
+<span class="sd">                        in the IPython notebook.</span>
+
+<span class="sd">- ``disable_notebook`` : disable automatic D3 display of figures</span>
+<span class="sd">                         in the IPython</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">__version__</span> <span class="o">=</span> <span class="s">&#39;0.0.1&#39;</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;fig_to_d3&quot;</span><span class="p">,</span> <span class="s">&quot;display_d3&quot;</span><span class="p">,</span> <span class="s">&quot;show_d3&quot;</span><span class="p">,</span>
+           <span class="s">&quot;enable_notebook&quot;</span><span class="p">,</span> <span class="s">&quot;disable_notebook&quot;</span><span class="p">]</span>
+
+<span class="kn">from</span> <span class="nn">.display</span> <span class="kn">import</span> <span class="n">fig_to_d3</span><span class="p">,</span> <span class="n">display_d3</span><span class="p">,</span> <span class="n">show_d3</span>
+<span class="kn">from</span> <span class="nn">.display</span> <span class="kn">import</span> <span class="n">enable_notebook</span><span class="p">,</span> <span class="n">disable_notebook</span>
+</pre></div>
+
+      </div>
+      <div class="bottomnav">
+      
+        <p>
+        <a class="uplink" href="../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, Jake Vanderplas.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

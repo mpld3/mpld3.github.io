@@ -1,0 +1,107 @@
+
+
+.. raw:: html
+
+    <style type="text/css">
+    .figure {
+        float: left;
+        margin: 10px;
+        width: 180px;
+        height: 200px;
+    }
+
+    .figure img {
+        display: inline;
+        width: 170px;
+        height: 170px;
+        opacity:0.4;
+        filter:alpha(opacity=40); /* For IE8 and earlier */
+    }
+
+    .figure img:hover
+    {
+        opacity:1.0;
+        filter:alpha(opacity=100); /* For IE8 and earlier */
+    }
+
+    .figure .caption {
+        width: 180px;
+        text-align: center !important;
+    }
+    </style>
+
+.. _example-gallery:
+
+Example Gallery
+===============
+
+
+
+.. toctree::
+   :hidden:
+
+   ./custom_plugin
+
+   ./heart_path
+
+   ./html_tooltips
+
+   ./multiaxes
+
+   ./random_walk
+
+   ./scatter_tooltip
+
+   ./show_image
+
+
+
+
+
+.. figure:: ./custom_plugin.png
+    :target: ./custom_plugin.html
+    :align: center
+
+    :ref:`custom_plugin`
+
+.. figure:: ./heart_path.png
+    :target: ./heart_path.html
+    :align: center
+
+    :ref:`heart_path`
+
+.. figure:: ./html_tooltips.png
+    :target: ./html_tooltips.html
+    :align: center
+
+    :ref:`html_tooltips`
+
+.. figure:: ./multiaxes.png
+    :target: ./multiaxes.html
+    :align: center
+
+    :ref:`multiaxes`
+
+.. figure:: ./random_walk.png
+    :target: ./random_walk.html
+    :align: center
+
+    :ref:`random_walk`
+
+.. figure:: ./scatter_tooltip.png
+    :target: ./scatter_tooltip.html
+    :align: center
+
+    :ref:`scatter_tooltip`
+
+.. figure:: ./show_image.png
+    :target: ./show_image.html
+    :align: center
+
+    :ref:`show_image`
+
+
+
+.. raw:: html
+
+    <div style="clear: both"></div>

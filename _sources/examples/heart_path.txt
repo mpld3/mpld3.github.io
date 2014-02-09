@@ -1,0 +1,707 @@
+
+.. _heart_path:
+
+
+Patches and Paths
+=================
+This is a demo adapted from a `matplotlib gallery example
+<http://matplotlib.org/examples/shapes_and_collections/path_patch_demo.html>`_
+
+
+.. raw:: html
+    
+    
+    
+    
+    
+    
+        <style>
+    
+    
+        div#figure43511d53786646d5b776f8f9f92c9996
+        .axesbg{
+            fill: #FFFFFF;
+        }
+    
+    
+    
+    div#figure43511d53786646d5b776f8f9f92c9996
+    .axis line, .axis path {
+        shape-rendering: crispEdges;
+        stroke: black;
+        fill: none;
+    }
+    
+    div#figure43511d53786646d5b776f8f9f92c9996
+    .axis text {
+        font-family: sans-serif;
+        font-size: 12.0px;
+        fill: black;
+        stroke: none;
+    }
+    
+    
+    
+    div#figure43511d53786646d5b776f8f9f92c9996
+    .axis line, .axis path {
+        shape-rendering: crispEdges;
+        stroke: black;
+        fill: none;
+    }
+    
+    div#figure43511d53786646d5b776f8f9f92c9996
+    .axis text {
+        font-family: sans-serif;
+        font-size: 12.0px;
+        fill: black;
+        stroke: none;
+    }
+    
+    
+    
+    div#figure43511d53786646d5b776f8f9f92c9996
+    .grid .tick {
+      stroke: #808080;
+      stroke-dasharray: 2,2;
+      stroke-opacity: 0.5;
+    }
+    
+    div#figure43511d53786646d5b776f8f9f92c9996
+    .grid path {
+      stroke-width: 0;
+    }
+    
+    
+    
+    div#figure43511d53786646d5b776f8f9f92c9996
+    .grid .tick {
+      stroke: #808080;
+      stroke-dasharray: 2,2;
+      stroke-opacity: 0.5;
+    }
+    
+    div#figure43511d53786646d5b776f8f9f92c9996
+    .grid path {
+      stroke-width: 0;
+    }
+    
+    
+    
+    div#figure43511d53786646d5b776f8f9f92c9996
+    .axes1
+    path.patch1a07ac15642b49c0bc6c4802f81587a9 {
+        stroke: #000000;
+        stroke-width: 1.0;
+        stroke-dasharray: 10,0;
+        fill: #FF0000;
+        stroke-opacity: 0.5;
+        fill-opacity: 0.5;
+    }
+    
+    
+    
+    div#figure43511d53786646d5b776f8f9f92c9996
+    .axes1
+    path.line5 {
+        stroke: #007F00;
+        stroke-width: 1.0;
+        stroke-dasharray: 10,0;
+        fill: none;
+        stroke-opacity: 1;
+    }
+    
+    div#figure43511d53786646d5b776f8f9f92c9996
+    .axes1
+    path.points5 {
+        stroke-width: 0.5;
+        stroke: #000000;
+        fill: #007F00;
+        fill-opacity: 1;
+        stroke-opacity: 1;
+    }
+    
+    
+    
+    div#figure43511d53786646d5b776f8f9f92c9996
+    text.text893409b3c18a410daf1970de5cf9672b {
+       font-size : 12.0px;
+       fill : #000000;
+       opacity : 1;
+    }
+    
+    
+    
+    div#figure43511d53786646d5b776f8f9f92c9996
+    text.text47adc55268d641e1800bf278bc7ba80c {
+       font-size : 12.0px;
+       fill : #000000;
+       opacity : 1;
+    }
+    
+    
+    
+    div#figure43511d53786646d5b776f8f9f92c9996
+    text.text481f53a617a4432ba0fbf21ab0b8a158 {
+       font-size : 14.4px;
+       fill : #000000;
+       opacity : 1;
+    }
+    
+    
+    
+    
+    
+        </style>
+    
+    
+    
+        <div id='figure43511d53786646d5b776f8f9f92c9996'>
+        </div>
+        <script type="text/javascript">
+        var create_fig43511d53786646d5b776f8f9f92c9996 = function(d3, undefined){
+    
+    
+        function Figure(figid, width, height){
+          this.figid = figid;
+          this.root = d3.select(figid);
+          this.width = width;
+          this.height = height;
+          this.axes = [];
+        }
+    
+        Figure.prototype.draw = function(){
+          this.canvas = this.root.append('svg:svg')
+                                     .attr('class', 'figure')
+                                     .attr('width', this.width)
+                                     .attr('height', this.height);
+          for (var i=0; i<this.axes.length; i++){
+            this.axes[i].draw();
+          }
+        };
+    
+        Figure.prototype.reset = function(duration){
+          duration = (typeof duration !== 'undefined') ? duration : 750;
+          for (var i=0; i<this.axes.length; i++){
+            this.axes[i].prep_reset();
+          }
+    
+          var transition = function(t){
+            for (var i=0; i<this.axes.length; i++){
+              this.axes[i].xdom(this.axes[i].xdom.domain(this.axes[i].ix(t)));
+              this.axes[i].ydom(this.axes[i].ydom.domain(this.axes[i].iy(t)));
+    
+              // don't propagate: this will be done as part of the loop.
+              this.axes[i].zoomed(false);
+            }
+          }.bind(this)
+    
+          d3.transition().duration(duration)
+                         .tween("zoom", function(){return transition;});
+    
+          for (var i=0; i<this.axes.length; i++){
+            this.axes[i].finalize_reset();
+          }
+        };
+    
+    
+    
+        function Axes(fig, bbox,
+                      xlim, ylim,
+                      xscale, yscale,
+                      xdomain, ydomain,
+                      xgridOn, ygridOn,
+                      axclass, clipid,
+                      zoomable){
+          this.axnum = fig.axes.length;
+          fig.axes.push(this);
+    
+          this.fig = fig;
+          this.bbox = bbox;
+          this.xlim = xlim;
+          this.ylim = ylim;
+          this.xdomain = xdomain;
+          this.ydomain = ydomain;
+          this.xscale = xscale;
+          this.yscale = yscale;
+          this.xgridOn = xgridOn;
+          this.ygridOn = ygridOn;
+          this.axclass = (typeof axclass !== 'undefined') ? axclass : "axes";
+          this.clipid = (typeof clipid != 'undefined') ? clipid : "clip";
+          this.zoomable = zoomable;
+    
+          this.sharex = [];
+          this.sharey = [];
+          this.elements = [];
+    
+          this.position = [this.bbox[0] * this.fig.width,
+                           (1 - this.bbox[1] - this.bbox[3]) * this.fig.height];
+          this.width = bbox[2] * this.fig.width;
+          this.height = bbox[3] * this.fig.height;
+    
+          if(this.xscale === 'log'){
+            this.xdom = d3.scale.log();
+          }else if(this.xscale === 'date'){
+            this.xdom = d3.time.scale();
+          }else{
+            this.xdom = d3.scale.linear();
+          }
+    
+          if(this.yscale === 'log'){
+            this.ydom = d3.scale.log();
+          }else if(this.yscale === 'date'){
+            this.ydom = d3.time.scale();
+          }else{
+            this.ydom = d3.scale.linear();
+          }
+    
+          this.xdom.domain(this.xdomain)
+                .range([0, this.width]);
+    
+          this.ydom.domain(this.ydomain)
+                .range([this.height, 0]);
+    
+          if(this.xscale === 'date'){
+             this.xmap = d3.time.scale()
+                               .domain(this.xdomain)
+                               .range(this.xlim);
+             this.x = function(x){return this.xdom(this.xmap.invert(x));}
+          }else if(this.xscale === 'log'){
+             this.xmap = this.xdom;
+             this.x = this.xdom;
+          }else{
+             this.xmap = this.xdom;
+             this.x = this.xdom;
+          }
+    
+          if(this.yscale === 'date'){
+             this.ymap = d3.time.scale()
+                                  .domain(this.ydomain)
+                                  .range(this.ylim);
+             this.y = function(y){return this.ydom(this.ymap.invert(y));}
+          }else if(this.xscale === 'log'){
+             this.ymap = this.ydom;
+             this.y = this.ydom;
+          }else{
+             this.ymap = this.ydom;
+             this.y = this.ydom;
+          }
+        }
+    
+        Axes.prototype.draw = function(){
+          this.zoom = d3.behavior.zoom()
+                              .x(this.xdom)
+                              .y(this.ydom)
+                              .on("zoom", this.zoomed.bind(this));
+    
+          this.baseaxes = this.fig.canvas.append("g")
+                                 .attr('transform', 'translate('
+                                                     + this.position[0] + ','
+                                                     + this.position[1] + ')')
+                                 .attr('width', this.width)
+                                 .attr('height', this.height)
+                                 .attr('class', "baseaxes");
+    
+          if(this.zoomable){
+            this.baseaxes.call(this.zoom);
+          }
+    
+          this.axesbg = this.baseaxes.append("svg:rect")
+                                 .attr("width", this.width)
+                                 .attr("height", this.height)
+                                 .attr("class", "axesbg");
+    
+          this.clip = this.baseaxes.append("svg:clipPath")
+                              .attr("id", this.clipid)
+                              .append("svg:rect")
+                                 .attr("x", 0)
+                                 .attr("y", 0)
+                                 .attr("width", this.width)
+                                 .attr("height", this.height)
+    
+          this.axes = this.baseaxes.append("g")
+                               .attr("class", this.axclass)
+                               .attr("clip-path", "url(#" + this.clipid + ")");
+    
+          for(var i=0; i<this.elements.length; i++){
+            this.elements[i].draw();
+          }
+        };
+    
+        Axes.prototype.zoomed = function(propagate){
+          // propagate is a boolean specifying whether to propagate movements
+          // to shared axes, specified by sharex and sharey.  Default is true.
+          propagate = (typeof propagate == 'undefined') ? true : propagate;
+    
+          //console.log(this.zoom.translate());
+          //console.log(this.zoom.scale());
+          //console.log(this.zoom.x().domain());
+          //console.log(this.zoom.y().domain());
+    
+          for(var i=0; i<this.elements.length; i++){
+            this.elements[i].zoomed();
+          }
+    
+          t = this.zoom.translate();
+          s = this.zoom.scale();
+          if(propagate){
+            // update shared y axes
+            for(var i=0; i<this.sharey.length; i++){
+              ti = this.sharey[i].zoom.translate();
+              this.sharey[i].zoom.translate([ti[0], t[1]]);
+              this.sharey[i].zoom.scale(s);
+            }
+            // update shared x axes
+            for(var i=0; i<this.sharex.length; i++){
+              ti = this.sharex[i].zoom.translate();
+              this.sharex[i].zoom.translate([t[0], ti[1]]);
+              this.sharex[i].zoom.scale(s);
+            }
+            // render updates to shared x axes
+            for(var i=0; i<this.sharey.length; i++){
+              this.sharey[i].zoomed(false);
+            }
+            // render updates to shared y axes
+            for(var i=0; i<this.sharex.length; i++){
+              this.sharex[i].zoomed(false);
+            }
+          }
+        };
+    
+        Axes.prototype.add_element = function(element){
+          this.elements.push(element);
+        };
+    
+        Axes.prototype.prep_reset = function(){
+          // interpolate() does not work on dates, so we map dates to numbers,
+          // interpolate the numbers, and then invert the map.
+          // we use the same strategy for log, so the interpolation will be smooth.
+          // There probably is a cleaner approach...
+    
+          if (this.xscale === 'date'){
+            var start = this.xdom.domain();
+            var end = this.xdomain;
+            var interp = d3.interpolate(
+                    [this.xmap(start[0]), this.xmap(start[1])],
+                    [this.xmap(end[0]), this.xmap(end[1])]);
+            this.ix = function(t){
+              return [this.xmap.invert(interp(t)[0]),
+                      this.xmap.invert(interp(t)[1])];
+            }
+          }else{
+            this.ix = d3.interpolate(this.xdom.domain(), this.xlim);
+          }
+    
+          if (this.yscale === 'date'){
+            var start = this.ydom.domain();
+            var end = this.ydomain;
+            var interp = d3.interpolate(
+                    [this.ymap(start[0]), this.ymap(start[1])],
+                    [this.ymap(end[0]), this.ymap(end[1])]);
+            this.iy = function(t){
+              return [this.ymap.invert(interp(t)[0]),
+                      this.ymap.invert(interp(t)[1])];
+            }
+          }else{
+            this.iy = d3.interpolate(this.ydom.domain(), this.ylim);
+          }
+        }
+    
+        Axes.prototype.finalize_reset = function(){
+          this.zoom.scale(1).translate([0, 0]);
+        }
+    
+        Axes.prototype.reset = function(){
+          this.prep_reset();
+          d3.transition().duration(750).tween("zoom", function() {
+            return function(t) {
+              this.zoom.x(this.xdom.domain(this.ix(t)))
+                       .y(this.ydom.domain(this.iy(t)));
+              this.zoomed();
+            };
+          });
+          this.finalize_reset();
+        };
+    
+    
+    
+        function Axis(axes, position, nticks, tickvalues, tickformat){
+          this.axes = axes;
+          this.position = position;
+          this.nticks = nticks;
+          this.tickvalues = tickvalues;
+          this.tickformat = tickformat;
+          if (position == "bottom"){
+            this.transform = "translate(0," + this.axes.height + ")";
+            this.scale = this.axes.xdom;
+            this.class = "x axis";
+          }else if (position == "top"){
+            this.transform = "translate(0,0)"
+            this.scale = this.axes.xdom;
+            this.class = "x axis";
+          }else if (position == "left"){
+            this.transform = "translate(0,0)";
+            this.scale = this.axes.ydom;
+            this.class = "y axis";
+          }else{
+            this.transform = "translate(" + this.axes.width + ",0)";
+            this.scale = this.axes.ydom;
+            this.class = "y axis";
+          }
+        }
+    
+        Axis.prototype.draw = function(){
+          this.axis = d3.svg.axis()
+                              .scale(this.scale)
+                              .orient(this.position)
+                              .ticks(this.nticks)
+                              .tickValues(this.tickvalues)
+                              .tickFormat(this.tickformat);
+          this.elem = this.axes.baseaxes.append('g')
+                            .attr("transform", this.transform)
+                            .attr("class", this.class)
+                            .call(this.axis);
+        };
+    
+        Axis.prototype.zoomed = function(){
+          this.elem.call(this.axis);
+        };
+    
+    
+    
+        function Grid(axes, xy){
+          this.axes = axes;
+          this.class = xy + " grid"
+          if(xy == "x"){
+            this.transform = "translate(0," + this.axes.height + ")";
+            this.position = "bottom";
+            this.scale = this.axes.xdom;
+            this.tickSize = -this.axes.height;
+          }else{
+            this.transform = "translate(0,0)";
+            this.position = "left";
+            this.scale = this.axes.ydom;
+            this.tickSize = -this.axes.width;
+          }
+        }
+    
+        Grid.prototype.draw = function(){
+          this.grid = d3.svg.axis()
+                              .scale(this.scale)
+                              .orient(this.position)
+                              .tickSize(this.tickSize, 0, 0)
+                              .tickFormat("");
+          this.elem = this.axes.axes.append("g")
+                              .attr("class", this.class)
+                              .attr("transform", this.transform)
+                              .call(this.grid);
+        };
+    
+        Grid.prototype.zoomed = function(){
+          this.elem.call(this.grid);
+        };
+    
+    
+    
+        // This function constructs a mapped SVG path
+        // from an input data array
+        var construct_SVG_path = function(data, xmap, ymap){
+           xmap = (typeof xmap !== 'undefined') ? xmap : function(x){return x;};
+           ymap = (typeof ymap !== 'undefined') ? ymap : function(y){return y;};
+           var result = "";
+           for (var i=0;i<data.length;i++){
+              result += data[i][0];
+              if(data[i][0] == 'Z'){
+                continue;
+              }
+              for (var j=0;j<data[i][1].length;j++){
+                if(j % 2 == 0){
+                   result += " " + xmap(data[i][1][j]);
+                }else{
+                   result += " " + ymap(data[i][1][j]);
+                }
+              }
+              result += " ";
+           }
+           return result;
+         };
+    
+    
+          var figwidth = 8.0 * 80;
+          var figheight = 6.0 * 80;
+          var fig = new Figure("div#figure43511d53786646d5b776f8f9f92c9996",
+                               figwidth, figheight);
+    
+    
+    
+        var ax1 = new Axes(fig, [0.125, 0.099999999999999978, 0.77500000000000002, 0.80000000000000004], [-4.020833333333333, 5.020833333333333], [-3.0, 4.0],
+                                   "linear", "linear",
+                                   [-4.020833333333333, 5.020833333333333], [-3.0, 4.0],
+                                   true, true,
+                                   "axes1",
+                                   "clip43511d53786646d5b776f8f9f92c99961", true);
+    
+    
+    
+    // Add an Axis element
+    ax1.add_element(new Axis(ax1, "bottom",
+                                     7, null,
+                                     null));
+    
+    
+    
+    // Add an Axis element
+    ax1.add_element(new Axis(ax1, "left",
+                                     8, null,
+                                     null));
+    
+    
+    
+    // Add a Grid element
+    ax1.add_element(new Grid(ax1, "x"));
+    
+    
+    
+    // Add a Grid element
+    ax1.add_element(new Grid(ax1, "y"));
+    
+    
+    
+    // Add a Patch element
+    var patch1a07ac15642b49c0bc6c4802f81587a9 = new function(){
+      this.data = [["M", [1.58, -2.57]], ["C", [0.35, -1.1, -1.75, 2.0, 0.375, 2.0]], ["L", [0.85, 1.15]], ["C", [2.2, 3.2, 3.0, 0.05, 2.0, -0.5]], ["Z", [1.58, -2.57]]];
+      this.ax = ax1;
+    
+      this.draw = function(){
+        this.patch = this.ax.axes.append("svg:path")
+                       .attr("d", construct_SVG_path(this.data,
+                                                     this.ax.x,
+                                                     this.ax.y))
+                       .attr("vector-effect", "non-scaling-stroke")
+                       .attr('class', 'patch1a07ac15642b49c0bc6c4802f81587a9');
+      };
+    
+      this.zoomed = function(){
+    
+          this.patch.attr("d", construct_SVG_path(this.data,
+                                                  this.ax.x,
+                                                  this.ax.y));
+    
+      };
+    };
+    
+    ax1.add_element(patch1a07ac15642b49c0bc6c4802f81587a9);
+    
+    
+    
+    // Add a Line2D element
+    var line286eaf2b78234ac8997e0881b7ca8229 = new function(){
+     this.data = [[1.58, -2.57], [0.35, -1.1], [-1.75, 2.0], [0.375, 2.0], [0.85, 1.15], [2.2, 3.2], [3.0, 0.05], [2.0, -0.5], [1.58, -2.57]];
+     this.ax = ax1;
+    
+     this.translate = function(d)
+       { return "translate(" + this.ax.x(d[0]) + ","
+                             + this.ax.y(d[1]) + ")"; };
+    
+     this.draw = function(){
+    
+         this.line = d3.svg.line()
+              .x(function(d) {return this.ax.x(d[0]);})
+              .y(function(d) {return this.ax.y(d[1]);})
+              .interpolate("linear")
+              .defined(function (d) {return !isNaN(d[0]) && !isNaN(d[1]); });
+    
+         this.lineobj = this.ax.axes.append("svg:path")
+                             .attr("d", this.line(this.data))
+                             .attr('class', 'line5');
+    
+    
+         this.pointsobj = this.ax.axes.append("svg:g")
+             .selectAll("scatter-dots-5")
+               .data(this.data.filter(
+                           function(d){return !isNaN(d[0]) && !isNaN(d[1]); }))
+               .enter().append("svg:path")
+                   .attr('class', 'points5')
+                   .attr("d", construct_SVG_path([["M", [0.0, 3.0]], ["C", [0.7956093000000001, 3.0, 1.5587396123545605, 2.683901074764725, 2.121320343559643, 2.121320343559643]], ["C", [2.683901074764725, 1.5587396123545605, 3.0, 0.7956093000000001, 3.0, 0.0]], ["C", [3.0, -0.7956093000000001, 2.683901074764725, -1.5587396123545605, 2.121320343559643, -2.121320343559643]], ["C", [1.5587396123545605, -2.683901074764725, 0.7956093000000001, -3.0, 0.0, -3.0]], ["C", [-0.7956093000000001, -3.0, -1.5587396123545605, -2.683901074764725, -2.121320343559643, -2.121320343559643]], ["C", [-2.683901074764725, -1.5587396123545605, -3.0, -0.7956093000000001, -3.0, 0.0]], ["C", [-3.0, 0.7956093000000001, -2.683901074764725, 1.5587396123545605, -2.121320343559643, 2.121320343559643]], ["C", [-1.5587396123545605, 2.683901074764725, -0.7956093000000001, 3.0, 0.0, 3.0]], ["Z", [0.0, 3.0]]]))
+                   .attr("transform", this.translate.bind(this));
+    
+     };
+    
+     this.zoomed = function(){
+    
+    
+            this.lineobj.attr("d", this.line(this.data));
+    
+    
+            this.pointsobj.attr("transform", this.translate.bind(this));
+    
+    
+     }
+    };
+    
+    ax1.add_element(line286eaf2b78234ac8997e0881b7ca8229);
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+          fig.draw();
+    
+    
+    
+          return fig
+        }
+    
+        // set a timeout of 0: this makes things work in the IPython notebook
+        setTimeout(function(){
+          // we need to call the function, making sure d3 is defined appropriately
+          if(typeof define === "function" && define.amd){
+            // If require.js is available, use it to load d3
+            require.config({paths: {d3: "http://d3js.org/d3.v3.min"}});
+            require(["d3"], create_fig43511d53786646d5b776f8f9f92c9996);
+          }else if(typeof d3 === "undefined"){
+            // No require.js: dynamically load d3
+            var s = document.createElement('script');
+            s.src = "http://d3js.org/d3.v3.min.js";
+            s.async = true;
+            s.onreadystatechange = s.onload = s.onerror = function() {
+               if(typeof d3 === "undefined"){
+                  document.getElementById("figure43511d53786646d5b776f8f9f92c9996").innerHTML =
+                        "<p style='color:red;'>(d3 failed to load)</p>";
+               }else{
+                  create_fig43511d53786646d5b776f8f9f92c9996(d3);
+               }
+            };
+            document.getElementsByTagName("head")[0].appendChild(s);
+          }else{
+            // d3 is already globally loaded
+            create_fig43511d53786646d5b776f8f9f92c9996(d3);
+          }
+        }, 0);
+    
+        </script>
+    
+    
+    
+    
+
+**Python source code:** :download:`[download source: heart_path.py]<heart_path.py>`
+
+.. literalinclude:: heart_path.py
+    :lines: 7-

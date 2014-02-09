@@ -1,0 +1,522 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>API documentation &mdash; MPLD3: Bringing Matplotlib to the Browser</title>
+    
+    <link rel="stylesheet" href="../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/print.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/theme_extras.js"></script>
+    <link rel="top" title="MPLD3: Bringing Matplotlib to the Browser" href="../index.html" />
+    <link rel="prev" title="Notebook Examples" href="../notebooks/index.html" /> 
+  </head>
+  <body>
+      <div class="header"><h1 class="heading"><a href="../index.html">
+          <span>MPLD3: Bringing Matplotlib to the Browser</span></a></h1>
+        <h2 class="heading"><span>API documentation</span></h2>
+      </div>
+      <div class="topnav">
+      
+        <p>
+        «&#160;&#160;<a href="../notebooks/index.html">Notebook Examples</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="module-mpld3">
+<span id="api-documentation"></span><h1>API documentation<a class="headerlink" href="#module-mpld3" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="mpld3-interactive-d3-rendering-of-matplotlib-images">
+<h2>mpld3: interactive D3 rendering of matplotlib images<a class="headerlink" href="#mpld3-interactive-d3-rendering-of-matplotlib-images" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="functions-general-use">
+<h3>Functions: General Use<a class="headerlink" href="#functions-general-use" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">fig_to_d3</span></tt> : convert a figure to an html string</li>
+<li><tt class="docutils literal"><span class="pre">show_d3</span></tt> : save a figure to HTML, and open in a web browser window</li>
+</ul>
+</div>
+<div class="section" id="functions-ipython-notebook">
+<h3>Functions: IPython Notebook<a class="headerlink" href="#functions-ipython-notebook" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p class="first"><tt class="docutils literal"><span class="pre">display_d3</span></tt> : display a figure in an IPython notebook</p>
+</li>
+<li><dl class="first docutils">
+<dt><tt class="docutils literal"><span class="pre">enable_notebook</span></tt> <span class="classifier-delimiter">:</span> <span class="classifier">enable automatic D3 display of figures</span></dt>
+<dd><p class="first last">in the IPython notebook.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><tt class="docutils literal"><span class="pre">disable_notebook</span></tt> <span class="classifier-delimiter">:</span> <span class="classifier">disable automatic D3 display of figures</span></dt>
+<dd><p class="first last">in the IPython</p>
+</dd>
+</dl>
+</li>
+</ul>
+<dl class="function">
+<dt id="mpld3.fig_to_d3">
+<tt class="descclassname">mpld3.</tt><tt class="descname">fig_to_d3</tt><big>(</big><em>fig</em>, <em>d3_url=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#mpld3.fig_to_d3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Output d3 representation of the figure</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>fig</strong> : matplotlib figure</p>
+<blockquote>
+<div><p>The figure to display</p>
+</div></blockquote>
+<p><strong>d3_url</strong> : string (optional)</p>
+<blockquote>
+<div><p>The URL of the d3 library.  If not specified, a standard web path
+will be used.</p>
+</div></blockquote>
+<p><strong>**kwargs :</strong> :</p>
+<blockquote>
+<div><p>Additional keyword arguments passed to D3Figure.html</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>fig_html</strong> : string</p>
+<blockquote class="last">
+<div><p>the HTML representation of the figure</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><tt class="xref py py-obj docutils literal"><span class="pre">-</span></tt>, <tt class="xref py py-obj docutils literal"><span class="pre">notebook</span></tt>, <tt class="xref py py-obj docutils literal"><span class="pre">-</span></tt>, <tt class="xref py py-obj docutils literal"><span class="pre">-</span></tt></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="mpld3.display_d3">
+<tt class="descclassname">mpld3.</tt><tt class="descname">display_d3</tt><big>(</big><em>fig=None</em>, <em>closefig=True</em>, <em>d3_url=None</em><big>)</big><a class="headerlink" href="#mpld3.display_d3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display figure in IPython notebook via the HTML display hook</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>fig</strong> : matplotlib figure</p>
+<blockquote>
+<div><p>The figure to display (grabs current figure if missing)</p>
+</div></blockquote>
+<p><strong>closefig</strong> : boolean (default: True)</p>
+<blockquote>
+<div><p>If true, close the figure so that the IPython matplotlib mode will not
+display the png version of the figure.</p>
+</div></blockquote>
+<p><strong>d3_url</strong> : string (optional)</p>
+<blockquote>
+<div><p>The URL of the d3 library.  If not specified, a standard web path
+will be used.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>fig_d3</strong> : IPython.display.HTML object</p>
+<blockquote class="last">
+<div><p>the IPython HTML rich display of the figure.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><tt class="xref py py-obj docutils literal"><span class="pre">-</span></tt>, <tt class="xref py py-obj docutils literal"><span class="pre">notebook</span></tt>, <tt class="xref py py-obj docutils literal"><span class="pre">-</span></tt></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="mpld3.show_d3">
+<tt class="descclassname">mpld3.</tt><tt class="descname">show_d3</tt><big>(</big><em>fig=None</em>, <em>d3_url=None</em>, <em>ip='127.0.0.1'</em>, <em>port=8888</em>, <em>n_retries=50</em><big>)</big><a class="headerlink" href="#mpld3.show_d3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open figure in a web browser</p>
+<p>Similar behavior to plt.show().  This opens the D3 visualization of the
+specified figure in the web browser.  On most platforms, the browser
+will open automatically.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>fig</strong> : matplotlib figure</p>
+<blockquote>
+<div><p>The figure to display.  If not specified, the current active figure
+will be used.</p>
+</div></blockquote>
+<p><strong>d3_url</strong> : string (optional)</p>
+<blockquote>
+<div><p>The URL of the d3 library.  If not specified, a standard web path
+will be used.</p>
+</div></blockquote>
+<p><strong>ip</strong> : string, default = &#8216;127.0.0.1&#8217;</p>
+<blockquote>
+<div><p>the ip address used for the local server</p>
+</div></blockquote>
+<p><strong>port</strong> : int, default = 8888</p>
+<blockquote>
+<div><p>the port number to use for the local server.  If already in use,
+a nearby open port will be found (see n_retries)</p>
+</div></blockquote>
+<p><strong>n_retries</strong> : int, default = 50</p>
+<blockquote class="last">
+<div><p>the maximum number of ports to try when locating an empty port.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><tt class="xref py py-obj docutils literal"><span class="pre">-</span></tt>, <tt class="xref py py-obj docutils literal"><span class="pre">-</span></tt></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="mpld3.enable_notebook">
+<tt class="descclassname">mpld3.</tt><tt class="descname">enable_notebook</tt><big>(</big><em>d3_url=None</em><big>)</big><a class="headerlink" href="#mpld3.enable_notebook" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enable the automatic display of figures in the IPython Notebook.</p>
+<p>This function should be used with the inline Matplotlib backend
+that ships with IPython that can be enabled with <cite>%pylab inline</cite>
+or <cite>%matplotlib inline</cite>. This works by adding an HTML formatter
+for Figure objects; the existing SVG/PNG formatters will remain
+enabled.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>d3_url</strong> : string (optional)</p>
+<blockquote class="last">
+<div><p>if specified, then find the d3 library at the provided URL</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><tt class="xref py py-obj docutils literal"><span class="pre">-</span></tt>, <tt class="xref py py-obj docutils literal"><span class="pre">-</span></tt></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="mpld3.disable_notebook">
+<tt class="descclassname">mpld3.</tt><tt class="descname">disable_notebook</tt><big>(</big><big>)</big><a class="headerlink" href="#mpld3.disable_notebook" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disable the automatic display of figures in the IPython Notebook.</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><tt class="xref py py-obj docutils literal"><span class="pre">-</span></tt></p>
+</div>
+</dd></dl>
+
+</div>
+</div>
+<span class="target" id="module-mpld3.plugins"></span><p>Plugins to add behavior to mpld3 charts</p>
+<dl class="function">
+<dt id="mpld3.plugins.connect">
+<tt class="descclassname">mpld3.plugins.</tt><tt class="descname">connect</tt><big>(</big><em>fig</em>, <em>*plugins</em><big>)</big><a class="reference internal" href="../_modules/mpld3/plugins.html#connect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mpld3.plugins.connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Connect one or more plugins to a figure</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>fig</strong> : matplotlib Figure instance</p>
+<blockquote>
+<div><p>The figure to which the plugins will be connected</p>
+</div></blockquote>
+<p><strong>*plugins :</strong> :</p>
+<blockquote class="last">
+<div><p>Additional arguments should be plugins which will be connected
+to the figure.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">mpld3</span> <span class="kn">import</span> <span class="n">plugins</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lines</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="s">&#39;-k&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plugins</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">plugins</span><span class="o">.</span><span class="n">LineLabelTooltip</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="mpld3.plugins.PointLabelTooltip">
+<em class="property">class </em><tt class="descclassname">mpld3.plugins.</tt><tt class="descname">PointLabelTooltip</tt><big>(</big><em>points</em>, <em>labels=None</em>, <em>hoffset=0</em>, <em>voffset=10</em><big>)</big><a class="reference internal" href="../_modules/mpld3/plugins.html#PointLabelTooltip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mpld3.plugins.PointLabelTooltip" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Plugin to enable a tooltip: text which hovers over points.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>points</strong> : matplotlib Collection or Line2D object</p>
+<blockquote>
+<div><p>The figure element to apply the tooltip to</p>
+</div></blockquote>
+<p><strong>labels</strong> : array or None</p>
+<blockquote>
+<div><p>If supplied, specify the labels for each point in points.  If not
+supplied, the (x, y) values will be used.</p>
+</div></blockquote>
+<p><strong>hoffset, voffset</strong> : integer</p>
+<blockquote class="last">
+<div><p>The number of pixels to offset the tooltip text.  Default is
+hoffset = 0, voffset = 10</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">mpld3</span> <span class="kn">import</span> <span class="n">fig_to_d3</span><span class="p">,</span> <span class="n">plugins</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">points</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="s">&#39;o&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plugins</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">PointLabelTooltip</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig_to_d3</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">fig_js</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">generate_unique_id</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">html</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">js</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">set_figure</span></tt>(figure)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">style</span></tt>()</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="mpld3.plugins.PointHTMLTooltip">
+<em class="property">class </em><tt class="descclassname">mpld3.plugins.</tt><tt class="descname">PointHTMLTooltip</tt><big>(</big><em>points</em>, <em>labels=None</em>, <em>hoffset=0</em>, <em>voffset=10</em>, <em>css=None</em><big>)</big><a class="reference internal" href="../_modules/mpld3/plugins.html#PointHTMLTooltip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mpld3.plugins.PointHTMLTooltip" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Plugin to enable an HTML tooltip: formated text which hovers over points.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>points</strong> : matplotlib Collection or Line2D object</p>
+<blockquote>
+<div><p>The figure element to apply the tooltip to</p>
+</div></blockquote>
+<p><strong>labels</strong> : list</p>
+<blockquote>
+<div><p>The labels for each point in points, as strings of unescaped HTML.</p>
+</div></blockquote>
+<p><strong>hoffset, voffset</strong> : integer, optional</p>
+<blockquote>
+<div><p>The number of pixels to offset the tooltip text.  Default is
+hoffset = 0, voffset = 10</p>
+</div></blockquote>
+<p><strong>css</strong> : str, optional</p>
+<blockquote>
+<div><p>css to be included, for styling the label html if desired</p>
+</div></blockquote>
+<p><strong>Examples</strong> :</p>
+<p><strong>&#8212;&#8212;&#8211;</strong> :</p>
+<p><strong>&gt;&gt;&gt; import matplotlib.pyplot as plt</strong> :</p>
+<p><strong>&gt;&gt;&gt; from mpld3 import fig_to_d3, plugins</strong> :</p>
+<p><strong>&gt;&gt;&gt; fig, ax = plt.subplots()</strong> :</p>
+<p><strong>&gt;&gt;&gt; points = ax.plot(range(10), &#8216;o&#8217;)</strong> :</p>
+<p><strong>&gt;&gt;&gt; labels = [&#8216;&lt;h1&gt;{title}&lt;/h1&gt;&#8217;.format(title=i) for i in range(10)]</strong> :</p>
+<p><strong>&gt;&gt;&gt; plugins.connect(fig, PointHTMLTooltip(points[0], labels))</strong> :</p>
+<p class="last"><strong>&gt;&gt;&gt; fig_to_d3(fig)</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">fig_js</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">generate_unique_id</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">html</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">js</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">set_figure</span></tt>(figure)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">style</span></tt>()</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="mpld3.plugins.LineLabelTooltip">
+<em class="property">class </em><tt class="descclassname">mpld3.plugins.</tt><tt class="descname">LineLabelTooltip</tt><big>(</big><em>line</em>, <em>label</em>, <em>hoffset=0</em>, <em>voffset=10</em><big>)</big><a class="reference internal" href="../_modules/mpld3/plugins.html#LineLabelTooltip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mpld3.plugins.LineLabelTooltip" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Plugin to enable a tooltip: text which hovers over points.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>line</strong> : matplotlib Line2D object</p>
+<blockquote>
+<div><p>The figure element to apply the tooltip to</p>
+</div></blockquote>
+<p><strong>label</strong> : string</p>
+<p><strong>hoffset, voffset</strong> : integer</p>
+<blockquote class="last">
+<div><p>The number of pixels to offset the tooltip text.  Default is
+hoffset = 0, voffset = 10</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">mpld3</span> <span class="kn">import</span> <span class="n">fig_to_d3</span><span class="p">,</span> <span class="n">plugins</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">line</span><span class="p">,</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="s">&#39;-&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plugins</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">LineLabelTooltip</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="s">&#39;some label&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig_to_d3</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To label multiple lines, create multiple LineLabelToopTips.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lines</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span> <span class="n">x</span> <span class="p">,</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="s">&#39;-&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">line</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">lines</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">plugins</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">mpld3</span><span class="o">.</span><span class="n">plugins</span><span class="o">.</span><span class="n">LineLabelTooltip</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">label</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig_to_d3</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">fig_js</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">generate_unique_id</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">html</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">js</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">set_figure</span></tt>(figure)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">style</span></tt>()</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="mpld3.plugins.ResetButton">
+<em class="property">class </em><tt class="descclassname">mpld3.plugins.</tt><tt class="descname">ResetButton</tt><a class="reference internal" href="../_modules/mpld3/plugins.html#ResetButton"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mpld3.plugins.ResetButton" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Plugin to add a universal reset button</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">fig_js</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">generate_unique_id</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">html</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">js</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">set_figure</span></tt>(figure)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">style</span></tt>()</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+      </div>
+      <div class="bottomnav">
+      
+        <p>
+        «&#160;&#160;<a href="../notebooks/index.html">Notebook Examples</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, Jake Vanderplas.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
