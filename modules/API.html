@@ -28,7 +28,7 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/theme_extras.js"></script>
     <link rel="top" title="MPLD3: Bringing Matplotlib to the Browser" href="../index.html" />
-    <link rel="prev" title="Notebook Examples" href="../notebooks/index.html" /> 
+    <link rel="prev" title="mpld3_demo" href="../notebooks/mpld3_demo.html" /> 
   </head>
   <body>
       <div class="header"><h1 class="heading"><a href="../index.html">
@@ -38,7 +38,7 @@
       <div class="topnav">
       
         <p>
-        «&#160;&#160;<a href="../notebooks/index.html">Notebook Examples</a>
+        «&#160;&#160;<a href="../notebooks/mpld3_demo.html">mpld3_demo</a>
         &#160;&#160;::&#160;&#160;
         <a class="uplink" href="../index.html">Contents</a>
         </p>
@@ -49,28 +49,28 @@
         
   <div class="section" id="module-mpld3">
 <span id="api-documentation"></span><h1>API documentation<a class="headerlink" href="#module-mpld3" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="mpld3-interactive-d3-rendering-of-matplotlib-images">
-<h2>mpld3: interactive D3 rendering of matplotlib images<a class="headerlink" href="#mpld3-interactive-d3-rendering-of-matplotlib-images" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="interactive-d3-rendering-of-matplotlib-images">
+<h2>Interactive D3 rendering of matplotlib images<a class="headerlink" href="#interactive-d3-rendering-of-matplotlib-images" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="functions-general-use">
 <h3>Functions: General Use<a class="headerlink" href="#functions-general-use" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li><tt class="docutils literal"><span class="pre">fig_to_d3</span></tt> : convert a figure to an html string</li>
-<li><tt class="docutils literal"><span class="pre">show_d3</span></tt> : save a figure to HTML, and open in a web browser window</li>
+<li><a class="reference internal" href="#mpld3.fig_to_d3" title="mpld3.fig_to_d3"><tt class="xref py py-func docutils literal"><span class="pre">fig_to_d3()</span></tt></a> : convert a figure to an html string</li>
+<li><a class="reference internal" href="#mpld3.show_d3" title="mpld3.show_d3"><tt class="xref py py-func docutils literal"><span class="pre">show_d3()</span></tt></a> : save a figure to HTML, and open in a web browser window</li>
 </ul>
 </div>
 <div class="section" id="functions-ipython-notebook">
 <h3>Functions: IPython Notebook<a class="headerlink" href="#functions-ipython-notebook" title="Permalink to this headline">¶</a></h3>
 <ul>
-<li><p class="first"><tt class="docutils literal"><span class="pre">display_d3</span></tt> : display a figure in an IPython notebook</p>
+<li><p class="first"><a class="reference internal" href="#mpld3.display_d3" title="mpld3.display_d3"><tt class="xref py py-func docutils literal"><span class="pre">display_d3()</span></tt></a> : display a figure in an IPython notebook</p>
 </li>
 <li><dl class="first docutils">
-<dt><tt class="docutils literal"><span class="pre">enable_notebook</span></tt> <span class="classifier-delimiter">:</span> <span class="classifier">enable automatic D3 display of figures</span></dt>
+<dt><a class="reference internal" href="#mpld3.enable_notebook" title="mpld3.enable_notebook"><tt class="xref py py-func docutils literal"><span class="pre">enable_notebook()</span></tt></a> <span class="classifier-delimiter">:</span> <span class="classifier">enable automatic D3 display of figures</span></dt>
 <dd><p class="first last">in the IPython notebook.</p>
 </dd>
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt><tt class="docutils literal"><span class="pre">disable_notebook</span></tt> <span class="classifier-delimiter">:</span> <span class="classifier">disable automatic D3 display of figures</span></dt>
+<dt><a class="reference internal" href="#mpld3.disable_notebook" title="mpld3.disable_notebook"><tt class="xref py py-func docutils literal"><span class="pre">disable_notebook()</span></tt></a> <span class="classifier-delimiter">:</span> <span class="classifier">disable automatic D3 display of figures</span></dt>
 <dd><p class="first last">in the IPython</p>
 </dd>
 </dl>
@@ -109,7 +109,14 @@ will be used.</p>
 </table>
 <div class="admonition-see-also admonition seealso">
 <p class="first admonition-title">See also</p>
-<p class="last"><tt class="xref py py-obj docutils literal"><span class="pre">-</span></tt>, <tt class="xref py py-obj docutils literal"><span class="pre">notebook</span></tt>, <tt class="xref py py-obj docutils literal"><span class="pre">-</span></tt>, <tt class="xref py py-obj docutils literal"><span class="pre">-</span></tt></p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="#mpld3.show_d3" title="mpld3.show_d3"><tt class="xref py py-obj docutils literal"><span class="pre">show_d3</span></tt></a></dt>
+<dd>show a figure in a new browser window, notebook not required.</dd>
+<dt><a class="reference internal" href="#mpld3.display_d3" title="mpld3.display_d3"><tt class="xref py py-obj docutils literal"><span class="pre">display_d3</span></tt></a></dt>
+<dd>embed figure within the IPython notebook</dd>
+<dt><a class="reference internal" href="#mpld3.enable_notebook" title="mpld3.enable_notebook"><tt class="xref py py-obj docutils literal"><span class="pre">enable_notebook</span></tt></a></dt>
+<dd>automatically embed figures in the IPython notebook</dd>
+</dl>
 </div>
 </dd></dl>
 
@@ -147,7 +154,12 @@ will be used.</p>
 </table>
 <div class="admonition-see-also admonition seealso">
 <p class="first admonition-title">See also</p>
-<p class="last"><tt class="xref py py-obj docutils literal"><span class="pre">-</span></tt>, <tt class="xref py py-obj docutils literal"><span class="pre">notebook</span></tt>, <tt class="xref py py-obj docutils literal"><span class="pre">-</span></tt></p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="#mpld3.show_d3" title="mpld3.show_d3"><tt class="xref py py-obj docutils literal"><span class="pre">show_d3</span></tt></a></dt>
+<dd>show a figure in a new browser window, notebook not required.</dd>
+<dt><a class="reference internal" href="#mpld3.enable_notebook" title="mpld3.enable_notebook"><tt class="xref py py-obj docutils literal"><span class="pre">enable_notebook</span></tt></a></dt>
+<dd>automatically embed figures in the IPython notebook</dd>
+</dl>
 </div>
 </dd></dl>
 
@@ -191,7 +203,12 @@ a nearby open port will be found (see n_retries)</p>
 </table>
 <div class="admonition-see-also admonition seealso">
 <p class="first admonition-title">See also</p>
-<p class="last"><tt class="xref py py-obj docutils literal"><span class="pre">-</span></tt>, <tt class="xref py py-obj docutils literal"><span class="pre">-</span></tt></p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="#mpld3.display_d3" title="mpld3.display_d3"><tt class="xref py py-obj docutils literal"><span class="pre">display_d3</span></tt></a></dt>
+<dd>embed figure within the IPython notebook</dd>
+<dt><a class="reference internal" href="#mpld3.enable_notebook" title="mpld3.enable_notebook"><tt class="xref py py-obj docutils literal"><span class="pre">enable_notebook</span></tt></a></dt>
+<dd>automatically embed figures in the IPython notebook</dd>
+</dl>
 </div>
 </dd></dl>
 
@@ -218,7 +235,12 @@ enabled.</p>
 </table>
 <div class="admonition-see-also admonition seealso">
 <p class="first admonition-title">See also</p>
-<p class="last"><tt class="xref py py-obj docutils literal"><span class="pre">-</span></tt>, <tt class="xref py py-obj docutils literal"><span class="pre">-</span></tt></p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="#mpld3.disable_notebook" title="mpld3.disable_notebook"><tt class="xref py py-obj docutils literal"><span class="pre">disable_notebook</span></tt></a></dt>
+<dd>undo this operation</dd>
+<dt><a class="reference internal" href="#mpld3.display_d3" title="mpld3.display_d3"><tt class="xref py py-obj docutils literal"><span class="pre">display_d3</span></tt></a></dt>
+<dd>display a single figure in the notebook</dd>
+</dl>
 </div>
 </dd></dl>
 
@@ -228,13 +250,20 @@ enabled.</p>
 <dd><p>Disable the automatic display of figures in the IPython Notebook.</p>
 <div class="admonition-see-also admonition seealso">
 <p class="first admonition-title">See also</p>
-<p class="last"><tt class="xref py py-obj docutils literal"><span class="pre">-</span></tt></p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="#mpld3.enable_notebook" title="mpld3.enable_notebook"><tt class="xref py py-obj docutils literal"><span class="pre">enable_notebook</span></tt></a></dt>
+<dd>the operation this function undoes</dd>
+</dl>
 </div>
 </dd></dl>
 
 </div>
 </div>
-<span class="target" id="module-mpld3.plugins"></span><p>Plugins to add behavior to mpld3 charts</p>
+<span class="target" id="module-mpld3.plugins"></span><div class="section" id="plugins-to-add-behavior-to-mpld3-charts">
+<h2>Plugins to add behavior to mpld3 charts<a class="headerlink" href="#plugins-to-add-behavior-to-mpld3-charts" title="Permalink to this headline">¶</a></h2>
+<p>Plugins are means of adding additional javascript features to D3-rendered
+matplotlib plots.  A number of plugins are defined here; it is also possible
+to create nearly any imaginable behavior by defining your own custom plugin.</p>
 <dl class="function">
 <dt id="mpld3.plugins.connect">
 <tt class="descclassname">mpld3.plugins.</tt><tt class="descname">connect</tt><big>(</big><em>fig</em>, <em>*plugins</em><big>)</big><a class="reference internal" href="../_modules/mpld3/plugins.html#connect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mpld3.plugins.connect" title="Permalink to this definition">¶</a></dt>
@@ -501,13 +530,14 @@ hoffset = 0, voffset = 10</p>
 </dd></dl>
 
 </div>
+</div>
 
 
       </div>
       <div class="bottomnav">
       
         <p>
-        «&#160;&#160;<a href="../notebooks/index.html">Notebook Examples</a>
+        «&#160;&#160;<a href="../notebooks/mpld3_demo.html">mpld3_demo</a>
         &#160;&#160;::&#160;&#160;
         <a class="uplink" href="../index.html">Contents</a>
         </p>

@@ -57,21 +57,21 @@
     <style>
 
 
-    div#figure75b4e54ed50d4b87a320a1af49a2c143
+    div#figure02978f870b15472cb73513b409267ef3
     .axesbg{
         fill: #FFFFFF;
     }
 
 
 
-div#figure75b4e54ed50d4b87a320a1af49a2c143
+div#figure02978f870b15472cb73513b409267ef3
 .axis line, .axis path {
     shape-rendering: crispEdges;
     stroke: black;
     fill: none;
 }
 
-div#figure75b4e54ed50d4b87a320a1af49a2c143
+div#figure02978f870b15472cb73513b409267ef3
 .axis text {
     font-family: sans-serif;
     font-size: 12.0px;
@@ -81,14 +81,14 @@ div#figure75b4e54ed50d4b87a320a1af49a2c143
 
 
 
-div#figure75b4e54ed50d4b87a320a1af49a2c143
+div#figure02978f870b15472cb73513b409267ef3
 .axis line, .axis path {
     shape-rendering: crispEdges;
     stroke: black;
     fill: none;
 }
 
-div#figure75b4e54ed50d4b87a320a1af49a2c143
+div#figure02978f870b15472cb73513b409267ef3
 .axis text {
     font-family: sans-serif;
     font-size: 12.0px;
@@ -98,35 +98,35 @@ div#figure75b4e54ed50d4b87a320a1af49a2c143
 
 
 
-div#figure75b4e54ed50d4b87a320a1af49a2c143
+div#figure02978f870b15472cb73513b409267ef3
 .grid .tick {
   stroke: #000000;
   stroke-dasharray: 2,2;
   stroke-opacity: 0.3;
 }
 
-div#figure75b4e54ed50d4b87a320a1af49a2c143
+div#figure02978f870b15472cb73513b409267ef3
 .grid path {
   stroke-width: 0;
 }
 
 
 
-div#figure75b4e54ed50d4b87a320a1af49a2c143
+div#figure02978f870b15472cb73513b409267ef3
 .grid .tick {
   stroke: #000000;
   stroke-dasharray: 2,2;
   stroke-opacity: 0.3;
 }
 
-div#figure75b4e54ed50d4b87a320a1af49a2c143
+div#figure02978f870b15472cb73513b409267ef3
 .grid path {
   stroke-width: 0;
 }
 
 
 
-div#figure75b4e54ed50d4b87a320a1af49a2c143
+div#figure02978f870b15472cb73513b409267ef3
 .axes1
 path.line5 {
     stroke: #0000FF;
@@ -136,7 +136,7 @@ path.line5 {
     stroke-opacity: 0.6;
 }
 
-div#figure75b4e54ed50d4b87a320a1af49a2c143
+div#figure02978f870b15472cb73513b409267ef3
 .axes1
 path.points5 {
     stroke-width: 1;
@@ -148,8 +148,8 @@ path.points5 {
 
 
 
-div#figure75b4e54ed50d4b87a320a1af49a2c143
-text.text091c55379a7b47878270d463350242ce {
+div#figure02978f870b15472cb73513b409267ef3
+text.text0da921ae9c5c4447b1d2be7368f48f43 {
    font-size : 12.0px;
    fill : #000000;
    opacity : 1;
@@ -157,8 +157,8 @@ text.text091c55379a7b47878270d463350242ce {
 
 
 
-div#figure75b4e54ed50d4b87a320a1af49a2c143
-text.text4815fc0aa03043acaeb50ec68e0043e8 {
+div#figure02978f870b15472cb73513b409267ef3
+text.text21370cdd8a1e4785abd999031f986fe2 {
    font-size : 12.0px;
    fill : #000000;
    opacity : 1;
@@ -166,8 +166,8 @@ text.text4815fc0aa03043acaeb50ec68e0043e8 {
 
 
 
-div#figure75b4e54ed50d4b87a320a1af49a2c143
-text.texte2ed3ce2f53447849eeec33aeb598ea0 {
+div#figure02978f870b15472cb73513b409267ef3
+text.text9559b11168a0430f8739cd9dbb8894f9 {
    font-size : 20.0px;
    fill : #000000;
    opacity : 1;
@@ -181,10 +181,10 @@ text.texte2ed3ce2f53447849eeec33aeb598ea0 {
 
 
 
-    <div id='figure75b4e54ed50d4b87a320a1af49a2c143'>
+    <div id='figure02978f870b15472cb73513b409267ef3'>
     </div>
     <script type="text/javascript">
-    var create_fig75b4e54ed50d4b87a320a1af49a2c143 = function(d3, undefined){
+    var create_fig02978f870b15472cb73513b409267ef3 = function(d3, undefined){
 
 
     function Figure(figid, width, height){
@@ -367,28 +367,16 @@ text.texte2ed3ce2f53447849eeec33aeb598ea0 {
         this.elements[i].zoomed();
       }
 
-      t = this.zoom.translate();
-      s = this.zoom.scale();
       if(propagate){
-        // update shared y axes
-        for(var i=0; i<this.sharey.length; i++){
-          ti = this.sharey[i].zoom.translate();
-          this.sharey[i].zoom.translate([ti[0], t[1]]);
-          this.sharey[i].zoom.scale(s);
-        }
         // update shared x axes
         for(var i=0; i<this.sharex.length; i++){
-          ti = this.sharex[i].zoom.translate();
-          this.sharex[i].zoom.translate([t[0], ti[1]]);
-          this.sharex[i].zoom.scale(s);
-        }
-        // render updates to shared x axes
-        for(var i=0; i<this.sharey.length; i++){
-          this.sharey[i].zoomed(false);
-        }
-        // render updates to shared y axes
-        for(var i=0; i<this.sharex.length; i++){
+          this.sharex[i].zoom.x().domain(this.zoom.x().domain());
           this.sharex[i].zoomed(false);
+        }
+        // update shared y axes
+        for(var i=0; i<this.sharey.length; i++){
+          this.sharey[i].zoom.y().domain(this.zoom.y().domain());
+          this.sharey[i].zoomed(false);
         }
       }
     };
@@ -554,7 +542,7 @@ text.texte2ed3ce2f53447849eeec33aeb598ea0 {
 
       var figwidth = 8.0 * 80;
       var figheight = 6.0 * 80;
-      var fig = new Figure("div#figure75b4e54ed50d4b87a320a1af49a2c143",
+      var fig = new Figure("div#figure02978f870b15472cb73513b409267ef3",
                            figwidth, figheight);
 
 
@@ -564,7 +552,7 @@ text.texte2ed3ce2f53447849eeec33aeb598ea0 {
                                [-2.0, 2.0], [-2.0, 2.0],
                                true, true,
                                "axes1",
-                               "clip75b4e54ed50d4b87a320a1af49a2c1431", true);
+                               "clip02978f870b15472cb73513b409267ef31", true);
 
 
 
@@ -593,7 +581,7 @@ ax1.add_element(new Grid(ax1, "y"));
 
 
 // Add a Line2D element
-var linec7723fd07eec4b26b64e914a41db525b = new function(){
+var line368a7df8a61f4d85a433b2ed3df4cec2 = new function(){
  this.data = [[-0.8877857476301128, 0.46566243973045984], [-1.980796468223927, -1.5362436862772237], [-0.3479121493261526, 1.4882521937955997], [0.15634896910398005, 1.8958891760305832], [1.2302906807277207, 1.1787795711596507], [1.2023798487844113, -0.17992483581235091], [-0.3873268174079523, -1.0707526215105425], [-0.30230275057533557, 1.0544517269311366], [-1.0485529650670926, -0.40317694697317963], [-1.4200179371789752, 1.2224450703824274], [-1.7062701906250126, 0.2082749780768603], [1.9507753952317897, 0.9766390364837128], [-0.5096521817516535, 0.3563663971744019], [-0.4380743016111864, 0.7065731681919482], [-1.2527953600499262, 0.010500020720820478], [0.7774903558319101, 1.7858704939058352], [-1.6138978475579515, 0.12691209270361992], [-0.2127402802139687, 0.40198936344470165], [-0.8954665611936756, 1.8831506970562544], [0.386902497859262, -1.3477590611424464], [-0.510805137568873, -1.2704849984857336], [-1.180632184122412, 0.9693967081580112], [-0.028182228338654868, -1.17312340511416], [0.42833187053041766, 1.9436211856492926], [0.06651722238316789, -0.41361898075974735], [0.3024718977397814, -0.7474548114407578], [-0.6343220936809636, 1.9229420264803847], [-0.3627411659871381, 1.4805147914344243], [-0.672460447775951, 1.8675589604265699], [-0.3595531615405413, 0.9060446582753853], [-0.813146282044454, -0.8612256850547025], [-1.7262826023316769, 1.9100649530990337], [0.17742614225375283, -0.2680033709513804], [-0.4017809362082619, 0.8024563957963952], [-1.6301983469660446, 0.947251967773748], [0.4627822555257742, -0.1550100930908342], [-0.9072983643832422, 0.6140793703460803], [0.05194539579613895, 0.9222066715665268], [0.7290905621775369, 0.37642553115562943], [0.12898291075741067, -1.0994007905841945], [1.1394006845433007, 0.298238174206056], [-1.2348258203536526, 1.3263858966870303], [0.402341641177549, -0.6945678597313655], [-0.6848100909403132, -0.14963454032767076], [-0.8707971491818818, -0.43515355172163744], [-0.5788496647644155, 1.8492637284793418], [-0.31155253212737266, 0.6722947570124355], [0.05616534222974544, 0.40746183624111043], [-1.1651498407833565, -0.7699160744453164], [0.9008264869541871, 0.5392491912918173]];
  this.ax = ax1;
 
@@ -625,7 +613,7 @@ var linec7723fd07eec4b26b64e914a41db525b = new function(){
  }
 };
 
-ax1.add_element(linec7723fd07eec4b26b64e914a41db525b);
+ax1.add_element(line368a7df8a61f4d85a433b2ed3df4cec2);
 
 
 
@@ -650,7 +638,7 @@ ax1.add_element(new function(){
 
                   .attr("class", "text")
                   .text(this.text)
-                  .attr("class", "text091c55379a7b47878270d463350242ce")
+                  .attr("class", "text0da921ae9c5c4447b1d2be7368f48f43")
                   .attr("style", "text-anchor: middle;" +
                                  "dominant-baseline: hanging")
 
@@ -685,7 +673,7 @@ ax1.add_element(new function(){
 
                   .attr("class", "text")
                   .text(this.text)
-                  .attr("class", "text4815fc0aa03043acaeb50ec68e0043e8")
+                  .attr("class", "text21370cdd8a1e4785abd999031f986fe2")
                   .attr("style", "text-anchor: middle;" +
                                  "dominant-baseline: auto")
 
@@ -720,7 +708,7 @@ ax1.add_element(new function(){
 
                   .attr("class", "text")
                   .text(this.text)
-                  .attr("class", "texte2ed3ce2f53447849eeec33aeb598ea0")
+                  .attr("class", "text9559b11168a0430f8739cd9dbb8894f9")
                   .attr("style", "text-anchor: middle;" +
                                  "dominant-baseline: auto")
 
@@ -776,7 +764,7 @@ ax1.add_element(new function(){
       if(typeof define === "function" && define.amd){
         // If require.js is available, use it to load d3
         require.config({paths: {d3: "http://d3js.org/d3.v3.min"}});
-        require(["d3"], create_fig75b4e54ed50d4b87a320a1af49a2c143);
+        require(["d3"], create_fig02978f870b15472cb73513b409267ef3);
       }else if(typeof d3 === "undefined"){
         // No require.js: dynamically load d3
         var s = document.createElement('script');
@@ -784,16 +772,16 @@ ax1.add_element(new function(){
         s.async = true;
         s.onreadystatechange = s.onload = s.onerror = function() {
            if(typeof d3 === "undefined"){
-              document.getElementById("figure75b4e54ed50d4b87a320a1af49a2c143").innerHTML =
+              document.getElementById("figure02978f870b15472cb73513b409267ef3").innerHTML =
                     "<p style='color:red;'>(d3 failed to load)</p>";
            }else{
-              create_fig75b4e54ed50d4b87a320a1af49a2c143(d3);
+              create_fig02978f870b15472cb73513b409267ef3(d3);
            }
         };
         document.getElementsByTagName("head")[0].appendChild(s);
       }else{
         // d3 is already globally loaded
-        create_fig75b4e54ed50d4b87a320a1af49a2c143(d3);
+        create_fig02978f870b15472cb73513b409267ef3(d3);
       }
     }, 0);
 
