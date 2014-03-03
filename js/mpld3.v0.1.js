@@ -56,7 +56,13 @@
     };
     
     mpld3.Figure.prototype.add_plugin = function(plug, props){
-	if(plug in mpld3.plugin_map) plug = mpld3.plugin_map[plug];
+	if(plug in mpld3.plugin_map)
+          plug = mpld3.plugin_map[plug];
+	if(typeof(plug) === "string"){
+          console.warn("Skipping unrecognized plugin: " + plug);
+          return;
+        }
+
 	if(props.clear_toolbar){
 	    this.prop.toolbar = [];
 	}
@@ -215,7 +221,6 @@
     mpld3.BaseButton.prototype.deactivate = function(){};
     mpld3.BaseButton.prototype.onClick = function(){};
     mpld3.BaseButton.prototype.icon = "";
-    mpld3.BaseButton.prototype.members = {}
 
     /* Factory for button classes */
     mpld3.ButtonFactory = function(members){
@@ -250,7 +255,6 @@
 			  active: false});},
 	icon: function(){return mpld3.icons["move"];}
     });
-
     
     /* Set up the mapping of button types and icons */
     /* Icons come from the mpld3/icons/ directory   */
