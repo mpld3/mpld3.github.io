@@ -4,750 +4,16 @@
 
 HTML tooltip plugin
 ===================
-This is a demonstration of how to add rich HTML annotations to data plots
+This is a demonstration of how to add rich HTML annotations to data plots.
+The Plugin is defined within mpld3, and the user-provided CSS controls the
+format of the information shown on hover.
+Use the toolbar buttons at the bottom-right of the plot to enable zooming
+and panning, and to reset the view.
 
 
 .. raw:: html
     
-    
-    
-    
-    
-    
-        <style>
-    
-    
-        div#figure02978f870b15472cb73513b409267ef3
-        .axesbg{
-            fill: #FFFFFF;
-        }
-    
-    
-    
-    div#figure02978f870b15472cb73513b409267ef3
-    .axis line, .axis path {
-        shape-rendering: crispEdges;
-        stroke: black;
-        fill: none;
-    }
-    
-    div#figure02978f870b15472cb73513b409267ef3
-    .axis text {
-        font-family: sans-serif;
-        font-size: 12.0px;
-        fill: black;
-        stroke: none;
-    }
-    
-    
-    
-    div#figure02978f870b15472cb73513b409267ef3
-    .axis line, .axis path {
-        shape-rendering: crispEdges;
-        stroke: black;
-        fill: none;
-    }
-    
-    div#figure02978f870b15472cb73513b409267ef3
-    .axis text {
-        font-family: sans-serif;
-        font-size: 12.0px;
-        fill: black;
-        stroke: none;
-    }
-    
-    
-    
-    div#figure02978f870b15472cb73513b409267ef3
-    .grid .tick {
-      stroke: #000000;
-      stroke-dasharray: 2,2;
-      stroke-opacity: 0.3;
-    }
-    
-    div#figure02978f870b15472cb73513b409267ef3
-    .grid path {
-      stroke-width: 0;
-    }
-    
-    
-    
-    div#figure02978f870b15472cb73513b409267ef3
-    .grid .tick {
-      stroke: #000000;
-      stroke-dasharray: 2,2;
-      stroke-opacity: 0.3;
-    }
-    
-    div#figure02978f870b15472cb73513b409267ef3
-    .grid path {
-      stroke-width: 0;
-    }
-    
-    
-    
-    div#figure02978f870b15472cb73513b409267ef3
-    .axes1
-    path.line5 {
-        stroke: #0000FF;
-        stroke-width: 1.0;
-        stroke-dasharray: none;
-        fill: none;
-        stroke-opacity: 0.6;
-    }
-    
-    div#figure02978f870b15472cb73513b409267ef3
-    .axes1
-    path.points5 {
-        stroke-width: 1;
-        stroke: #000000;
-        fill: #0000FF;
-        fill-opacity: 0.6;
-        stroke-opacity: 0.6;
-    }
-    
-    
-    
-    div#figure02978f870b15472cb73513b409267ef3
-    text.text0da921ae9c5c4447b1d2be7368f48f43 {
-       font-size : 12.0px;
-       fill : #000000;
-       opacity : 1;
-    }
-    
-    
-    
-    div#figure02978f870b15472cb73513b409267ef3
-    text.text21370cdd8a1e4785abd999031f986fe2 {
-       font-size : 12.0px;
-       fill : #000000;
-       opacity : 1;
-    }
-    
-    
-    
-    div#figure02978f870b15472cb73513b409267ef3
-    text.text9559b11168a0430f8739cd9dbb8894f9 {
-       font-size : 20.0px;
-       fill : #000000;
-       opacity : 1;
-    }
-    
-    
-    
-    
-    
-        </style>
-    
-    
-    
-        <div id='figure02978f870b15472cb73513b409267ef3'>
-        </div>
-        <script type="text/javascript">
-        var create_fig02978f870b15472cb73513b409267ef3 = function(d3, undefined){
-    
-    
-        function Figure(figid, width, height){
-          this.figid = figid;
-          this.root = d3.select(figid);
-          this.width = width;
-          this.height = height;
-          this.axes = [];
-        }
-    
-        Figure.prototype.draw = function(){
-          this.canvas = this.root.append('svg:svg')
-                                     .attr('class', 'figure')
-                                     .attr('width', this.width)
-                                     .attr('height', this.height);
-          for (var i=0; i<this.axes.length; i++){
-            this.axes[i].draw();
-          }
-        };
-    
-        Figure.prototype.reset = function(duration){
-          duration = (typeof duration !== 'undefined') ? duration : 750;
-          for (var i=0; i<this.axes.length; i++){
-            this.axes[i].prep_reset();
-          }
-    
-          var transition = function(t){
-            for (var i=0; i<this.axes.length; i++){
-              this.axes[i].xdom(this.axes[i].xdom.domain(this.axes[i].ix(t)));
-              this.axes[i].ydom(this.axes[i].ydom.domain(this.axes[i].iy(t)));
-    
-              // don't propagate: this will be done as part of the loop.
-              this.axes[i].zoomed(false);
-            }
-          }.bind(this)
-    
-          d3.transition().duration(duration)
-                         .tween("zoom", function(){return transition;});
-    
-          for (var i=0; i<this.axes.length; i++){
-            this.axes[i].finalize_reset();
-          }
-        };
-    
-    
-    
-        function Axes(fig, bbox,
-                      xlim, ylim,
-                      xscale, yscale,
-                      xdomain, ydomain,
-                      xgridOn, ygridOn,
-                      axclass, clipid,
-                      zoomable){
-          this.axnum = fig.axes.length;
-          fig.axes.push(this);
-    
-          this.fig = fig;
-          this.bbox = bbox;
-          this.xlim = xlim;
-          this.ylim = ylim;
-          this.xdomain = xdomain;
-          this.ydomain = ydomain;
-          this.xscale = xscale;
-          this.yscale = yscale;
-          this.xgridOn = xgridOn;
-          this.ygridOn = ygridOn;
-          this.axclass = (typeof axclass !== 'undefined') ? axclass : "axes";
-          this.clipid = (typeof clipid != 'undefined') ? clipid : "clip";
-          this.zoomable = zoomable;
-    
-          this.sharex = [];
-          this.sharey = [];
-          this.elements = [];
-    
-          this.position = [this.bbox[0] * this.fig.width,
-                           (1 - this.bbox[1] - this.bbox[3]) * this.fig.height];
-          this.width = bbox[2] * this.fig.width;
-          this.height = bbox[3] * this.fig.height;
-    
-          if(this.xscale === 'log'){
-            this.xdom = d3.scale.log();
-          }else if(this.xscale === 'date'){
-            this.xdom = d3.time.scale();
-          }else{
-            this.xdom = d3.scale.linear();
-          }
-    
-          if(this.yscale === 'log'){
-            this.ydom = d3.scale.log();
-          }else if(this.yscale === 'date'){
-            this.ydom = d3.time.scale();
-          }else{
-            this.ydom = d3.scale.linear();
-          }
-    
-          this.xdom.domain(this.xdomain)
-                .range([0, this.width]);
-    
-          this.ydom.domain(this.ydomain)
-                .range([this.height, 0]);
-    
-          if(this.xscale === 'date'){
-             this.xmap = d3.time.scale()
-                               .domain(this.xdomain)
-                               .range(this.xlim);
-             this.x = function(x){return this.xdom(this.xmap.invert(x));}
-          }else if(this.xscale === 'log'){
-             this.xmap = this.xdom;
-             this.x = this.xdom;
-          }else{
-             this.xmap = this.xdom;
-             this.x = this.xdom;
-          }
-    
-          if(this.yscale === 'date'){
-             this.ymap = d3.time.scale()
-                                  .domain(this.ydomain)
-                                  .range(this.ylim);
-             this.y = function(y){return this.ydom(this.ymap.invert(y));}
-          }else if(this.xscale === 'log'){
-             this.ymap = this.ydom;
-             this.y = this.ydom;
-          }else{
-             this.ymap = this.ydom;
-             this.y = this.ydom;
-          }
-        }
-    
-        Axes.prototype.draw = function(){
-          this.zoom = d3.behavior.zoom()
-                              .x(this.xdom)
-                              .y(this.ydom)
-                              .on("zoom", this.zoomed.bind(this));
-    
-          this.baseaxes = this.fig.canvas.append("g")
-                                 .attr('transform', 'translate('
-                                                     + this.position[0] + ','
-                                                     + this.position[1] + ')')
-                                 .attr('width', this.width)
-                                 .attr('height', this.height)
-                                 .attr('class', "baseaxes");
-    
-          if(this.zoomable){
-            this.baseaxes.call(this.zoom);
-          }
-    
-          this.axesbg = this.baseaxes.append("svg:rect")
-                                 .attr("width", this.width)
-                                 .attr("height", this.height)
-                                 .attr("class", "axesbg");
-    
-          this.clip = this.baseaxes.append("svg:clipPath")
-                              .attr("id", this.clipid)
-                              .append("svg:rect")
-                                 .attr("x", 0)
-                                 .attr("y", 0)
-                                 .attr("width", this.width)
-                                 .attr("height", this.height)
-    
-          this.axes = this.baseaxes.append("g")
-                               .attr("class", this.axclass)
-                               .attr("clip-path", "url(#" + this.clipid + ")");
-    
-          for(var i=0; i<this.elements.length; i++){
-            this.elements[i].draw();
-          }
-        };
-    
-        Axes.prototype.zoomed = function(propagate){
-          // propagate is a boolean specifying whether to propagate movements
-          // to shared axes, specified by sharex and sharey.  Default is true.
-          propagate = (typeof propagate == 'undefined') ? true : propagate;
-    
-          //console.log(this.zoom.translate());
-          //console.log(this.zoom.scale());
-          //console.log(this.zoom.x().domain());
-          //console.log(this.zoom.y().domain());
-    
-          for(var i=0; i<this.elements.length; i++){
-            this.elements[i].zoomed();
-          }
-    
-          if(propagate){
-            // update shared x axes
-            for(var i=0; i<this.sharex.length; i++){
-              this.sharex[i].zoom.x().domain(this.zoom.x().domain());
-              this.sharex[i].zoomed(false);
-            }
-            // update shared y axes
-            for(var i=0; i<this.sharey.length; i++){
-              this.sharey[i].zoom.y().domain(this.zoom.y().domain());
-              this.sharey[i].zoomed(false);
-            }
-          }
-        };
-    
-        Axes.prototype.add_element = function(element){
-          this.elements.push(element);
-        };
-    
-        Axes.prototype.prep_reset = function(){
-          // interpolate() does not work on dates, so we map dates to numbers,
-          // interpolate the numbers, and then invert the map.
-          // we use the same strategy for log, so the interpolation will be smooth.
-          // There probably is a cleaner approach...
-    
-          if (this.xscale === 'date'){
-            var start = this.xdom.domain();
-            var end = this.xdomain;
-            var interp = d3.interpolate(
-                    [this.xmap(start[0]), this.xmap(start[1])],
-                    [this.xmap(end[0]), this.xmap(end[1])]);
-            this.ix = function(t){
-              return [this.xmap.invert(interp(t)[0]),
-                      this.xmap.invert(interp(t)[1])];
-            }
-          }else{
-            this.ix = d3.interpolate(this.xdom.domain(), this.xlim);
-          }
-    
-          if (this.yscale === 'date'){
-            var start = this.ydom.domain();
-            var end = this.ydomain;
-            var interp = d3.interpolate(
-                    [this.ymap(start[0]), this.ymap(start[1])],
-                    [this.ymap(end[0]), this.ymap(end[1])]);
-            this.iy = function(t){
-              return [this.ymap.invert(interp(t)[0]),
-                      this.ymap.invert(interp(t)[1])];
-            }
-          }else{
-            this.iy = d3.interpolate(this.ydom.domain(), this.ylim);
-          }
-        }
-    
-        Axes.prototype.finalize_reset = function(){
-          this.zoom.scale(1).translate([0, 0]);
-        }
-    
-        Axes.prototype.reset = function(){
-          this.prep_reset();
-          d3.transition().duration(750).tween("zoom", function() {
-            return function(t) {
-              this.zoom.x(this.xdom.domain(this.ix(t)))
-                       .y(this.ydom.domain(this.iy(t)));
-              this.zoomed();
-            };
-          });
-          this.finalize_reset();
-        };
-    
-    
-    
-        function Axis(axes, position, nticks, tickvalues, tickformat){
-          this.axes = axes;
-          this.position = position;
-          this.nticks = nticks;
-          this.tickvalues = tickvalues;
-          this.tickformat = tickformat;
-          if (position == "bottom"){
-            this.transform = "translate(0," + this.axes.height + ")";
-            this.scale = this.axes.xdom;
-            this.class = "x axis";
-          }else if (position == "top"){
-            this.transform = "translate(0,0)"
-            this.scale = this.axes.xdom;
-            this.class = "x axis";
-          }else if (position == "left"){
-            this.transform = "translate(0,0)";
-            this.scale = this.axes.ydom;
-            this.class = "y axis";
-          }else{
-            this.transform = "translate(" + this.axes.width + ",0)";
-            this.scale = this.axes.ydom;
-            this.class = "y axis";
-          }
-        }
-    
-        Axis.prototype.draw = function(){
-          this.axis = d3.svg.axis()
-                              .scale(this.scale)
-                              .orient(this.position)
-                              .ticks(this.nticks)
-                              .tickValues(this.tickvalues)
-                              .tickFormat(this.tickformat);
-          this.elem = this.axes.baseaxes.append('g')
-                            .attr("transform", this.transform)
-                            .attr("class", this.class)
-                            .call(this.axis);
-        };
-    
-        Axis.prototype.zoomed = function(){
-          this.elem.call(this.axis);
-        };
-    
-    
-    
-        function Grid(axes, xy){
-          this.axes = axes;
-          this.class = xy + " grid"
-          if(xy == "x"){
-            this.transform = "translate(0," + this.axes.height + ")";
-            this.position = "bottom";
-            this.scale = this.axes.xdom;
-            this.tickSize = -this.axes.height;
-          }else{
-            this.transform = "translate(0,0)";
-            this.position = "left";
-            this.scale = this.axes.ydom;
-            this.tickSize = -this.axes.width;
-          }
-        }
-    
-        Grid.prototype.draw = function(){
-          this.grid = d3.svg.axis()
-                              .scale(this.scale)
-                              .orient(this.position)
-                              .tickSize(this.tickSize, 0, 0)
-                              .tickFormat("");
-          this.elem = this.axes.axes.append("g")
-                              .attr("class", this.class)
-                              .attr("transform", this.transform)
-                              .call(this.grid);
-        };
-    
-        Grid.prototype.zoomed = function(){
-          this.elem.call(this.grid);
-        };
-    
-    
-    
-        // This function constructs a mapped SVG path
-        // from an input data array
-        var construct_SVG_path = function(data, xmap, ymap){
-           xmap = (typeof xmap !== 'undefined') ? xmap : function(x){return x;};
-           ymap = (typeof ymap !== 'undefined') ? ymap : function(y){return y;};
-           var result = "";
-           for (var i=0;i<data.length;i++){
-              result += data[i][0];
-              if(data[i][0] == 'Z'){
-                continue;
-              }
-              for (var j=0;j<data[i][1].length;j++){
-                if(j % 2 == 0){
-                   result += " " + xmap(data[i][1][j]);
-                }else{
-                   result += " " + ymap(data[i][1][j]);
-                }
-              }
-              result += " ";
-           }
-           return result;
-         };
-    
-    
-          var figwidth = 8.0 * 80;
-          var figheight = 6.0 * 80;
-          var fig = new Figure("div#figure02978f870b15472cb73513b409267ef3",
-                               figwidth, figheight);
-    
-    
-    
-        var ax1 = new Axes(fig, [0.125, 0.099999999999999978, 0.77500000000000002, 0.80000000000000004], [-2.0, 2.0], [-2.0, 2.0],
-                                   "linear", "linear",
-                                   [-2.0, 2.0], [-2.0, 2.0],
-                                   true, true,
-                                   "axes1",
-                                   "clip02978f870b15472cb73513b409267ef31", true);
-    
-    
-    
-    // Add an Axis element
-    ax1.add_element(new Axis(ax1, "bottom",
-                                     9, null,
-                                     null));
-    
-    
-    
-    // Add an Axis element
-    ax1.add_element(new Axis(ax1, "left",
-                                     9, null,
-                                     null));
-    
-    
-    
-    // Add a Grid element
-    ax1.add_element(new Grid(ax1, "x"));
-    
-    
-    
-    // Add a Grid element
-    ax1.add_element(new Grid(ax1, "y"));
-    
-    
-    
-    // Add a Line2D element
-    var line368a7df8a61f4d85a433b2ed3df4cec2 = new function(){
-     this.data = [[-0.8877857476301128, 0.46566243973045984], [-1.980796468223927, -1.5362436862772237], [-0.3479121493261526, 1.4882521937955997], [0.15634896910398005, 1.8958891760305832], [1.2302906807277207, 1.1787795711596507], [1.2023798487844113, -0.17992483581235091], [-0.3873268174079523, -1.0707526215105425], [-0.30230275057533557, 1.0544517269311366], [-1.0485529650670926, -0.40317694697317963], [-1.4200179371789752, 1.2224450703824274], [-1.7062701906250126, 0.2082749780768603], [1.9507753952317897, 0.9766390364837128], [-0.5096521817516535, 0.3563663971744019], [-0.4380743016111864, 0.7065731681919482], [-1.2527953600499262, 0.010500020720820478], [0.7774903558319101, 1.7858704939058352], [-1.6138978475579515, 0.12691209270361992], [-0.2127402802139687, 0.40198936344470165], [-0.8954665611936756, 1.8831506970562544], [0.386902497859262, -1.3477590611424464], [-0.510805137568873, -1.2704849984857336], [-1.180632184122412, 0.9693967081580112], [-0.028182228338654868, -1.17312340511416], [0.42833187053041766, 1.9436211856492926], [0.06651722238316789, -0.41361898075974735], [0.3024718977397814, -0.7474548114407578], [-0.6343220936809636, 1.9229420264803847], [-0.3627411659871381, 1.4805147914344243], [-0.672460447775951, 1.8675589604265699], [-0.3595531615405413, 0.9060446582753853], [-0.813146282044454, -0.8612256850547025], [-1.7262826023316769, 1.9100649530990337], [0.17742614225375283, -0.2680033709513804], [-0.4017809362082619, 0.8024563957963952], [-1.6301983469660446, 0.947251967773748], [0.4627822555257742, -0.1550100930908342], [-0.9072983643832422, 0.6140793703460803], [0.05194539579613895, 0.9222066715665268], [0.7290905621775369, 0.37642553115562943], [0.12898291075741067, -1.0994007905841945], [1.1394006845433007, 0.298238174206056], [-1.2348258203536526, 1.3263858966870303], [0.402341641177549, -0.6945678597313655], [-0.6848100909403132, -0.14963454032767076], [-0.8707971491818818, -0.43515355172163744], [-0.5788496647644155, 1.8492637284793418], [-0.31155253212737266, 0.6722947570124355], [0.05616534222974544, 0.40746183624111043], [-1.1651498407833565, -0.7699160744453164], [0.9008264869541871, 0.5392491912918173]];
-     this.ax = ax1;
-    
-     this.translate = function(d)
-       { return "translate(" + this.ax.x(d[0]) + ","
-                             + this.ax.y(d[1]) + ")"; };
-    
-     this.draw = function(){
-    
-    
-         this.pointsobj = this.ax.axes.append("svg:g")
-             .selectAll("scatter-dots-5")
-               .data(this.data.filter(
-                           function(d){return !isNaN(d[0]) && !isNaN(d[1]); }))
-               .enter().append("svg:path")
-                   .attr('class', 'points5')
-                   .attr("d", construct_SVG_path([["M", [0.0, 7.5]], ["C", [1.9890232500000002, 7.5, 3.896849030886401, 6.709752686911813, 5.303300858899107, 5.303300858899107]], ["C", [6.709752686911813, 3.896849030886401, 7.5, 1.9890232500000002, 7.5, 0.0]], ["C", [7.5, -1.9890232500000002, 6.709752686911813, -3.896849030886401, 5.303300858899107, -5.303300858899107]], ["C", [3.896849030886401, -6.709752686911813, 1.9890232500000002, -7.5, 0.0, -7.5]], ["C", [-1.9890232500000002, -7.5, -3.896849030886401, -6.709752686911813, -5.303300858899107, -5.303300858899107]], ["C", [-6.709752686911813, -3.896849030886401, -7.5, -1.9890232500000002, -7.5, 0.0]], ["C", [-7.5, 1.9890232500000002, -6.709752686911813, 3.896849030886401, -5.303300858899107, 5.303300858899107]], ["C", [-3.896849030886401, 6.709752686911813, -1.9890232500000002, 7.5, 0.0, 7.5]], ["Z", [0.0, 7.5]]]))
-                   .attr("transform", this.translate.bind(this));
-    
-     };
-    
-     this.zoomed = function(){
-    
-    
-    
-            this.pointsobj.attr("transform", this.translate.bind(this));
-    
-    
-     }
-    };
-    
-    ax1.add_element(line368a7df8a61f4d85a433b2ed3df4cec2);
-    
-    
-    
-    
-    // Add a text element
-    ax1.add_element(new function(){
-     this.position = [328.0, 24.999999999999986];
-     this.rotation = -0.0;
-     this.ax = ax1;
-     this.text = "x";
-    
-     this.draw = function(){
-    
-       this.obj = this.ax.fig.canvas.append("text")
-                      .attr("x", this.position[0])
-                      .attr("y", this.ax.fig.height - this.position[1])
-    
-                      .attr("transform", "rotate(" + this.rotation + ","
-                                      + this.position[0] + ","
-                                      + (figheight - this.position[1]) + ")")
-    
-    
-                      .attr("class", "text")
-                      .text(this.text)
-                      .attr("class", "text0da921ae9c5c4447b1d2be7368f48f43")
-                      .attr("style", "text-anchor: middle;" +
-                                     "dominant-baseline: hanging")
-    
-     }
-    
-     this.zoomed = function(){
-    
-     }
-    });
-    
-    
-    
-    
-    
-    // Add a text element
-    ax1.add_element(new function(){
-     this.position = [39.75, 240.0];
-     this.rotation = -90.0;
-     this.ax = ax1;
-     this.text = "y";
-    
-     this.draw = function(){
-    
-       this.obj = this.ax.fig.canvas.append("text")
-                      .attr("x", this.position[0])
-                      .attr("y", this.ax.fig.height - this.position[1])
-    
-                      .attr("transform", "rotate(" + this.rotation + ","
-                                      + this.position[0] + ","
-                                      + (figheight - this.position[1]) + ")")
-    
-    
-                      .attr("class", "text")
-                      .text(this.text)
-                      .attr("class", "text21370cdd8a1e4785abd999031f986fe2")
-                      .attr("style", "text-anchor: middle;" +
-                                     "dominant-baseline: auto")
-    
-     }
-    
-     this.zoomed = function(){
-    
-     }
-    });
-    
-    
-    
-    
-    
-    // Add a text element
-    ax1.add_element(new function(){
-     this.position = [328.0, 437.55555555555554];
-     this.rotation = -0.0;
-     this.ax = ax1;
-     this.text = "HTML tooltips";
-    
-     this.draw = function(){
-    
-       this.obj = this.ax.fig.canvas.append("text")
-                      .attr("x", this.position[0])
-                      .attr("y", this.ax.fig.height - this.position[1])
-    
-                      .attr("transform", "rotate(" + this.rotation + ","
-                                      + this.position[0] + ","
-                                      + (figheight - this.position[1]) + ")")
-    
-    
-                      .attr("class", "text")
-                      .text(this.text)
-                      .attr("class", "text9559b11168a0430f8739cd9dbb8894f9")
-                      .attr("style", "text-anchor: middle;" +
-                                     "dominant-baseline: auto")
-    
-     }
-    
-     this.zoomed = function(){
-    
-     }
-    });
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-          fig.draw();
-    
-    
-        var tooltip = d3.select("body").append("div")
-                        .attr("class", "mpld3-tooltip")
-                        .style("position", "absolute")
-                        .style("z-index", "10")
-                        .style("visibility", "hidden");
-    
-        var labels  = ['<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 0</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-0.887786</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 0.465662</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-0.674333</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 1</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-1.980796</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td>-1.536244</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td> 0.031831</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 2</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-0.347912</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 1.488252</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-0.635846</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 3</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td> 0.156349</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 1.895889</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td> 0.676433</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 4</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td> 1.230291</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 1.178780</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td> 0.576591</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 5</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td> 1.202380</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td>-0.179925</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-0.208299</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 6</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-0.387327</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td>-1.070753</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td> 0.396007</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 7</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-0.302303</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 1.054452</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-1.093062</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 8</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-1.048553</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td>-0.403177</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-1.491258</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 9</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-1.420018</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 1.222445</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td> 0.439392</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 10</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-1.706270</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 0.208275</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td> 0.166673</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 11</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td> 1.950775</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 0.976639</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td> 0.635031</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 12</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-0.509652</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 0.356366</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td> 2.383145</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 13</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-0.438074</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 0.706573</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td> 0.944479</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 14</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-1.252795</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 0.010500</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-0.912822</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 15</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td> 0.777490</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 1.785870</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td> 1.117016</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 16</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-1.613898</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 0.126912</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-1.315907</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 17</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-0.212740</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 0.401989</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-0.461585</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 18</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-0.895467</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 1.883151</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-0.068242</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 19</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td> 0.386902</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td>-1.347759</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td> 1.713343</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 20</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-0.510805</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td>-1.270485</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-0.744755</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 21</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-1.180632</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 0.969397</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-0.826439</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 22</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-0.028182</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td>-1.173123</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-0.098453</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 23</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td> 0.428332</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 1.943621</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-0.663478</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 24</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td> 0.066517</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td>-0.413619</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td> 1.126636</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 25</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td> 0.302472</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td>-0.747455</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-1.079932</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 26</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-0.634322</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 1.922942</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-1.147469</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 27</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-0.362741</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 1.480515</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-0.437820</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 28</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-0.672460</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 1.867559</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-0.498032</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 29</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-0.359553</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 0.906045</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td> 1.929532</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 30</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-0.813146</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td>-0.861226</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td> 0.949421</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 31</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-1.726283</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 1.910065</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td> 0.087551</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 32</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td> 0.177426</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td>-0.268003</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-1.225436</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 33</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-0.401781</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 0.802456</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td> 0.844363</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 34</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-1.630198</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 0.947252</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-1.000215</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 35</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td> 0.462782</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td>-0.155010</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-1.544771</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 36</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-0.907298</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 0.614079</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td> 1.188030</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 37</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td> 0.051945</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 0.922207</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td> 0.316943</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 38</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td> 0.729091</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 0.376426</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td> 0.920859</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 39</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td> 0.128983</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td>-1.099401</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td> 0.318728</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 40</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td> 1.139401</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 0.298238</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td> 0.856831</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 41</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-1.234826</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 1.326386</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-0.651026</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 42</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td> 0.402342</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td>-0.694568</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-1.034243</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 43</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-0.684810</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td>-0.149635</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td> 0.681595</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 44</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-0.870797</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td>-0.435154</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-0.803410</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 45</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-0.578850</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 1.849264</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-0.689550</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 46</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-0.311553</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 0.672295</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-0.455533</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 47</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td> 0.056165</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 0.407462</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td> 0.017479</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 48</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-1.165150</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td>-0.769916</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-0.353994</td>\n    </tr>\n  </tbody>\n</table>', '<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Row 49</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td> 0.900826</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 0.539249</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-1.374951</td>\n    </tr>\n  </tbody>\n</table>'];
-    
-    
-        ax1.axes.selectAll(".points5")
-            .on("mouseover", function(d, i){
-                               tooltip
-                                 .html(labels[i])
-                                 .style("visibility", "visible");})
-            .on("mousemove", function(d, i){
-                               tooltip
-                                 .style("top", (d3.event.pageY+10)+"px")
-                                 .style("left",(d3.event.pageX+10)+"px");})
-            .on("mouseout",  function(d, i){
-                               tooltip
-                                 .style("visibility", "hidden");});
-    
-    
-          return fig
-        }
-    
-        // set a timeout of 0: this makes things work in the IPython notebook
-        setTimeout(function(){
-          // we need to call the function, making sure d3 is defined appropriately
-          if(typeof define === "function" && define.amd){
-            // If require.js is available, use it to load d3
-            require.config({paths: {d3: "http://d3js.org/d3.v3.min"}});
-            require(["d3"], create_fig02978f870b15472cb73513b409267ef3);
-          }else if(typeof d3 === "undefined"){
-            // No require.js: dynamically load d3
-            var s = document.createElement('script');
-            s.src = "http://d3js.org/d3.v3.min.js";
-            s.async = true;
-            s.onreadystatechange = s.onload = s.onerror = function() {
-               if(typeof d3 === "undefined"){
-                  document.getElementById("figure02978f870b15472cb73513b409267ef3").innerHTML =
-                        "<p style='color:red;'>(d3 failed to load)</p>";
-               }else{
-                  create_fig02978f870b15472cb73513b409267ef3(d3);
-               }
-            };
-            document.getElementsByTagName("head")[0].appendChild(s);
-          }else{
-            // d3 is already globally loaded
-            create_fig02978f870b15472cb73513b409267ef3(d3);
-          }
-        }, 0);
-    
-        </script>
-    
-        <style>
+    <style>
     
     table
     {
@@ -769,13 +35,73 @@ This is a demonstration of how to add rich HTML annotations to data plots
       text-align: right;
     }
     
-        </style>
+    </style>
     
+    <div id="fig2233844180977441908735075"></div>
+    <script>
+    function mpld3_load_lib(url, callback){
+      var s = document.createElement('script');
+      s.src = url;
+      s.async = true;
+      s.onreadystatechange = s.onload = callback;
+      s.onerror = function(){console.warn("failed to load library " + url);};
+      document.getElementsByTagName("head")[0].appendChild(s);
+    }
     
+    function create_fig2233844180977441908735075(){
+      
+        var HtmlTooltipPlugin = function(fig, prop){
+           this.fig = fig;
+           var required = ["id"];
+           var defaults = {labels:null, hoffset:0, voffset:10};
+           this.prop = mpld3.process_props(this, prop, defaults, required);
+        };
     
+        HtmlTooltipPlugin.prototype.draw = function(){
+           var obj = mpld3.get_element(this.prop.id);
+           var labels = this.prop.labels;
+           var tooltip = d3.select("body").append("div")
+                        .attr("class", "mpld3-tooltip")
+                        .style("position", "absolute")
+                        .style("z-index", "10")
+                        .style("visibility", "hidden");
     
+           obj.elements()
+               .on("mouseover", function(d, i){
+                                  tooltip.html(labels[i])
+                                         .style("visibility", "visible");})
+               .on("mousemove", function(d, i){
+                        tooltip
+                          .style("top", d3.event.pageY + this.prop.voffset + "px")
+                          .style("left",d3.event.pageX + this.prop.hoffset + "px");
+                     }.bind(this))
+               .on("mouseout",  function(d, i){
+                               tooltip.style("visibility", "hidden");});
+        };
+    
+        mpld3.register_plugin("htmltooltip", HtmlTooltipPlugin);
+        
+      mpld3.draw_figure("fig2233844180977441908735075", {"width": 640.0, "plugins": [{"voffset": 10, "labels": ["<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 0</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-0.887786</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 0.465662</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-0.674333</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 1</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-1.980796</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td>-1.536244</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td> 0.031831</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 2</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-0.347912</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 1.488252</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-0.635846</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 3</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td> 0.156349</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 1.895889</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td> 0.676433</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 4</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td> 1.230291</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 1.178780</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td> 0.576591</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 5</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td> 1.202380</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td>-0.179925</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-0.208299</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 6</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-0.387327</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td>-1.070753</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td> 0.396007</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 7</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-0.302303</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 1.054452</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-1.093062</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 8</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-1.048553</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td>-0.403177</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-1.491258</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 9</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-1.420018</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 1.222445</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td> 0.439392</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 10</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-1.706270</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 0.208275</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td> 0.166673</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 11</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td> 1.950775</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 0.976639</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td> 0.635031</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 12</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-0.509652</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 0.356366</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td> 2.383145</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 13</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-0.438074</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 0.706573</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td> 0.944479</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 14</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-1.252795</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 0.010500</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-0.912822</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 15</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td> 0.777490</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 1.785870</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td> 1.117016</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 16</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-1.613898</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 0.126912</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-1.315907</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 17</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-0.212740</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 0.401989</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-0.461585</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 18</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-0.895467</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 1.883151</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-0.068242</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 19</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td> 0.386902</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td>-1.347759</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td> 1.713343</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 20</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-0.510805</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td>-1.270485</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-0.744755</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 21</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-1.180632</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 0.969397</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-0.826439</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 22</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-0.028182</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td>-1.173123</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-0.098453</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 23</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td> 0.428332</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 1.943621</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-0.663478</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 24</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td> 0.066517</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td>-0.413619</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td> 1.126636</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 25</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td> 0.302472</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td>-0.747455</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-1.079932</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 26</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-0.634322</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 1.922942</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-1.147469</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 27</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-0.362741</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 1.480515</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-0.437820</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 28</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-0.672460</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 1.867559</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-0.498032</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 29</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-0.359553</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 0.906045</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td> 1.929532</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 30</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-0.813146</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td>-0.861226</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td> 0.949421</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 31</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-1.726283</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 1.910065</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td> 0.087551</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 32</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td> 0.177426</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td>-0.268003</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-1.225436</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 33</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-0.401781</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 0.802456</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td> 0.844363</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 34</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-1.630198</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 0.947252</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-1.000215</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 35</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td> 0.462782</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td>-0.155010</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-1.544771</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 36</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-0.907298</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 0.614079</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td> 1.188030</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 37</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td> 0.051945</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 0.922207</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td> 0.316943</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 38</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td> 0.729091</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 0.376426</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td> 0.920859</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 39</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td> 0.128983</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td>-1.099401</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td> 0.318728</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 40</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td> 1.139401</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 0.298238</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td> 0.856831</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 41</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-1.234826</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 1.326386</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-0.651026</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 42</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td> 0.402342</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td>-0.694568</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-1.034243</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 43</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-0.684810</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td>-0.149635</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td> 0.681595</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 44</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-0.870797</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td>-0.435154</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-0.803410</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 45</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-0.578850</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 1.849264</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-0.689550</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 46</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-0.311553</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 0.672295</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-0.455533</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 47</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td> 0.056165</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 0.407462</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td> 0.017479</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 48</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td>-1.165150</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td>-0.769916</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-0.353994</td>\n    </tr>\n  </tbody>\n</table>", "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>Row 49</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>x</th>\n      <td> 0.900826</td>\n    </tr>\n    <tr>\n      <th>y</th>\n      <td> 0.539249</td>\n    </tr>\n    <tr>\n      <th>z</th>\n      <td>-1.374951</td>\n    </tr>\n  </tbody>\n</table>"], "type": "htmltooltip", "id": "223384418252624pts", "hoffset": 10}], "axes": [{"xlim": [-2.0, 2.0], "yscale": "linear", "axesbg": "#FFFFFF", "texts": [{"v_baseline": "hanging", "h_anchor": "middle", "color": "#000000", "text": "x", "coordinates": "axes", "zorder": 3, "alpha": 1, "fontsize": 12.0, "position": [0.5, -0.059895833333333329], "rotation": -0.0, "id": "223384418119056"}, {"v_baseline": "auto", "h_anchor": "middle", "color": "#000000", "text": "y", "coordinates": "axes", "zorder": 3, "alpha": 1, "fontsize": 12.0, "position": [-0.081149193548387094, 0.5], "rotation": -90.0, "id": "223384418138064"}, {"v_baseline": "auto", "h_anchor": "middle", "color": "#000000", "text": "HTML tooltips", "coordinates": "axes", "zorder": 3, "alpha": 1, "fontsize": 20.0, "position": [0.5, 1.0144675925925926], "rotation": -0.0, "id": "223384418162256"}], "zoomable": true, "images": [], "xdomain": [-2.0, 2.0], "ylim": [-2.0, 2.0], "paths": [], "sharey": [], "sharex": [], "axesbgalpha": null, "axes": [{"grid": {"color": "#000000", "alpha": 0.3, "dasharray": "2,2", "gridOn": true}, "position": "bottom", "nticks": 9, "tickvalues": null, "tickformat": null}, {"grid": {"color": "#000000", "alpha": 0.3, "dasharray": "2,2", "gridOn": true}, "position": "left", "nticks": 9, "tickvalues": null, "tickformat": null}], "lines": [], "markers": [{"edgecolor": "#000000", "facecolor": "#0000FF", "edgewidth": 1, "yindex": 1, "coordinates": "data", "zorder": 2, "markerpath": [[[0.0, 7.5], [1.9890232500000002, 7.5], [3.896849030886401, 6.709752686911813], [5.303300858899107, 5.303300858899107], [6.709752686911813, 3.896849030886401], [7.5, 1.9890232500000002], [7.5, 0.0], [7.5, -1.9890232500000002], [6.709752686911813, -3.896849030886401], [5.303300858899107, -5.303300858899107], [3.896849030886401, -6.709752686911813], [1.9890232500000002, -7.5], [0.0, -7.5], [-1.9890232500000002, -7.5], [-3.896849030886401, -6.709752686911813], [-5.303300858899107, -5.303300858899107], [-6.709752686911813, -3.896849030886401], [-7.5, -1.9890232500000002], [-7.5, 0.0], [-7.5, 1.9890232500000002], [-6.709752686911813, 3.896849030886401], [-5.303300858899107, 5.303300858899107], [-3.896849030886401, 6.709752686911813], [-1.9890232500000002, 7.5], [0.0, 7.5]], ["M", "C", "C", "C", "C", "C", "C", "C", "C", "Z"]], "alpha": 0.6, "xindex": 0, "data": "data01", "id": "223384418252624pts"}], "id": "223384418098896", "ydomain": [-2.0, 2.0], "collections": [], "xscale": "linear", "bbox": [0.125, 0.099999999999999978, 0.77500000000000002, 0.80000000000000004]}], "data": {"data01": [[-0.8877857476301128, 0.46566243973045984], [-1.980796468223927, -1.5362436862772237], [-0.3479121493261526, 1.4882521937955997], [0.15634896910398005, 1.8958891760305832], [1.2302906807277207, 1.1787795711596507], [1.2023798487844113, -0.17992483581235091], [-0.3873268174079523, -1.0707526215105425], [-0.30230275057533557, 1.0544517269311366], [-1.0485529650670926, -0.40317694697317963], [-1.4200179371789752, 1.2224450703824274], [-1.7062701906250126, 0.2082749780768603], [1.9507753952317897, 0.9766390364837128], [-0.5096521817516535, 0.3563663971744019], [-0.4380743016111864, 0.7065731681919482], [-1.2527953600499262, 0.010500020720820478], [0.7774903558319101, 1.7858704939058352], [-1.6138978475579515, 0.12691209270361992], [-0.2127402802139687, 0.40198936344470165], [-0.8954665611936756, 1.8831506970562544], [0.386902497859262, -1.3477590611424464], [-0.510805137568873, -1.2704849984857336], [-1.180632184122412, 0.9693967081580112], [-0.028182228338654868, -1.17312340511416], [0.42833187053041766, 1.9436211856492926], [0.06651722238316789, -0.41361898075974735], [0.3024718977397814, -0.7474548114407578], [-0.6343220936809636, 1.9229420264803847], [-0.3627411659871381, 1.4805147914344243], [-0.672460447775951, 1.8675589604265699], [-0.3595531615405413, 0.9060446582753853], [-0.813146282044454, -0.8612256850547025], [-1.7262826023316769, 1.9100649530990337], [0.17742614225375283, -0.2680033709513804], [-0.4017809362082619, 0.8024563957963952], [-1.6301983469660446, 0.947251967773748], [0.4627822555257742, -0.1550100930908342], [-0.9072983643832422, 0.6140793703460803], [0.05194539579613895, 0.9222066715665268], [0.7290905621775369, 0.37642553115562943], [0.12898291075741067, -1.0994007905841945], [1.1394006845433007, 0.298238174206056], [-1.2348258203536526, 1.3263858966870303], [0.402341641177549, -0.6945678597313655], [-0.6848100909403132, -0.14963454032767076], [-0.8707971491818818, -0.43515355172163744], [-0.5788496647644155, 1.8492637284793418], [-0.31155253212737266, 0.6722947570124355], [0.05616534222974544, 0.40746183624111043], [-1.1651498407833565, -0.7699160744453164], [0.9008264869541871, 0.5392491912918173]]}, "id": "223384418097744", "toolbar": ["reset", "move"], "height": 480.0});
+    }
+    
+    if(typeof(mpld3) !== "undefined"){
+       // already loaded: just create the figure
+       create_fig2233844180977441908735075();
+    }else if(typeof define === "function" && define.amd){
+       // require.js is available: use it to load d3/mpld3
+       require.config({paths: {d3: "http://d3js.org/d3.v3.min"}});
+       require(["d3"], function(d3){
+          window.d3 = d3;
+          mpld3_load_lib("http://mpld3.github.io/js/mpld3.v0.1.js", create_fig2233844180977441908735075);
+        });
+    }else{
+        // require.js not available: dynamically load d3 & mpld3
+        mpld3_load_lib("http://d3js.org/d3.v3.min.js", function(){
+            mpld3_load_lib("http://mpld3.github.io/js/mpld3.v0.1.js", create_fig2233844180977441908735075);})
+    }
+    </script>
 
 **Python source code:** :download:`[download source: html_tooltips.py]<html_tooltips.py>`
 
 .. literalinclude:: html_tooltips.py
-    :lines: 6-
+    :lines: 10-

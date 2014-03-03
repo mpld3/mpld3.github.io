@@ -46,7 +46,7 @@ Example Gallery
 
    ./html_tooltips
 
-   ./multiaxes
+   ./linked_brush
 
    ./random_walk
 
@@ -76,11 +76,11 @@ Example Gallery
 
     :ref:`html_tooltips`
 
-.. figure:: ./multiaxes.png
-    :target: ./multiaxes.html
+.. figure:: ./linked_brush.png
+    :target: ./linked_brush.html
     :align: center
 
-    :ref:`multiaxes`
+    :ref:`linked_brush`
 
 .. figure:: ./random_walk.png
     :target: ./random_walk.html
