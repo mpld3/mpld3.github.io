@@ -42,6 +42,8 @@ Example Gallery
 
    ./custom_plugin
 
+   ./drag_points
+
    ./heart_path
 
    ./html_tooltips
@@ -63,6 +65,12 @@ Example Gallery
     :align: center
 
     :ref:`custom_plugin`
+
+.. figure:: ./drag_points.png
+    :target: ./drag_points.html
+    :align: center
+
+    :ref:`drag_points`
 
 .. figure:: ./heart_path.png
     :target: ./heart_path.html

@@ -30,7 +30,7 @@
     <link rel="top" title="MPLD3: Bringing Matplotlib to the Browser" href="../index.html" />
     <link rel="up" title="Example Gallery" href="index.html" />
     <link rel="next" title="HTML tooltip plugin" href="html_tooltips.html" />
-    <link rel="prev" title="Defining a Custom Plugin" href="custom_plugin.html" /> 
+    <link rel="prev" title="Draggable Points Example" href="drag_points.html" /> 
   </head>
   <body>
       <div class="header"><h1 class="heading"><a href="../index.html">
@@ -40,7 +40,7 @@
       <div class="topnav">
       
         <p>
-        «&#160;&#160;<a href="custom_plugin.html">Defining a Custom Plugin</a>
+        «&#160;&#160;<a href="drag_points.html">Draggable Points Example</a>
         &#160;&#160;::&#160;&#160;
         <a class="uplink" href="../index.html">Contents</a>
         &#160;&#160;::&#160;&#160;
@@ -53,14 +53,16 @@
         
   <div class="section" id="patches-and-paths">
 <span id="heart-path"></span><h1>Patches and Paths<a class="headerlink" href="#patches-and-paths" title="Permalink to this headline">¶</a></h1>
-<p>This is a demo adapted from a <a class="reference external" href="http://matplotlib.org/examples/shapes_and_collections/path_patch_demo.html">matplotlib gallery example</a>
-Use the toolbar buttons at the bottom-right of the plot to enable zooming
+<p>This is a demo adapted from a <a class="reference external" href="http://matplotlib.org/examples/shapes_and_collections/path_patch_demo.html">matplotlib gallery example</a></p>
+<p>This example adds a custom D3 plugin allowing the user to drag the path
+control-points and see the effect on the path.</p>
+<p>Use the toolbar buttons at the bottom-right of the plot to enable zooming
 and panning, and to reset the view.</p>
 <style>
 
 </style>
 
-<div id="fig2233843744740004220840327"></div>
+<div id="fig2557343713749926244395365"></div>
 <script>
 function mpld3_load_lib(url, callback){
   var s = document.createElement('script');
@@ -71,32 +73,156 @@ function mpld3_load_lib(url, callback){
   document.getElementsByTagName("head")[0].appendChild(s);
 }
 
-function create_fig2233843744740004220840327(){
+function create_fig2557343713749926244395365(){
 
-  mpld3.draw_figure("fig2233843744740004220840327", {"width": 640.0, "axes": [{"xlim": [-4.020833333333333, 5.020833333333333], "yscale": "linear", "axesbg": "#FFFFFF", "texts": [], "zoomable": true, "images": [], "xdomain": [-4.020833333333333, 5.020833333333333], "ylim": [-3.0, 4.0], "paths": [{"edgecolor": "#000000", "facecolor": "#FF0000", "edgewidth": 1.0, "pathcodes": ["M", "C", "L", "C", "Z"], "yindex": 1, "coordinates": "data", "dasharray": "10,0", "zorder": 1, "alpha": 0.5, "xindex": 0, "data": "data02", "id": "223384302780752"}], "sharey": [], "sharex": [], "axesbgalpha": null, "axes": [{"grid": {"color": "#808080", "alpha": 0.5, "dasharray": "2,2", "gridOn": true}, "position": "bottom", "nticks": 7, "tickvalues": null, "tickformat": null}, {"grid": {"color": "#808080", "alpha": 0.5, "dasharray": "2,2", "gridOn": true}, "position": "left", "nticks": 8, "tickvalues": null, "tickformat": null}], "lines": [{"color": "#007F00", "yindex": 1, "coordinates": "data", "dasharray": "10,0", "zorder": 2, "alpha": 1, "xindex": 0, "linewidth": 1.0, "data": "data01", "id": "223384302781968"}], "markers": [{"edgecolor": "#000000", "facecolor": "#007F00", "edgewidth": 0.5, "yindex": 1, "coordinates": "data", "zorder": 2, "markerpath": [[[0.0, 3.0], [0.7956093000000001, 3.0], [1.5587396123545605, 2.683901074764725], [2.121320343559643, 2.121320343559643], [2.683901074764725, 1.5587396123545605], [3.0, 0.7956093000000001], [3.0, 0.0], [3.0, -0.7956093000000001], [2.683901074764725, -1.5587396123545605], [2.121320343559643, -2.121320343559643], [1.5587396123545605, -2.683901074764725], [0.7956093000000001, -3.0], [0.0, -3.0], [-0.7956093000000001, -3.0], [-1.5587396123545605, -2.683901074764725], [-2.121320343559643, -2.121320343559643], [-2.683901074764725, -1.5587396123545605], [-3.0, -0.7956093000000001], [-3.0, 0.0], [-3.0, 0.7956093000000001], [-2.683901074764725, 1.5587396123545605], [-2.121320343559643, 2.121320343559643], [-1.5587396123545605, 2.683901074764725], [-0.7956093000000001, 3.0], [0.0, 3.0]], ["M", "C", "C", "C", "C", "C", "C", "C", "C", "Z"]], "alpha": 1, "xindex": 0, "data": "data01", "id": "223384302781968pts"}], "id": "223384302728848", "ydomain": [-3.0, 4.0], "collections": [], "xscale": "linear", "bbox": [0.125, 0.099999999999999978, 0.77500000000000002, 0.80000000000000004]}], "data": {"data02": [[1.58, -2.57], [0.35, -1.1], [-1.75, 2.0], [0.375, 2.0], [0.85, 1.15], [2.2, 3.2], [3.0, 0.05], [2.0, -0.5]], "data01": [[1.58, -2.57], [0.35, -1.1], [-1.75, 2.0], [0.375, 2.0], [0.85, 1.15], [2.2, 3.2], [3.0, 0.05], [2.0, -0.5], [1.58, -2.57]]}, "id": "223384374474000", "toolbar": ["reset", "move"], "height": 480.0});
+    var DragPlugin = function(fig, prop){
+      this.fig = fig;
+      this.prop = mpld3.process_props(this, prop, {},
+                                      ["idpts", "idline", "idpatch"]);
+    }
+
+    DragPlugin.prototype.draw = function(){
+        var patchobj = mpld3.get_element(this.prop.idpatch);
+        var ptsobj = mpld3.get_element(this.prop.idpts);
+        var lineobj = mpld3.get_element(this.prop.idline);
+        console.log(ptsobj.ax.position);
+
+        var drag = d3.behavior.drag()
+            .origin(function(d) { return {x:ptsobj.ax.x(d[0]),
+                                          y:ptsobj.ax.y(d[1])}; })
+            .on("dragstart", dragstarted)
+            .on("drag", dragged)
+            .on("dragend", dragended);
+
+        lineobj.line.attr("d", lineobj.datafunc(ptsobj.data));
+        patchobj.path.attr("d", patchobj.datafunc(ptsobj.data,
+                                                  patchobj.pathcodes));
+        lineobj.data = ptsobj.data;
+        patchobj.data = ptsobj.data;
+
+        ptsobj.elements()
+           .data(ptsobj.data)
+           .style("cursor", "default")
+           .call(drag);
+
+        function dragstarted(d) {
+          d3.event.sourceEvent.stopPropagation();
+          d3.select(this).classed("dragging", true);
+        }
+
+        function dragged(d, i) {
+          d[0] = ptsobj.ax.x.invert(d3.event.x);
+          d[1] = ptsobj.ax.y.invert(d3.event.y);
+          d3.select(this)
+            .attr("transform", "translate(" + [d3.event.x,d3.event.y] + ")");
+          lineobj.line.attr("d", lineobj.datafunc(ptsobj.data));
+          patchobj.path.attr("d", patchobj.datafunc(ptsobj.data,
+                                                    patchobj.pathcodes));
+        }
+
+        function dragended(d, i) {
+          console.log(ptsobj.data[i]);
+          d3.select(this).classed("dragging", false);
+        }
+    }
+
+    mpld3.register_plugin("drag", DragPlugin);
+
+  mpld3.draw_figure("fig2557343713749926244395365", {"width": 640.0, "plugins": [{"idpatch": "255734373846736", "idline": "255734373811600", "type": "drag", "idpts": "255734373847952pts"}], "axes": [{"xlim": [-4.020833333333333, 5.020833333333333], "yscale": "linear", "axesbg": "#FFFFFF", "texts": [{"v_baseline": "auto", "h_anchor": "middle", "color": "#000000", "text": "Drag Points to Change Path", "coordinates": "axes", "zorder": 3, "alpha": 1, "fontsize": 18.0, "position": [0.5, 1.0144675925925926], "rotation": -0.0, "id": "255734373784464"}], "zoomable": true, "images": [], "xdomain": [-4.020833333333333, 5.020833333333333], "ylim": [-3.0, 4.0], "paths": [{"edgecolor": "#000000", "facecolor": "#FF0000", "edgewidth": 1.0, "pathcodes": ["M", "C", "L", "C", "Z"], "yindex": 1, "coordinates": "data", "dasharray": "10,0", "zorder": 1, "alpha": 0.5, "xindex": 0, "data": "data01", "id": "255734373846736"}], "sharey": [], "sharex": [], "axesbgalpha": null, "axes": [{"grid": {"color": "#808080", "alpha": 0.5, "dasharray": "2,2", "gridOn": true}, "position": "bottom", "nticks": 7, "tickvalues": null, "tickformat": null}, {"grid": {"color": "#808080", "alpha": 0.5, "dasharray": "2,2", "gridOn": true}, "position": "left", "nticks": 8, "tickvalues": null, "tickformat": null}], "lines": [{"color": "#000000", "yindex": 1, "coordinates": "data", "dasharray": "10,0", "zorder": 2, "alpha": 1, "xindex": 0, "linewidth": 1.0, "data": "data01", "id": "255734373811600"}], "markers": [{"edgecolor": "#000000", "facecolor": "#007F00", "edgewidth": 0.5, "yindex": 1, "coordinates": "data", "zorder": 2, "markerpath": [[[0.0, 5.0], [1.3260155, 5.0], [2.597899353924267, 4.473168457941209], [3.5355339059327378, 3.5355339059327378], [4.473168457941209, 2.597899353924267], [5.0, 1.3260155], [5.0, 0.0], [5.0, -1.3260155], [4.473168457941209, -2.597899353924267], [3.5355339059327378, -3.5355339059327378], [2.597899353924267, -4.473168457941209], [1.3260155, -5.0], [0.0, -5.0], [-1.3260155, -5.0], [-2.597899353924267, -4.473168457941209], [-3.5355339059327378, -3.5355339059327378], [-4.473168457941209, -2.597899353924267], [-5.0, -1.3260155], [-5.0, 0.0], [-5.0, 1.3260155], [-4.473168457941209, 2.597899353924267], [-3.5355339059327378, 3.5355339059327378], [-2.597899353924267, 4.473168457941209], [-1.3260155, 5.0], [0.0, 5.0]], ["M", "C", "C", "C", "C", "C", "C", "C", "C", "Z"]], "alpha": 1, "xindex": 0, "data": "data01", "id": "255734373847952pts"}], "id": "255734374304912", "ydomain": [-3.0, 4.0], "collections": [], "xscale": "linear", "bbox": [0.125, 0.099999999999999978, 0.77500000000000002, 0.80000000000000004]}], "data": {"data01": [[1.58, -2.57], [0.35, -1.1], [-1.75, 2.0], [0.375, 2.0], [0.85, 1.15], [2.2, 3.2], [3.0, 0.05], [2.0, -0.5]]}, "id": "255734371374992", "toolbar": ["reset", "move"], "height": 480.0});
 }
 
 if(typeof(mpld3) !== "undefined"){
    // already loaded: just create the figure
-   create_fig2233843744740004220840327();
+   create_fig2557343713749926244395365();
 }else if(typeof define === "function" && define.amd){
    // require.js is available: use it to load d3/mpld3
    require.config({paths: {d3: "http://d3js.org/d3.v3.min"}});
    require(["d3"], function(d3){
       window.d3 = d3;
-      mpld3_load_lib("http://mpld3.github.io/js/mpld3.v0.1.js", create_fig2233843744740004220840327);
+      mpld3_load_lib("http://mpld3.github.io/js/mpld3.v0.1.js", create_fig2557343713749926244395365);
     });
 }else{
     // require.js not available: dynamically load d3 & mpld3
     mpld3_load_lib("http://d3js.org/d3.v3.min.js", function(){
-        mpld3_load_lib("http://mpld3.github.io/js/mpld3.v0.1.js", create_fig2233843744740004220840327);})
+        mpld3_load_lib("http://mpld3.github.io/js/mpld3.v0.1.js", create_fig2557343713749926244395365);})
 }
 </script><p><strong>Python source code:</strong> <a class="reference download internal" href="../_downloads/heart_path.py"><tt class="xref download docutils literal"><span class="pre">[download</span> <span class="pre">source:</span> <span class="pre">heart_path.py]</span></tt></a></p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">matplotlib.path</span> <span class="kn">as</span> <span class="nn">mpath</span>
-<span class="kn">import</span> <span class="nn">matplotlib.patches</span> <span class="kn">as</span> <span class="nn">mpatches</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="kn">as</span> <span class="nn">mpl</span>
+<span class="kn">import</span> <span class="nn">matplotlib.path</span> <span class="kn">as</span> <span class="nn">mpath</span>
+<span class="kn">import</span> <span class="nn">matplotlib.patches</span> <span class="kn">as</span> <span class="nn">mpatches</span>
 
 <span class="kn">import</span> <span class="nn">mpld3</span>
+<span class="kn">from</span> <span class="nn">mpld3</span> <span class="kn">import</span> <span class="n">plugins</span><span class="p">,</span> <span class="n">utils</span>
+
+
+<span class="k">class</span> <span class="nc">LinkedDragPlugin</span><span class="p">(</span><span class="n">plugins</span><span class="o">.</span><span class="n">PluginBase</span><span class="p">):</span>
+    <span class="n">JAVASCRIPT</span> <span class="o">=</span> <span class="s">r&quot;&quot;&quot;</span>
+<span class="s">    var DragPlugin = function(fig, prop){</span>
+<span class="s">      this.fig = fig;</span>
+<span class="s">      this.prop = mpld3.process_props(this, prop, {},</span>
+<span class="s">                                      [&quot;idpts&quot;, &quot;idline&quot;, &quot;idpatch&quot;]);</span>
+<span class="s">    }</span>
+
+<span class="s">    DragPlugin.prototype.draw = function(){</span>
+<span class="s">        var patchobj = mpld3.get_element(this.prop.idpatch);</span>
+<span class="s">        var ptsobj = mpld3.get_element(this.prop.idpts);</span>
+<span class="s">        var lineobj = mpld3.get_element(this.prop.idline);</span>
+<span class="s">        console.log(ptsobj.ax.position);</span>
+
+<span class="s">        var drag = d3.behavior.drag()</span>
+<span class="s">            .origin(function(d) { return {x:ptsobj.ax.x(d[0]),</span>
+<span class="s">                                          y:ptsobj.ax.y(d[1])}; })</span>
+<span class="s">            .on(&quot;dragstart&quot;, dragstarted)</span>
+<span class="s">            .on(&quot;drag&quot;, dragged)</span>
+<span class="s">            .on(&quot;dragend&quot;, dragended);</span>
+
+<span class="s">        lineobj.line.attr(&quot;d&quot;, lineobj.datafunc(ptsobj.data));</span>
+<span class="s">        patchobj.path.attr(&quot;d&quot;, patchobj.datafunc(ptsobj.data,</span>
+<span class="s">                                                  patchobj.pathcodes));</span>
+<span class="s">        lineobj.data = ptsobj.data;</span>
+<span class="s">        patchobj.data = ptsobj.data;</span>
+
+<span class="s">        ptsobj.elements()</span>
+<span class="s">           .data(ptsobj.data)</span>
+<span class="s">           .style(&quot;cursor&quot;, &quot;default&quot;)</span>
+<span class="s">           .call(drag);</span>
+
+<span class="s">        function dragstarted(d) {</span>
+<span class="s">          d3.event.sourceEvent.stopPropagation();</span>
+<span class="s">          d3.select(this).classed(&quot;dragging&quot;, true);</span>
+<span class="s">        }</span>
+
+<span class="s">        function dragged(d, i) {</span>
+<span class="s">          d[0] = ptsobj.ax.x.invert(d3.event.x);</span>
+<span class="s">          d[1] = ptsobj.ax.y.invert(d3.event.y);</span>
+<span class="s">          d3.select(this)</span>
+<span class="s">            .attr(&quot;transform&quot;, &quot;translate(&quot; + [d3.event.x,d3.event.y] + &quot;)&quot;);</span>
+<span class="s">          lineobj.line.attr(&quot;d&quot;, lineobj.datafunc(ptsobj.data));</span>
+<span class="s">          patchobj.path.attr(&quot;d&quot;, patchobj.datafunc(ptsobj.data,</span>
+<span class="s">                                                    patchobj.pathcodes));</span>
+<span class="s">        }</span>
+
+<span class="s">        function dragended(d, i) {</span>
+<span class="s">          console.log(ptsobj.data[i]);</span>
+<span class="s">          d3.select(this).classed(&quot;dragging&quot;, false);</span>
+<span class="s">        }</span>
+<span class="s">    }</span>
+
+<span class="s">    mpld3.register_plugin(&quot;drag&quot;, DragPlugin);</span>
+<span class="s">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">patch</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">mpl</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">Line2D</span><span class="p">):</span>
+            <span class="n">suffix</span> <span class="o">=</span> <span class="s">&quot;pts&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">suffix</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dict_</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;drag&quot;</span><span class="p">,</span>
+                      <span class="s">&quot;idpts&quot;</span><span class="p">:</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_id</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">suffix</span><span class="p">),</span>
+                      <span class="s">&quot;idline&quot;</span><span class="p">:</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_id</span><span class="p">(</span><span class="n">line</span><span class="p">),</span>
+                      <span class="s">&quot;idpatch&quot;</span><span class="p">:</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_id</span><span class="p">(</span><span class="n">patch</span><span class="p">)}</span>
 
 
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
@@ -119,11 +245,15 @@ if(typeof(mpld3) !== "undefined"){
 <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">patch</span><span class="p">)</span>
 
 <span class="c"># plot control points and connecting lines</span>
-<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">path</span><span class="o">.</span><span class="n">vertices</span><span class="p">)</span>
-<span class="n">line</span><span class="p">,</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s">&#39;go-&#39;</span><span class="p">)</span>
+<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">path</span><span class="o">.</span><span class="n">vertices</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">points</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s">&#39;go&#39;</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">line</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s">&#39;-k&#39;</span><span class="p">)</span>
 
 <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="bp">True</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;gray&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;equal&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s">&quot;Drag Points to Change Path&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+
+<span class="n">plugins</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">LinkedDragPlugin</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">patch</span><span class="p">))</span>
 
 <span class="n">mpld3</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -135,7 +265,7 @@ if(typeof(mpld3) !== "undefined"){
       <div class="bottomnav">
       
         <p>
-        «&#160;&#160;<a href="custom_plugin.html">Defining a Custom Plugin</a>
+        «&#160;&#160;<a href="drag_points.html">Draggable Points Example</a>
         &#160;&#160;::&#160;&#160;
         <a class="uplink" href="../index.html">Contents</a>
         &#160;&#160;::&#160;&#160;
