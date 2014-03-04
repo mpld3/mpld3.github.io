@@ -20,7 +20,7 @@ and panning, and to reset the view.
     
     </style>
     
-    <div id="fig2565943713749928747242122"></div>
+    <div id="fig261784371441168803608396"></div>
     <script>
     function mpld3_load_lib(url, callback){
       var s = document.createElement('script');
@@ -31,7 +31,7 @@ and panning, and to reset the view.
       document.getElementsByTagName("head")[0].appendChild(s);
     }
     
-    function create_fig2565943713749928747242122(){
+    function create_fig261784371441168803608396(){
       
         var DragPlugin = function(fig, prop){
           this.fig = fig;
@@ -84,23 +84,23 @@ and panning, and to reset the view.
     
         mpld3.register_plugin("drag", DragPlugin);
         
-      mpld3.draw_figure("fig2565943713749928747242122", {"width": 640.0, "plugins": [{"idpatch": "256594373846736", "idline": "256594373811600", "type": "drag", "idpts": "256594373847952pts"}], "axes": [{"xlim": [-4.020833333333333, 5.020833333333333], "yscale": "linear", "axesbg": "#FFFFFF", "texts": [{"v_baseline": "auto", "h_anchor": "middle", "color": "#000000", "text": "Drag Points to Change Path", "coordinates": "axes", "zorder": 3, "alpha": 1, "fontsize": 18.0, "position": [0.5, 1.0144675925925926], "rotation": -0.0, "id": "256594373784464"}], "zoomable": true, "images": [], "xdomain": [-4.020833333333333, 5.020833333333333], "ylim": [-3.0, 4.0], "paths": [{"edgecolor": "#000000", "facecolor": "#FF0000", "edgewidth": 1.0, "pathcodes": ["M", "C", "L", "C", "Z"], "yindex": 1, "coordinates": "data", "dasharray": "10,0", "zorder": 1, "alpha": 0.5, "xindex": 0, "data": "data01", "id": "256594373846736"}], "sharey": [], "sharex": [], "axesbgalpha": null, "axes": [{"grid": {"color": "#808080", "alpha": 0.5, "dasharray": "2,2", "gridOn": true}, "position": "bottom", "nticks": 7, "tickvalues": null, "tickformat": null}, {"grid": {"color": "#808080", "alpha": 0.5, "dasharray": "2,2", "gridOn": true}, "position": "left", "nticks": 8, "tickvalues": null, "tickformat": null}], "lines": [{"color": "#000000", "yindex": 1, "coordinates": "data", "dasharray": "10,0", "zorder": 2, "alpha": 1, "xindex": 0, "linewidth": 1.0, "data": "data01", "id": "256594373811600"}], "markers": [{"edgecolor": "#000000", "facecolor": "#007F00", "edgewidth": 0.5, "yindex": 1, "coordinates": "data", "zorder": 2, "markerpath": [[[0.0, 5.0], [1.3260155, 5.0], [2.597899353924267, 4.473168457941209], [3.5355339059327378, 3.5355339059327378], [4.473168457941209, 2.597899353924267], [5.0, 1.3260155], [5.0, 0.0], [5.0, -1.3260155], [4.473168457941209, -2.597899353924267], [3.5355339059327378, -3.5355339059327378], [2.597899353924267, -4.473168457941209], [1.3260155, -5.0], [0.0, -5.0], [-1.3260155, -5.0], [-2.597899353924267, -4.473168457941209], [-3.5355339059327378, -3.5355339059327378], [-4.473168457941209, -2.597899353924267], [-5.0, -1.3260155], [-5.0, 0.0], [-5.0, 1.3260155], [-4.473168457941209, 2.597899353924267], [-3.5355339059327378, 3.5355339059327378], [-2.597899353924267, 4.473168457941209], [-1.3260155, 5.0], [0.0, 5.0]], ["M", "C", "C", "C", "C", "C", "C", "C", "C", "Z"]], "alpha": 1, "xindex": 0, "data": "data01", "id": "256594373847952pts"}], "id": "256594374304912", "ydomain": [-3.0, 4.0], "collections": [], "xscale": "linear", "bbox": [0.125, 0.099999999999999978, 0.77500000000000002, 0.80000000000000004]}], "data": {"data01": [[1.58, -2.57], [0.35, -1.1], [-1.75, 2.0], [0.375, 2.0], [0.85, 1.15], [2.2, 3.2], [3.0, 0.05], [2.0, -0.5]]}, "id": "256594371374992", "toolbar": ["reset", "move"], "height": 480.0});
+      mpld3.draw_figure("fig261784371441168803608396", {"width": 640.0, "plugins": [{"idpatch": "261784373824272", "idline": "261784373825936", "type": "drag", "idpts": "261784373825488pts"}], "axes": [{"xlim": [-4.020833333333333, 5.020833333333333], "yscale": "linear", "axesbg": "#FFFFFF", "texts": [{"v_baseline": "auto", "h_anchor": "middle", "color": "#000000", "text": "Drag Points to Change Path", "coordinates": "axes", "zorder": 3, "alpha": 1, "fontsize": 18.0, "position": [0.5, 1.0144675925925926], "rotation": -0.0, "id": "261784374323088"}], "zoomable": true, "images": [], "xdomain": [-4.020833333333333, 5.020833333333333], "ylim": [-3.0, 4.0], "paths": [{"edgecolor": "#000000", "facecolor": "#FF0000", "edgewidth": 1.0, "pathcodes": ["M", "C", "L", "C", "Z"], "yindex": 1, "coordinates": "data", "dasharray": "10,0", "zorder": 1, "alpha": 0.5, "xindex": 0, "data": "data01", "id": "261784373824272"}], "sharey": [], "sharex": [], "axesbgalpha": null, "axes": [{"grid": {"color": "#808080", "alpha": 0.5, "dasharray": "2,2", "gridOn": true}, "position": "bottom", "nticks": 7, "tickvalues": null, "tickformat": null}, {"grid": {"color": "#808080", "alpha": 0.5, "dasharray": "2,2", "gridOn": true}, "position": "left", "nticks": 8, "tickvalues": null, "tickformat": null}], "lines": [{"color": "#000000", "yindex": 1, "coordinates": "data", "dasharray": "10,0", "zorder": 2, "alpha": 1, "xindex": 0, "linewidth": 1.0, "data": "data01", "id": "261784373825936"}], "markers": [{"edgecolor": "#000000", "facecolor": "#007F00", "edgewidth": 0.5, "yindex": 1, "coordinates": "data", "zorder": 2, "markerpath": [[[0.0, 5.0], [1.3260155, 5.0], [2.597899353924267, 4.473168457941209], [3.5355339059327378, 3.5355339059327378], [4.473168457941209, 2.597899353924267], [5.0, 1.3260155], [5.0, 0.0], [5.0, -1.3260155], [4.473168457941209, -2.597899353924267], [3.5355339059327378, -3.5355339059327378], [2.597899353924267, -4.473168457941209], [1.3260155, -5.0], [0.0, -5.0], [-1.3260155, -5.0], [-2.597899353924267, -4.473168457941209], [-3.5355339059327378, -3.5355339059327378], [-4.473168457941209, -2.597899353924267], [-5.0, -1.3260155], [-5.0, 0.0], [-5.0, 1.3260155], [-4.473168457941209, 2.597899353924267], [-3.5355339059327378, 3.5355339059327378], [-2.597899353924267, 4.473168457941209], [-1.3260155, 5.0], [0.0, 5.0]], ["M", "C", "C", "C", "C", "C", "C", "C", "C", "Z"]], "alpha": 1, "xindex": 0, "data": "data01", "id": "261784373825488pts"}], "id": "261784374313104", "ydomain": [-3.0, 4.0], "collections": [], "xscale": "linear", "bbox": [0.125, 0.099999999999999978, 0.77500000000000002, 0.80000000000000004]}], "data": {"data01": [[1.58, -2.57], [0.35, -1.1], [-1.75, 2.0], [0.375, 2.0], [0.85, 1.15], [2.2, 3.2], [3.0, 0.05], [2.0, -0.5]]}, "id": "261784371441168", "toolbar": ["reset", "move"], "height": 480.0});
     }
     
     if(typeof(mpld3) !== "undefined"){
        // already loaded: just create the figure
-       create_fig2565943713749928747242122();
+       create_fig261784371441168803608396();
     }else if(typeof define === "function" && define.amd){
        // require.js is available: use it to load d3/mpld3
        require.config({paths: {d3: "http://d3js.org/d3.v3.min"}});
        require(["d3"], function(d3){
           window.d3 = d3;
-          mpld3_load_lib("http://mpld3.github.io/js/mpld3.v0.1.js", create_fig2565943713749928747242122);
+          mpld3_load_lib("http://mpld3.github.io/js/mpld3.v0.1.js", create_fig261784371441168803608396);
         });
     }else{
         // require.js not available: dynamically load d3 & mpld3
         mpld3_load_lib("http://d3js.org/d3.v3.min.js", function(){
-            mpld3_load_lib("http://mpld3.github.io/js/mpld3.v0.1.js", create_fig2565943713749928747242122);})
+            mpld3_load_lib("http://mpld3.github.io/js/mpld3.v0.1.js", create_fig261784371441168803608396);})
     }
     </script>
 

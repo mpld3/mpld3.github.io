@@ -62,17 +62,17 @@ of the basic mpld3 functions you should know about.</p>
 <p>These are the general functions used to convert matplotlib graphics into HTML
 and D3js. See some examples of these being used in the <a class="reference internal" href="examples/index.html#example-gallery"><em>Example Gallery</em></a>.</p>
 <dl class="docutils">
-<dt><tt class="xref py py-func docutils literal"><span class="pre">fig_to_html()</span></tt></dt>
+<dt><a class="reference internal" href="modules/API.html#mpld3.fig_to_html" title="mpld3.fig_to_html"><tt class="xref py py-func docutils literal"><span class="pre">fig_to_html()</span></tt></a></dt>
 <dd>This is the core routine which takes a figure and constructs a string of
 html and javascript which can be embedded in any webpage.</dd>
-<dt><tt class="xref py py-func docutils literal"><span class="pre">fig_to_dict()</span></tt></dt>
+<dt><a class="reference internal" href="modules/API.html#mpld3.fig_to_dict" title="mpld3.fig_to_dict"><tt class="xref py py-func docutils literal"><span class="pre">fig_to_dict()</span></tt></a></dt>
 <dd>This routine converts a matplotlib image to a JSON-serializable dictionary,
 which can be loaded into an appropriate HTML page and rendered via the
 mpld3 Javascript library.  Note that custom plugins which are not built
 into mpld3 will not be part of the JSON serialization.</dd>
-<dt><tt class="xref py py-func docutils literal"><span class="pre">show()</span></tt></dt>
+<dt><a class="reference internal" href="modules/API.html#mpld3.show" title="mpld3.show"><tt class="xref py py-func docutils literal"><span class="pre">show()</span></tt></a></dt>
 <dd>This function is mpld3&#8217;s equivalent of matplotlib&#8217;s <tt class="docutils literal"><span class="pre">plt.show</span></tt> function.
-It will convert the current figure to html using <tt class="xref py py-func docutils literal"><span class="pre">fig_to_d3()</span></tt>, start
+It will convert the current figure to html using <a class="reference internal" href="modules/API.html#mpld3.fig_to_d3" title="mpld3.fig_to_d3"><tt class="xref py py-func docutils literal"><span class="pre">fig_to_d3()</span></tt></a>, start
 a local webserver which serves this html, and (if the operating system
 allows it) automatically open this page in the web browser.</dd>
 </dl>
@@ -82,22 +82,22 @@ allows it) automatically open this page in the web browser.</dd>
 <p>These are functions which enable the use of mpld3 within the IPython notebook.
 See some examples of these being used in the <a class="reference internal" href="notebooks/index.html#notebook-examples"><em>Notebook Examples</em></a>.</p>
 <dl class="docutils">
-<dt><tt class="xref py py-func docutils literal"><span class="pre">display()</span></tt></dt>
+<dt><a class="reference internal" href="modules/API.html#mpld3.display" title="mpld3.display"><tt class="xref py py-func docutils literal"><span class="pre">display()</span></tt></a></dt>
 <dd>This function displays a single mpld3 figure inline within the IPython
 notebook. It is useful if you want to use the standard static figure
 display hook through the notebook, but override it in a few cases.
 If you want every matplotlib figure to be displayed via mpld3, use
-the <tt class="xref py py-func docutils literal"><span class="pre">enable_notebook()</span></tt> function, described below.</dd>
-<dt><tt class="xref py py-func docutils literal"><span class="pre">enable_notebook()</span></tt></dt>
+the <a class="reference internal" href="modules/API.html#mpld3.enable_notebook" title="mpld3.enable_notebook"><tt class="xref py py-func docutils literal"><span class="pre">enable_notebook()</span></tt></a> function, described below.</dd>
+<dt><a class="reference internal" href="modules/API.html#mpld3.enable_notebook" title="mpld3.enable_notebook"><tt class="xref py py-func docutils literal"><span class="pre">enable_notebook()</span></tt></a></dt>
 <dd>This function will adjust the IPython notebook display properties so that
 mpld3 will be used to display every figure, without having to call
-<tt class="xref py py-func docutils literal"><span class="pre">display_d3()</span></tt>. This is useful if you want every figure to be
+<a class="reference internal" href="modules/API.html#mpld3.display_d3" title="mpld3.display_d3"><tt class="xref py py-func docutils literal"><span class="pre">display_d3()</span></tt></a>. This is useful if you want every figure to be
 automatically embedded in the notebook as an interactive javascript figure.
 Note: this should be used in conjunction with the <tt class="docutils literal"><span class="pre">%matplotlib</span> <span class="pre">inline</span></tt>
 mode within the notebook: see the <a class="reference external" href="http://ipython.org/ipython-doc/dev/interactive/notebook.html#plotting">IPython documentation</a>
 for details.</dd>
-<dt><tt class="xref py py-func docutils literal"><span class="pre">disable_notebook()</span></tt></dt>
-<dd>This function undoes the changes made by <tt class="xref py py-func docutils literal"><span class="pre">enable_notebook()</span></tt>, so that
+<dt><a class="reference internal" href="modules/API.html#mpld3.disable_notebook" title="mpld3.disable_notebook"><tt class="xref py py-func docutils literal"><span class="pre">disable_notebook()</span></tt></a></dt>
+<dd>This function undoes the changes made by <a class="reference internal" href="modules/API.html#mpld3.enable_notebook" title="mpld3.enable_notebook"><tt class="xref py py-func docutils literal"><span class="pre">enable_notebook()</span></tt></a>, so that
 the normal matplotlib backend is used instead.</dd>
 </dl>
 </div>
@@ -106,9 +106,9 @@ the normal matplotlib backend is used instead.</dd>
 <p>Figures can be saved to file either in a stand-alone HTML format, or in a JSON
 format.  mpld3 supplies the following convenience routines for this purpose:</p>
 <dl class="docutils">
-<dt><tt class="xref py py-func docutils literal"><span class="pre">save_html()</span></tt></dt>
+<dt><a class="reference internal" href="modules/API.html#mpld3.save_html" title="mpld3.save_html"><tt class="xref py py-func docutils literal"><span class="pre">save_html()</span></tt></a></dt>
 <dd>Save a figure to a stand-alone HTML file.</dd>
-<dt><tt class="xref py py-func docutils literal"><span class="pre">save_json()</span></tt></dt>
+<dt><a class="reference internal" href="modules/API.html#mpld3.save_json" title="mpld3.save_json"><tt class="xref py py-func docutils literal"><span class="pre">save_json()</span></tt></a></dt>
 <dd>Save the JSON representation of the figure to a file.
 Note that custom plugins which are not built
 into mpld3 will not be part of the JSON serialization.</dd>
