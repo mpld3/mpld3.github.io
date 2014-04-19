@@ -44,8 +44,8 @@
   function mpld3_generateId(N, chars) {
     N = typeof N !== "undefined" ? N : 10;
     chars = typeof chars !== "undefined" ? chars : "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    var id = "";
-    for (var i = 0; i < N; i++) id += chars.charAt(Math.round(Math.random() * (chars.length - 1)));
+    var id = chars.charAt(Math.round(Math.random() * (chars.length - 11)));
+    for (var i = 1; i < N; i++) id += chars.charAt(Math.round(Math.random() * (chars.length - 1)));
     return id;
   }
   mpld3.get_element = function(id, fig) {
@@ -674,9 +674,6 @@
     }, {
       position: "bottom"
     } ],
-    grids: [],
-    xgridprops: {},
-    ygridprops: {},
     lines: [],
     paths: [],
     markers: [],
@@ -1042,7 +1039,7 @@
     this.fig.disable_zoom();
   };
   mpld3_ZoomPlugin.prototype.draw = function() {
-    this.fig.disable_zoom();
+    if (this.props.enabled) this.fig.enable_zoom(); else this.fig.disable_zoom();
   };
   mpld3.BoxZoomPlugin = mpld3_BoxZoomPlugin;
   mpld3.register_plugin("boxzoom", mpld3_BoxZoomPlugin);
@@ -1235,7 +1232,6 @@
     });
     var allData = [];
     var dataToBrush = fig.canvas.selectAll("." + dataClass);
-    console.log("yo");
     var currentAxes;
     function brushstart(d) {
       if (currentAxes != this) {
@@ -1275,6 +1271,34 @@
       this.enabled = false;
     };
     this.disable();
+  };
+  mpld3.register_plugin("mouseposition", MousePositionPlugin);
+  MousePositionPlugin.prototype = Object.create(mpld3.Plugin.prototype);
+  MousePositionPlugin.prototype.constructor = MousePositionPlugin;
+  MousePositionPlugin.prototype.requiredProps = [];
+  MousePositionPlugin.prototype.defaultProps = {
+    fontsize: 12,
+    fmt: ".3g"
+  };
+  function MousePositionPlugin(fig, props) {
+    mpld3.Plugin.call(this, fig, props);
+  }
+  MousePositionPlugin.prototype.draw = function() {
+    var fig = this.fig;
+    var fmt = d3.format(this.props.fmt);
+    var coords = fig.canvas.append("text").attr("class", "mpld3-coordinates").style("text-anchor", "end").style("font-size", this.props.fontsize).attr("x", this.fig.width - 5).attr("y", this.fig.height - 5);
+    for (var i = 0; i < this.fig.axes.length; i++) {
+      var update_coords = function() {
+        var ax = fig.axes[i];
+        return function() {
+          var pos = d3.mouse(this), x = ax.x.invert(pos[0]), y = ax.y.invert(pos[1]);
+          coords.text("(" + fmt(x) + ", " + fmt(y) + ")");
+        };
+      }();
+      fig.axes[i].baseaxes.on("mousemove", update_coords).on("mouseout", function() {
+        coords.text("");
+      });
+    }
   };
   mpld3.Figure = mpld3_Figure;
   mpld3_Figure.prototype = Object.create(mpld3_PlotElement.prototype);
@@ -1370,7 +1394,7 @@
     for (var i = 0; i < this.axes.length; i++) {
       this.axes[i].draw();
     }
-    this.enable_zoom();
+    this.disable_zoom();
     for (var i = 0; i < this.plugins.length; i++) {
       this.plugins[i].draw();
     }
@@ -1411,8 +1435,8 @@
   };
   mpld3.PlotElement = mpld3_PlotElement;
   function mpld3_PlotElement(parent, props) {
-    this.parent = parent;
-    if (typeof props !== "undefined") this.props = this.processProps(props);
+    this.parent = isUndefinedOrNull(parent) ? null : parent;
+    this.props = isUndefinedOrNull(props) ? {} : this.processProps(props);
     this.fig = parent instanceof mpld3_Figure ? parent : parent && "fig" in parent ? parent.fig : null;
     this.ax = parent instanceof mpld3_Axes ? parent : parent && "ax" in parent ? parent.ax : null;
   }
