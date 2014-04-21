@@ -8,16 +8,16 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>API documentation &mdash; MPLD3: Bringing Matplotlib to the Browser</title>
+    <title>API documentation &mdash; Bringing Matplotlib to the Browser</title>
     
-    <link rel="stylesheet" href="../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/mpld3.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/print.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.1',
+        VERSION:     '0.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,18 +27,21 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/theme_extras.js"></script>
-    <link rel="top" title="MPLD3: Bringing Matplotlib to the Browser" href="../index.html" />
-    <link rel="prev" title="mpld3_demo" href="../notebooks/mpld3_demo.html" /> 
+    <link rel="shortcut icon" href="../_static/favicon.png"/>
+    <link rel="top" title="Bringing Matplotlib to the Browser" href="../index.html" />
+    <link rel="prev" title="Demo of mpld3" href="../notebooks/mpld3_demo.html" /> 
   </head>
   <body>
-      <div class="header"><h1 class="heading"><a href="../index.html">
-          <span>MPLD3: Bringing Matplotlib to the Browser</span></a></h1>
+      <div class="header"><a href="../index.html">
+          <img class="leftlogo" src="../_static/mpld3-medium.png" alt="Logo"/>
+        </a><h1 class="heading"><a href="../index.html">
+          <span>Bringing Matplotlib to the Browser</span></a></h1>
         <h2 class="heading"><span>API documentation</span></h2>
       </div>
       <div class="topnav">
       
         <p>
-        «&#160;&#160;<a href="../notebooks/mpld3_demo.html">mpld3_demo</a>
+        «&#160;&#160;<a href="../notebooks/mpld3_demo.html">Demo of mpld3</a>
         &#160;&#160;::&#160;&#160;
         <a class="uplink" href="../index.html">Contents</a>
         </p>
@@ -78,7 +81,7 @@
 </dl>
 <dl class="function">
 <dt id="mpld3.fig_to_html">
-<tt class="descclassname">mpld3.</tt><tt class="descname">fig_to_html</tt><big>(</big><em>fig</em>, <em>d3_url=None</em>, <em>mpld3_url=None</em>, <em>no_extras=False</em>, <em>template_type='general'</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#mpld3.fig_to_html" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">mpld3.</tt><tt class="descname">fig_to_html</tt><big>(</big><em>fig</em>, <em>d3_url=None</em>, <em>mpld3_url=None</em>, <em>no_extras=False</em>, <em>template_type='general'</em>, <em>figid=None</em>, <em>use_http=False</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#mpld3.fig_to_html" title="Permalink to this definition">¶</a></dt>
 <dd><p>Output html representation of the figure</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -121,6 +124,15 @@ notebook, whether or not require.js and jquery are available</p>
 </dd>
 </dl>
 </div></blockquote>
+<p><strong>figid</strong> : string (optional)</p>
+<blockquote>
+<div><p>The html/css id of the figure div, which must not contain spaces.
+If not specified, a random id will be generated.</p>
+</div></blockquote>
+<p><strong>use_http</strong> : boolean (optional)</p>
+<blockquote>
+<div><p>If true, use <a class="reference external" href="http://">http://</a> instead of <a class="reference external" href="https://">https://</a> for d3_url and mpld3_url.</p>
+</div></blockquote>
 <p><strong>**kwargs :</strong> :</p>
 <blockquote>
 <div><p>Additional keyword arguments passed to mplexporter.Exporter</p>
@@ -156,8 +168,8 @@ notebook, whether or not require.js and jquery are available</p>
 
 <dl class="function">
 <dt id="mpld3.fig_to_dict">
-<tt class="descclassname">mpld3.</tt><tt class="descname">fig_to_dict</tt><big>(</big><em>fig</em>, <em>d3_url=None</em>, <em>mpld3_url=None</em>, <em>template_type='general'</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#mpld3.fig_to_dict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Output json representation of the figure</p>
+<tt class="descclassname">mpld3.</tt><tt class="descname">fig_to_dict</tt><big>(</big><em>fig</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#mpld3.fig_to_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Output json-serializable dictionary representation of the figure</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -165,16 +177,6 @@ notebook, whether or not require.js and jquery are available</p>
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>fig</strong> : matplotlib figure</p>
 <blockquote>
 <div><p>The figure to display</p>
-</div></blockquote>
-<p><strong>d3_url</strong> : string (optional)</p>
-<blockquote>
-<div><p>The URL of the d3 library.  If not specified, a standard web path
-will be used.</p>
-</div></blockquote>
-<p><strong>mpld3_url</strong> : string (optional)</p>
-<blockquote>
-<div><p>The URL of the mpld3 library.  If not specified, a standard web path
-will be used.</p>
 </div></blockquote>
 <p><strong>**kwargs :</strong> :</p>
 <blockquote>
@@ -256,6 +258,15 @@ notebook, whether or not require.js and jquery are available</p>
 </dd>
 </dl>
 </div></blockquote>
+<p><strong>figid</strong> : string (optional)</p>
+<blockquote>
+<div><p>The html/css id of the figure div, which must not contain spaces.
+If not specified, a random id will be generated.</p>
+</div></blockquote>
+<p><strong>use_http</strong> : boolean (optional)</p>
+<blockquote>
+<div><p>If true, use <a class="reference external" href="http://">http://</a> instead of <a class="reference external" href="https://">https://</a> for d3_url and mpld3_url.</p>
+</div></blockquote>
 <p><strong>**kwargs :</strong> :</p>
 <blockquote>
 <div><p>Additional keyword arguments passed to mplexporter.Exporter</p>
@@ -307,6 +318,11 @@ notebook, whether or not require.js and jquery are available</p>
 <div><p>If true, close the figure so that the IPython matplotlib mode will not
 display the png version of the figure.</p>
 </div></blockquote>
+<p><strong>local</strong> : boolean (optional, default=False)</p>
+<blockquote>
+<div><p>if True, then copy the d3 &amp; mpld3 libraries to a location visible to
+the notebook server, and source them from there. See Notes below.</p>
+</div></blockquote>
 <p><strong>**kwargs :</strong> :</p>
 <blockquote>
 <div><p>additional keyword arguments are passed through to <a class="reference internal" href="#mpld3.fig_to_html" title="mpld3.fig_to_html"><tt class="xref py py-func docutils literal"><span class="pre">fig_to_html()</span></tt></a>.</p>
@@ -330,11 +346,19 @@ display the png version of the figure.</p>
 <dd>automatically embed figures in IPython notebook</dd>
 </dl>
 </div>
+<p class="rubric">Notes</p>
+<p>Known issues: using <tt class="docutils literal"><span class="pre">local=True</span></tt> may not work correctly in certain cases:</p>
+<ul class="simple">
+<li>In IPython &lt; 2.0, <tt class="docutils literal"><span class="pre">local=True</span></tt> may fail if the current working
+directory is changed within the notebook (e.g. with the %cd command).</li>
+<li>In IPython 2.0+, <tt class="docutils literal"><span class="pre">local=True</span></tt> may fail if a url prefix is added
+(e.g. by setting NotebookApp.base_url).</li>
+</ul>
 </dd></dl>
 
 <dl class="function">
 <dt id="mpld3.display">
-<tt class="descclassname">mpld3.</tt><tt class="descname">display</tt><big>(</big><em>fig=None</em>, <em>closefig=True</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#mpld3.display" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">mpld3.</tt><tt class="descname">display</tt><big>(</big><em>fig=None</em>, <em>closefig=True</em>, <em>local=False</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#mpld3.display" title="Permalink to this definition">¶</a></dt>
 <dd><p>Display figure in IPython notebook via the HTML display hook</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -349,6 +373,11 @@ display the png version of the figure.</p>
 <div><p>If true, close the figure so that the IPython matplotlib mode will not
 display the png version of the figure.</p>
 </div></blockquote>
+<p><strong>local</strong> : boolean (optional, default=False)</p>
+<blockquote>
+<div><p>if True, then copy the d3 &amp; mpld3 libraries to a location visible to
+the notebook server, and source them from there. See Notes below.</p>
+</div></blockquote>
 <p><strong>**kwargs :</strong> :</p>
 <blockquote>
 <div><p>additional keyword arguments are passed through to <a class="reference internal" href="#mpld3.fig_to_html" title="mpld3.fig_to_html"><tt class="xref py py-func docutils literal"><span class="pre">fig_to_html()</span></tt></a>.</p>
@@ -372,6 +401,14 @@ display the png version of the figure.</p>
 <dd>automatically embed figures in IPython notebook</dd>
 </dl>
 </div>
+<p class="rubric">Notes</p>
+<p>Known issues: using <tt class="docutils literal"><span class="pre">local=True</span></tt> may not work correctly in certain cases:</p>
+<ul class="simple">
+<li>In IPython &lt; 2.0, <tt class="docutils literal"><span class="pre">local=True</span></tt> may fail if the current working
+directory is changed within the notebook (e.g. with the %cd command).</li>
+<li>In IPython 2.0+, <tt class="docutils literal"><span class="pre">local=True</span></tt> may fail if a url prefix is added
+(e.g. by setting NotebookApp.base_url).</li>
+</ul>
 </dd></dl>
 
 <dl class="function">
@@ -540,7 +577,7 @@ representation of the figure.</p>
 </div></blockquote>
 <p><strong>**kwargs :</strong> :</p>
 <blockquote class="last">
-<div><p>additional keyword arguments will be passed to <a class="reference internal" href="#mpld3.fig_to_html" title="mpld3.fig_to_html"><tt class="xref py py-func docutils literal"><span class="pre">fig_to_html()</span></tt></a></p>
+<div><p>additional keyword arguments will be passed to <a class="reference internal" href="#mpld3.fig_to_dict" title="mpld3.fig_to_dict"><tt class="xref py py-func docutils literal"><span class="pre">fig_to_dict()</span></tt></a></p>
 </div></blockquote>
 </td>
 </tr>
@@ -561,7 +598,7 @@ representation of the figure.</p>
 
 <dl class="function">
 <dt id="mpld3.enable_notebook">
-<tt class="descclassname">mpld3.</tt><tt class="descname">enable_notebook</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#mpld3.enable_notebook" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">mpld3.</tt><tt class="descname">enable_notebook</tt><big>(</big><em>local=False</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#mpld3.enable_notebook" title="Permalink to this definition">¶</a></dt>
 <dd><p>Enable the automatic display of figures in the IPython Notebook.</p>
 <p>This function should be used with the inline Matplotlib backend
 that ships with IPython that can be enabled with <cite>%pylab inline</cite>
@@ -572,7 +609,12 @@ enabled.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>**kwargs :</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>local</strong> : boolean (optional, default=False)</p>
+<blockquote>
+<div><p>if True, then copy the d3 &amp; mpld3 libraries to a location visible to
+the notebook server, and source them from there. See Notes below.</p>
+</div></blockquote>
+<p><strong>**kwargs :</strong> :</p>
 <blockquote class="last">
 <div><p>all keyword parameters are passed through to <a class="reference internal" href="#mpld3.fig_to_html" title="mpld3.fig_to_html"><tt class="xref py py-func docutils literal"><span class="pre">fig_to_html()</span></tt></a></p>
 </div></blockquote>
@@ -591,6 +633,14 @@ enabled.</p>
 <dd>launch a local server and show a figure in a browser</dd>
 </dl>
 </div>
+<p class="rubric">Notes</p>
+<p>Known issues: using <tt class="docutils literal"><span class="pre">local=True</span></tt> may not work correctly in certain cases:</p>
+<ul class="simple">
+<li>In IPython &lt; 2.0, <tt class="docutils literal"><span class="pre">local=True</span></tt> may fail if the current working
+directory is changed within the notebook (e.g. with the %cd command).</li>
+<li>In IPython 2.0+, <tt class="docutils literal"><span class="pre">local=True</span></tt> may fail if a url prefix is added
+(e.g. by setting NotebookApp.base_url).</li>
+</ul>
 </dd></dl>
 
 <dl class="function">
@@ -642,6 +692,128 @@ to the figure.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plugins</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">plugins</span><span class="o">.</span><span class="n">LineLabelTooltip</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="function">
+<dt id="mpld3.plugins.clear">
+<tt class="descclassname">mpld3.plugins.</tt><tt class="descname">clear</tt><big>(</big><em>fig</em><big>)</big><a class="reference internal" href="../_modules/mpld3/plugins.html#clear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mpld3.plugins.clear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear all plugins from the figure, including defaults</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="mpld3.plugins.get_plugins">
+<tt class="descclassname">mpld3.plugins.</tt><tt class="descname">get_plugins</tt><big>(</big><em>fig</em><big>)</big><a class="reference internal" href="../_modules/mpld3/plugins.html#get_plugins"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mpld3.plugins.get_plugins" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the list of plugins in the figure</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="mpld3.plugins.Reset">
+<em class="property">class </em><tt class="descclassname">mpld3.plugins.</tt><tt class="descname">Reset</tt><a class="reference internal" href="../_modules/mpld3/plugins.html#Reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mpld3.plugins.Reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Plugin to add a reset button</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">css</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_dict</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">javascript</span></tt>()</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="mpld3.plugins.Zoom">
+<em class="property">class </em><tt class="descclassname">mpld3.plugins.</tt><tt class="descname">Zoom</tt><big>(</big><em>button=True</em>, <em>enabled=None</em><big>)</big><a class="reference internal" href="../_modules/mpld3/plugins.html#Zoom"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mpld3.plugins.Zoom" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Plugin to add zoom behavior to the plot</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>button</strong> : boolean, optional</p>
+<blockquote>
+<div><p>if True (default), then add a button to enable/disable zoom behavior</p>
+</div></blockquote>
+<p><strong>enabled</strong> : boolean, optional</p>
+<blockquote class="last">
+<div><p>specify whether the zoom should be enabled by default. By default,
+zoom is enabled if button == False, and disabled if button == True.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Even if <tt class="docutils literal"><span class="pre">enabled</span></tt> is specified, other plugins may modify this state.</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">css</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_dict</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">javascript</span></tt>()</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="mpld3.plugins.BoxZoom">
+<em class="property">class </em><tt class="descclassname">mpld3.plugins.</tt><tt class="descname">BoxZoom</tt><big>(</big><em>button=True</em>, <em>enabled=None</em><big>)</big><a class="reference internal" href="../_modules/mpld3/plugins.html#BoxZoom"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mpld3.plugins.BoxZoom" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Plugin to add box-zoom behavior to the plot</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>button</strong> : boolean, optional</p>
+<blockquote>
+<div><p>if True (default), then add a button to enable/disable zoom behavior</p>
+</div></blockquote>
+<p><strong>enabled</strong> : boolean, optional</p>
+<blockquote class="last">
+<div><p>specify whether the zoom should be enabled by default. By default,
+zoom is enabled if button == False, and disabled if button == True.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Even if <tt class="docutils literal"><span class="pre">enabled</span></tt> is specified, other plugins may modify this state.</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">css</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_dict</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">javascript</span></tt>()</td>
+<td></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="class">
@@ -813,6 +985,211 @@ hoffset = 0, voffset = 10</p>
 </table>
 </dd></dl>
 
+<dl class="class">
+<dt id="mpld3.plugins.MousePosition">
+<em class="property">class </em><tt class="descclassname">mpld3.plugins.</tt><tt class="descname">MousePosition</tt><big>(</big><em>fontsize=12</em>, <em>fmt='.3g'</em><big>)</big><a class="reference internal" href="../_modules/mpld3/plugins.html#MousePosition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mpld3.plugins.MousePosition" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Plugin to display coordinates for the current mouse position</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">css</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_dict</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">javascript</span></tt>()</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<span class="target" id="module-mpld3.mplexporter"></span><span class="target" id="module-mpld3.mpld3renderer"></span><div class="section" id="mpld3-renderer">
+<h2>mpld3 renderer<a class="headerlink" href="#mpld3-renderer" title="Permalink to this headline">¶</a></h2>
+<p>This is the renderer class which implements the mplexporter framework for mpld3</p>
+<dl class="class">
+<dt id="mpld3.mpld3renderer.MPLD3Renderer">
+<em class="property">class </em><tt class="descclassname">mpld3.mpld3renderer.</tt><tt class="descname">MPLD3Renderer</tt><a class="reference internal" href="../_modules/mpld3/mpld3renderer.html#MPLD3Renderer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mpld3.mpld3renderer.MPLD3Renderer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renderer class for mpld3</p>
+<p>This renderer class plugs into the <tt class="docutils literal"><span class="pre">mplexporter</span></tt> package in order to
+convert matplotlib figures into a JSON-serializable dictionary
+representation which can be read by mpld3.js.</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#mpld3.mpld3renderer.MPLD3Renderer.add_data" title="mpld3.mpld3renderer.MPLD3Renderer.add_data"><tt class="xref py py-obj docutils literal"><span class="pre">add_data</span></tt></a>(data[,&nbsp;key])</td>
+<td>Add a dataset to the current figure</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">ax_has_xgrid</span></tt>(ax)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">ax_has_ygrid</span></tt>(ax)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">ax_zoomable</span></tt>(ax)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">close_axes</span></tt>(ax)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">close_figure</span></tt>(fig)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">close_legend</span></tt>(legend)</td>
+<td>Finish commands for a particular legend.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">datalabel</span></tt>(i)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">draw_axes</span></tt>(*args,&nbsp;**kwds)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">draw_figure</span></tt>(*args,&nbsp;**kwds)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">draw_image</span></tt>(imdata,&nbsp;extent,&nbsp;coordinates,&nbsp;style)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">draw_legend</span></tt>(*args,&nbsp;**kwds)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">draw_line</span></tt>(data,&nbsp;coordinates,&nbsp;style,&nbsp;label[,&nbsp;...])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">draw_marked_line</span></tt>(data,&nbsp;coordinates,&nbsp;...[,&nbsp;...])</td>
+<td>Draw a line that also has markers.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">draw_markers</span></tt>(data,&nbsp;coordinates,&nbsp;style,&nbsp;label)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">draw_path</span></tt>(data,&nbsp;coordinates,&nbsp;pathcodes,&nbsp;style)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">draw_path_collection</span></tt>(paths,&nbsp;...[,&nbsp;mplobj])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">draw_text</span></tt>(text,&nbsp;position,&nbsp;coordinates,&nbsp;style)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">open_axes</span></tt>(ax,&nbsp;props)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">open_figure</span></tt>(fig,&nbsp;props)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">open_legend</span></tt>(legend,&nbsp;props)</td>
+<td>Beging commands for a particular legend.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="mpld3.mpld3renderer.MPLD3Renderer.add_data">
+<tt class="descname">add_data</tt><big>(</big><em>data</em>, <em>key='data'</em><big>)</big><a class="reference internal" href="../_modules/mpld3/mpld3renderer.html#MPLD3Renderer.add_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mpld3.mpld3renderer.MPLD3Renderer.add_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a dataset to the current figure</p>
+<p>If the dataset matches any already added data, we use that instead.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>data</strong> : array_like</p>
+<blockquote>
+<div><p>a shape [N,2] array of data</p>
+</div></blockquote>
+<p><strong>key</strong> : string (optional)</p>
+<blockquote>
+<div><p>the key to use for the data</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>datadict</strong> : dictionary</p>
+<blockquote class="last">
+<div><p>datadict has the keys &#8220;data&#8221;, &#8220;xindex&#8221;, &#8220;yindex&#8221;, which will
+be passed to the mpld3 JSON object.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<span class="target" id="module-mpld3.utils"></span><div class="section" id="mpld3-utilities">
+<h2>mpld3 Utilities<a class="headerlink" href="#mpld3-utilities" title="Permalink to this headline">¶</a></h2>
+<p>Utility routines for the mpld3 package</p>
+<dl class="function">
+<dt id="mpld3.utils.deprecated">
+<tt class="descclassname">mpld3.utils.</tt><tt class="descname">deprecated</tt><big>(</big><em>func</em>, <em>old_name</em>, <em>new_name</em><big>)</big><a class="reference internal" href="../_modules/mpld3/utils.html#deprecated"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mpld3.utils.deprecated" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decorator to mark functions as deprecated.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="mpld3.utils.get_id">
+<tt class="descclassname">mpld3.utils.</tt><tt class="descname">get_id</tt><big>(</big><em>obj</em>, <em>suffix=''</em>, <em>prefix='el'</em>, <em>warn_on_invalid=True</em><big>)</big><a class="reference internal" href="../_modules/mpld3/utils.html#get_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mpld3.utils.get_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a unique id for the object</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="mpld3.utils.html_id_ok">
+<tt class="descclassname">mpld3.utils.</tt><tt class="descname">html_id_ok</tt><big>(</big><em>objid</em>, <em>html5=False</em><big>)</big><a class="reference internal" href="../_modules/mpld3/utils.html#html_id_ok"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mpld3.utils.html_id_ok" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether objid is valid as an HTML id attribute.</p>
+<p>If html5 == True, then use the more liberal html5 rules.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="mpld3.utils.write_ipynb_local_js">
+<tt class="descclassname">mpld3.utils.</tt><tt class="descname">write_ipynb_local_js</tt><big>(</big><em>location=None</em>, <em>d3_src=None</em>, <em>mpld3_src=None</em><big>)</big><a class="reference internal" href="../_modules/mpld3/utils.html#write_ipynb_local_js"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mpld3.utils.write_ipynb_local_js" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the mpld3 and d3 javascript libraries to the given file location.</p>
+<p>This utility is used by the IPython notebook tools to enable easy use
+of mpld3 with no web connection.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>location</strong> : string (optioal)</p>
+<blockquote>
+<div><p>the directory in which the d3 and mpld3 javascript libraries will be
+written. If not specified, the IPython nbextensions directory will be
+used. If IPython doesn&#8217;t support nbextensions (&lt; 2.0),
+the current working directory will be used.</p>
+</div></blockquote>
+<p><strong>d3_src</strong> : string (optional)</p>
+<blockquote>
+<div><p>the source location of the d3 library. If not specified, the standard
+path in mpld3.urls.D3_LOCAL will be used.</p>
+</div></blockquote>
+<p><strong>mpld3_src</strong> : string (optional)</p>
+<blockquote>
+<div><p>the source location of the mpld3 library. If not specified, the
+standard path in mpld3.urls.MPLD3_LOCAL will be used.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>d3_url, mpld3_url</strong> : string</p>
+<blockquote class="last">
+<div><p>The URLs to be used for loading these js files.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<span class="target" id="module-mpld3.urls"></span><div class="section" id="mpld3-urls">
+<h2>mpld3 URLs<a class="headerlink" href="#mpld3-urls" title="Permalink to this headline">¶</a></h2>
+<p>URLs and filepaths for the mpld3 javascript libraries</p>
 </div>
 </div>
 
@@ -821,7 +1198,7 @@ hoffset = 0, voffset = 10</p>
       <div class="bottomnav">
       
         <p>
-        «&#160;&#160;<a href="../notebooks/mpld3_demo.html">mpld3_demo</a>
+        «&#160;&#160;<a href="../notebooks/mpld3_demo.html">Demo of mpld3</a>
         &#160;&#160;::&#160;&#160;
         <a class="uplink" href="../index.html">Contents</a>
         </p>
@@ -829,7 +1206,7 @@ hoffset = 0, voffset = 10</p>
       </div>
 
     <div class="footer">
-        &copy; Copyright 2014, Jake Vanderplas.
+        &copy; Copyright 2014, mpld3 developers.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>

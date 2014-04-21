@@ -1,0 +1,14 @@
+
+Plugins in mpld3
+================
+
+[
+:download:`custom_plugins.html <rendered/custom_plugins.html>`
+|
+:download:`custom_plugins.ipynb <custom_plugins.ipynb>`
+]
+
+.. raw:: html
+
+    <iframe src="../_downloads/custom_plugins.html"
+      width="100%" height="400px"></iframe>

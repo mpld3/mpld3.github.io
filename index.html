@@ -8,16 +8,16 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>MPLD3 &mdash; MPLD3: Bringing Matplotlib to the Browser</title>
+    <title>MPLD3 &mdash; Bringing Matplotlib to the Browser</title>
     
-    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/mpld3.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/print.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.1',
+        VERSION:     '0.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,12 +27,15 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/theme_extras.js"></script>
-    <link rel="top" title="MPLD3: Bringing Matplotlib to the Browser" href="#" />
+    <link rel="shortcut icon" href="_static/favicon.png"/>
+    <link rel="top" title="Bringing Matplotlib to the Browser" href="#" />
     <link rel="next" title="Quick Start Guide" href="quickstart.html" /> 
   </head>
   <body>
-      <div class="header"><h1 class="heading"><a href="#">
-          <span>MPLD3: Bringing Matplotlib to the Browser</span></a></h1>
+      <div class="header"><a href="#">
+          <img class="leftlogo" src="_static/mpld3-medium.png" alt="Logo"/>
+        </a><h1 class="heading"><a href="#">
+          <span>Bringing Matplotlib to the Browser</span></a></h1>
         <h2 class="heading"><span>MPLD3</span></h2>
       </div>
       <div class="topnav">
@@ -47,7 +50,7 @@
       <div class="content">
         
         
-  <a href="https://github.com/jakevdp/mpld3"><img style="position: fixed; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png" alt="Fork me on GitHub"></a>
+  <a href="https://github.com/jakevdp/mpld3"><img style="position: fixed; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
 
 <div class="example-banner"></div>
 
@@ -56,10 +59,11 @@
 <h1>MPLD3<a class="headerlink" href="#mpld3" title="Permalink to this headline">¶</a></h1>
 <p>The mpld3 project brings together <a class="reference external" href="http://www.matplotlib.org">Matplotlib</a>,
 the popular Python-based graphing library, and <a class="reference external" href="http://d3js.org">D3js</a>,
-the popular Javascript library for creating data-driven web pages.  The
-result is a simple API for exporting your matplotlib graphics to HTML code
-which can be used within the browser, within standard web pages, blogs, or
-tools such as the <a class="reference external" href="http://ipython.org/notebook.html">IPython notebook</a>.</p>
+the popular Javascript library for creating interactive data visualizations
+for the web.  The result is a simple API for exporting your matplotlib
+graphics to HTML code which can be used within the browser, within standard
+web pages, blogs, or tools such as the
+<a class="reference external" href="http://ipython.org/notebook.html">IPython notebook</a>.</p>
 <p>See the <a class="reference internal" href="examples/index.html#example-gallery"><em>Example Gallery</em></a> or <a class="reference internal" href="notebooks/index.html#notebook-examples"><em>Notebook Examples</em></a> for some
 interactive demonstrations of mpld3 in action.</p>
 <p>For a quick overview of the package, see the <a class="reference internal" href="quickstart.html#quickstart-guide"><em>Quick Start Guide</em></a>.</p>
@@ -75,16 +79,35 @@ interactive demonstrations of mpld3 in action.</p>
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#plugins">Plugins</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing mpld3</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="install.html#installing-released-versions">Installing released versions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#installing-from-git">Installing from git</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#building-javascript-sources">Building Javascript Sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#dependencies">Dependencies</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#general">General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#ipython-notebook">IPython Notebook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#javascript">Javascript</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#troubleshooting">Troubleshooting</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="plugins.html">Plugins</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples/index.html">Example Gallery</a><ul>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="notebooks/index.html">Notebook Examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="notebooks/mpld3_demo.html">mpld3_demo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/custom_plugins.html">Plugins in mpld3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/mpld3_demo.html">Demo of mpld3</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="modules/API.html">API documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="modules/API.html#interactive-d3-rendering-of-matplotlib-images">Interactive D3 rendering of matplotlib images</a></li>
 <li class="toctree-l2"><a class="reference internal" href="modules/API.html#plugins-to-add-behavior-to-mpld3-charts">Plugins to add behavior to mpld3 charts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/API.html#mpld3-renderer">mpld3 renderer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/API.html#mpld3-utilities">mpld3 Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/API.html#mpld3-urls">mpld3 URLs</a></li>
 </ul>
 </li>
 </ul>
@@ -119,7 +142,7 @@ GitHub page.</p>
       </div>
 
     <div class="footer">
-        &copy; Copyright 2014, Jake Vanderplas.
+        &copy; Copyright 2014, mpld3 developers.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>

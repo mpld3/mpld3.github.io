@@ -1,23 +1,8 @@
 /*
- * haiku.css_t
+ * mpld3.css_t
  * ~~~~~~~~~~~
  *
- * Sphinx stylesheet -- haiku theme.
- *
- * Adapted from http://haiku-os.org/docs/Haiku-doc.css.
- * Original copyright message:
- *
- *     Copyright 2008-2009, Haiku. All rights reserved.
- *     Distributed under the terms of the MIT License.
- *
- *     Authors:
- *              Francois Revol <revol@free.fr>
- *              Stephan Assmus <superstippi@gmx.de>
- *              Braden Ewing <brewin@gmail.com>
- *              Humdinger <humdingerb@gmail.com>
- *
- * :copyright: Copyright 2007-2011 by the Sphinx team, see AUTHORS.
- * :license: BSD, see LICENSE for details.
+ * Sphinx stylesheet -- mpld3 theme.
  *
  */
 
@@ -51,18 +36,18 @@ div.footer {
 a:link {
     font-weight: bold;
     text-decoration: none;
-    color: #dc3c01;
+    color: #af2e2f;
 }
 
 a:visited {
     font-weight: bold;
     text-decoration: none;
-    color: #892601;
+    color: #6f2e2f;
 }
 
 a:hover, a:active {
     text-decoration: underline;
-    color: #ff4500;
+    color: #cf2e2f;
 }
 
 /* Some headers act as anchors, don't give them a hover effect */
@@ -88,12 +73,12 @@ h4 a:hover, a:active {
 }
 
 a.headerlink {
-    color: #a7ce38;
+    color: #cf2e2f;
     padding-left: 5px;
 }
 
 a.headerlink:hover {
-    color: #a7ce38;
+    color: #ef2e2f;
 }
 
 /* basic text elements */
@@ -142,6 +127,12 @@ div.header h2 {
 
 div.header img.rightlogo {
     float: right;
+}
+
+div.header img.leftlogo {
+    float: left;
+    margin-right: 30px;
+    margin-top: 16px;
 }
 
 
@@ -202,15 +193,13 @@ table.index td {
 table.index a:link, table.index a:visited {
     font-weight: normal;
     text-decoration: none;
-    color: #dc3c01;
+    color: #af2e2f;
 }
 table.index a:hover, table.index a:active {
     text-decoration: underline;
-    color: #ff4500;
+    color: #cf2e2f;
 }
 
-
-/* Haiku User Guide styles and layout */
 
 /* Rounded corner boxes */
 /* Common declarations */

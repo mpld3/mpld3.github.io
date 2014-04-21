@@ -12,24 +12,25 @@ import matplotlib.pyplot as plt
 import numpy as np
 import mpld3
 from mpld3 import plugins, utils
-import jinja2
-import json
 
 
 class LinkedView(plugins.PluginBase):
     """A simple plugin showing how multiple axes can be linked"""
 
     JAVASCRIPT = """
-    var LinkedViewPlugin = function(fig, prop){
-      this.fig = fig;
-      this.prop = mpld3.process_props(this, prop, {},
-                                      ["idpts", "idline", "data"]);
-    }
+    mpld3.register_plugin("linkedview", LinkedViewPlugin);
+    LinkedViewPlugin.prototype = Object.create(mpld3.Plugin.prototype);
+    LinkedViewPlugin.prototype.constructor = LinkedViewPlugin;
+    LinkedViewPlugin.prototype.requiredProps = ["idpts", "idline", "data"];
+    LinkedViewPlugin.prototype.defaultProps = {}
+    function LinkedViewPlugin(fig, props){
+        mpld3.Plugin.call(this, fig, props);
+    };
 
     LinkedViewPlugin.prototype.draw = function(){
-      var pts = mpld3.get_element(this.prop.idpts);
-      var line = mpld3.get_element(this.prop.idline);
-      var data = this.prop.data;
+      var pts = mpld3.get_element(this.props.idpts);
+      var line = mpld3.get_element(this.props.idline);
+      var data = this.props.data;
 
       function mouseover(d, i){
         line.data = data[i];
@@ -39,8 +40,6 @@ class LinkedView(plugins.PluginBase):
       }
       pts.elements().on("mouseover", mouseover);
     };
-
-    mpld3.register_plugin("linkedview", LinkedViewPlugin);
     """
 
     def __init__(self, points, line, linedata):

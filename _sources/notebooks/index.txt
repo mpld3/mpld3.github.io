@@ -6,5 +6,7 @@ Notebook Examples
 
 .. toctree::
    
+   ./custom_plugins
+   
    ./mpld3_demo
    

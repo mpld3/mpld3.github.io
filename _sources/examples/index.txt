@@ -50,11 +50,13 @@ Example Gallery
 
    ./linked_brush
 
+   ./mouse_position
+
+   ./mpld3_logo
+
    ./random_walk
 
    ./scatter_tooltip
-
-   ./show_image
 
 
 
@@ -90,6 +92,18 @@ Example Gallery
 
     :ref:`linked_brush`
 
+.. figure:: ./mouse_position.png
+    :target: ./mouse_position.html
+    :align: center
+
+    :ref:`mouse_position`
+
+.. figure:: ./mpld3_logo.png
+    :target: ./mpld3_logo.html
+    :align: center
+
+    :ref:`mpld3_logo`
+
 .. figure:: ./random_walk.png
     :target: ./random_walk.html
     :align: center
@@ -101,12 +115,6 @@ Example Gallery
     :align: center
 
     :ref:`scatter_tooltip`
-
-.. figure:: ./show_image.png
-    :target: ./show_image.html
-    :align: center
-
-    :ref:`show_image`
 
 
 
