@@ -4,7 +4,7 @@
     figures: [],
     plugin_map: {}
   };
-  mpld3.version = "0.2git";
+  mpld3.version = "0.3git";
   mpld3.register_plugin = function(name, obj) {
     mpld3.plugin_map[name] = obj;
   };
@@ -327,7 +327,12 @@
     return new mpld3_Grid(this.ax, gridprop);
   };
   mpld3_Axis.prototype.draw = function() {
-    this.axis = d3.svg.axis().scale(this.scale).orient(this.props.position).ticks(this.props.nticks).tickValues(this.props.tickvalues).tickFormat(this.props.tickformat);
+    if (this.props.tickvalues) {
+      tick_labels = d3.scale.threshold().domain(this.props.tickvalues.slice(1)).range(this.props.tickformat);
+    } else {
+      tick_labels = null;
+    }
+    this.axis = d3.svg.axis().scale(this.scale).orient(this.props.position).ticks(this.props.nticks).tickValues(this.props.tickvalues).tickFormat(tick_labels);
     this.elem = this.ax.baseaxes.append("g").attr("transform", this.transform).attr("class", this.cssclass).call(this.axis);
     mpld3.insert_css("div#" + this.ax.fig.figid + " ." + this.cssclass + " line, " + " ." + this.cssclass + " path", {
       "shape-rendering": "crispEdges",
@@ -342,6 +347,12 @@
     });
   };
   mpld3_Axis.prototype.zoomed = function() {
+    var d = this.axis.scale().domain();
+    if (this.props.tickvalues != null) {
+      this.axis.tickValues(this.props.tickvalues.filter(function(v) {
+        return v >= d[0] && v <= d[1];
+      }));
+    }
     this.elem.call(this.axis);
   };
   mpld3.Coordinates = mpld3_Coordinates;
@@ -399,7 +410,7 @@
     facecolor: "green",
     edgecolor: "black",
     edgewidth: 1,
-    dasharray: "10,0",
+    dasharray: "none",
     pathcodes: null,
     offset: null,
     offsetcoordinates: "data",
@@ -530,7 +541,7 @@
     coordinates: "data",
     color: "salmon",
     linewidth: 2,
-    dasharray: "10,0",
+    dasharray: "none",
     alpha: 1,
     zorder: 2
   };
