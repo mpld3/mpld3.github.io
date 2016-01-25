@@ -327,10 +327,27 @@
     return new mpld3_Grid(this.ax, gridprop);
   };
   mpld3_Axis.prototype.draw = function() {
-    if (this.props.tickvalues) {
+    var scale = this.props.xy === "x" ? this.parent.props.xscale : this.parent.props.yscale;
+    if (scale === "linear" && this.props.tickvalues && this.props.tickformat) {
       tick_labels = d3.scale.threshold().domain(this.props.tickvalues.slice(1)).range(this.props.tickformat);
     } else {
       tick_labels = null;
+    }
+    if (scale === "date" && this.props.tickvalues) {
+      var domain = this.props.xy === "x" ? this.parent.x.domain() : this.parent.y.domain();
+      var range = this.props.xy === "x" ? this.parent.xdom.domain() : this.parent.ydom.domain();
+      var ordinal_to_js_date = d3.scale.linear().domain(domain).range(range);
+      this.props.tickvalues = this.props.tickvalues.map(function(value) {
+        return new Date(ordinal_to_js_date(value));
+      });
+      if (this.props.tickformat === null) {
+        var tick_labels = null;
+      } else {
+        var labels = this.props.tickformat;
+        tick_labels = function(d, i) {
+          return labels[i];
+        };
+      }
     }
     this.axis = d3.svg.axis().scale(this.scale).orient(this.props.position).ticks(this.props.nticks).tickValues(this.props.tickvalues).tickFormat(tick_labels);
     this.elem = this.ax.baseaxes.append("g").attr("transform", this.transform).attr("class", this.cssclass).call(this.axis);
@@ -341,14 +358,14 @@
     });
     mpld3.insert_css("div#" + this.ax.fig.figid + " ." + this.cssclass + " text", {
       "font-family": "sans-serif",
-      "font-size": this.props.fontsize,
+      "font-size": this.props.fontsize + "px",
       fill: this.props.fontcolor,
       stroke: "none"
     });
   };
   mpld3_Axis.prototype.zoomed = function() {
-    var d = this.axis.scale().domain();
     if (this.props.tickvalues != null) {
+      var d = this.axis.scale().domain();
       this.axis.tickValues(this.props.tickvalues.filter(function(v) {
         return v >= d[0] && v <= d[1];
       }));
@@ -425,11 +442,11 @@
     this.offsetcoords = new mpld3_Coordinates(this.props.offsetcoordinates, this.ax);
     this.datafunc = mpld3_path();
   }
-  mpld3_Path.prototype.nanFilter = function(d, i) {
-    return !isNaN(d[this.props.xindex]) && !isNaN(d[this.props.yindex]);
+  mpld3_Path.prototype.finiteFilter = function(d, i) {
+    return isFinite(this.pathcoords.x(d[this.props.xindex])) && isFinite(this.pathcoords.y(d[this.props.yindex]));
   };
   mpld3_Path.prototype.draw = function() {
-    this.datafunc.defined(this.nanFilter.bind(this)).x(function(d) {
+    this.datafunc.defined(this.finiteFilter.bind(this)).x(function(d) {
       return this.pathcoords.x(d[this.props.xindex]);
     }).y(function(d) {
       return this.pathcoords.y(d[this.props.yindex]);
@@ -516,9 +533,16 @@
     }
     return ret;
   };
+  mpld3_PathCollection.prototype.allFinite = function(d) {
+    if (d instanceof Array) {
+      return d.length == d.filter(isFinite).length;
+    } else {
+      return true;
+    }
+  };
   mpld3_PathCollection.prototype.draw = function() {
     this.group = this.ax.axes.append("svg:g");
-    this.pathsobj = this.group.selectAll("paths").data(this.offsets).enter().append("svg:path").attr("d", this.pathFunc.bind(this)).attr("class", "mpld3-path").attr("transform", this.transformFunc.bind(this)).attr("style", this.styleFunc.bind(this)).attr("vector-effect", "non-scaling-stroke");
+    this.pathsobj = this.group.selectAll("paths").data(this.offsets.filter(this.allFinite)).enter().append("svg:path").attr("d", this.pathFunc.bind(this)).attr("class", "mpld3-path").attr("transform", this.transformFunc.bind(this)).attr("style", this.styleFunc.bind(this)).attr("vector-effect", "non-scaling-stroke");
   };
   mpld3_PathCollection.prototype.elements = function(d) {
     return this.group.selectAll("path");
@@ -727,7 +751,7 @@
       this.x = mpld3.multiscale(d3.scale.linear().domain(this.props.xlim).range(this.props.xdomain.map(Number)), this.xdom);
     }
     if (this.props.yscale === "date") {
-      this.x = mpld3.multiscale(d3.scale.linear().domain(this.props.ylim).range(this.props.ydomain.map(Number)), this.ydom);
+      this.y = mpld3.multiscale(d3.scale.linear().domain(this.props.ylim).range(this.props.ydomain.map(Number)), this.ydom);
     }
     var axes = this.props.axes;
     for (var i = 0; i < axes.length; i++) {
