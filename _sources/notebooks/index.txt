@@ -6,7 +6,13 @@ Notebook Examples
 
 .. toctree::
    
+   ./custom_widgin_general
+   
    ./custom_plugins
    
+   ./sliderPlugin
+   
    ./mpld3_demo
+   
+   ./interactive_legend
    

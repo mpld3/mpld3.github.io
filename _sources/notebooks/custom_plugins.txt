@@ -1,6 +1,6 @@
 
-Plugins in mpld3
-================
+custom_plugins
+==============
 
 [
 :download:`custom_plugins.html <rendered/custom_plugins.html>`

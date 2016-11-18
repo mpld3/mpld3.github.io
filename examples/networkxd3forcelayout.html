@@ -1,0 +1,739 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>NetworkX to d3.js Force Layout &#8212; Bringing Matplotlib to the Browser</title>
+    
+    <link rel="stylesheet" href="../_static/mpld3.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/print.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/theme_extras.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="Bringing Matplotlib to the Browser" href="../index.html" />
+    <link rel="up" title="Example Gallery" href="index.html" />
+    <link rel="next" title="Scatter Plot With Tooltips" href="scatter_tooltip.html" />
+    <link rel="prev" title="Interactive legend plugin" href="interactive_legend.html" /> 
+  </head>
+  <body role="document">
+      <div class="header"><a href="../index.html">
+          <img class="leftlogo" src="../_static/mpld3-medium.png" alt="Logo"/>
+        </a><h1 class="heading"><a href="../index.html">
+          <span>Bringing Matplotlib to the Browser</span></a></h1>
+        <h2 class="heading"><span>NetworkX to d3.js Force Layout</span></h2>
+      </div>
+      <div class="topnav">
+      
+        <p>
+        «&#160;&#160;<a href="interactive_legend.html">Interactive legend plugin</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="../index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="scatter_tooltip.html">Scatter Plot With Tooltips</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="networkx-to-d3-js-force-layout">
+<span id="networkxd3forcelayout"></span><h1>NetworkX to d3.js Force Layout<a class="headerlink" href="#networkx-to-d3-js-force-layout" title="Permalink to this headline">¶</a></h1>
+<p>MPLD3 Plugin to convert a NetworkX graph to a force layout.
+This is an example demoed <a class="reference external" href="http://blog.kdheepak.com/mpld3-networkx-d3js-force-layout.html">here</a>
+You can download the plugin from the Github repo <a class="reference external" href="https://github.com/kdheepak/mpld3_plugins/blob/master/mpld3_plugins/plugins/networkxd3forcelayout.py">here</a></p>
+<p>BSD-Clause 3 License
+Copyright (C) 2016 Dheepak Krishnamurthy</p>
+<style>
+
+</style>
+
+<div id="fig_el5382475660272540961817552016"></div>
+<script>
+function mpld3_load_lib(url, callback){
+  var s = document.createElement('script');
+  s.src = url;
+  s.async = true;
+  s.onreadystatechange = s.onload = callback;
+  s.onerror = function(){console.warn("failed to load library " + url);};
+  document.getElementsByTagName("head")[0].appendChild(s);
+}
+
+if(typeof(mpld3) !== "undefined" && mpld3._mpld3IsLoaded){
+   // already loaded: just create the figure
+   !function(mpld3){
+
+    mpld3.register_plugin("networkxd3forcelayout", NetworkXD3ForceLayoutPlugin);
+    NetworkXD3ForceLayoutPlugin.prototype = Object.create(mpld3.Plugin.prototype);
+    NetworkXD3ForceLayoutPlugin.prototype.constructor = NetworkXD3ForceLayoutPlugin;
+    NetworkXD3ForceLayoutPlugin.prototype.requiredProps = ["graph",
+                                                                "ax_id",];
+    NetworkXD3ForceLayoutPlugin.prototype.defaultProps = { coordinates: "data",
+                                                               gravity: 1,
+                                                               charge: -30,
+                                                               link_strength: 1,
+                                                               friction: 0.9,
+                                                               link_distance: 20,
+                                                               maximum_stroke_width: 2,
+                                                               minimum_stroke_width: 1,
+                                                               nominal_stroke_width: 1,
+                                                               maximum_radius: 10,
+                                                               minimum_radius: 1,
+                                                               nominal_radius: 5,
+                                                            };
+    function NetworkXD3ForceLayoutPlugin(fig, props){
+        mpld3.Plugin.call(this, fig, props);
+    };
+    var color = d3.scale.category20();
+    NetworkXD3ForceLayoutPlugin.prototype.zoomScaleProp = function (nominal_prop, minimum_prop, maximum_prop) {
+        var zoom = this.ax.zoom;
+        scalerFunction = function() {
+            var prop = nominal_prop;
+            if (nominal_prop*zoom.scale()>maximum_prop) prop = maximum_prop/zoom.scale();
+            if (nominal_prop*zoom.scale()<minimum_prop) prop = minimum_prop/zoom.scale();
+            return prop
+        }
+        return scalerFunction;
+    }
+    NetworkXD3ForceLayoutPlugin.prototype.setupDefaults = function () {
+        this.zoomScaleStroke = this.zoomScaleProp(this.props.nominal_stroke_width,
+                                                  this.props.minimum_stroke_width,
+                                                  this.props.maximum_stroke_width)
+        this.zoomScaleRadius = this.zoomScaleProp(this.props.nominal_radius,
+                                                  this.props.minimum_radius,
+                                                  this.props.maximum_radius)
+    }
+    NetworkXD3ForceLayoutPlugin.prototype.zoomed = function() {
+            this.tick()
+        }
+    NetworkXD3ForceLayoutPlugin.prototype.draw = function(){
+        plugin = this
+        brush = this.fig.getBrush();
+        DEFAULT_NODE_SIZE = this.props.nominal_radius;
+        var height = this.fig.height
+        var width = this.fig.width
+        var graph = this.props.graph
+        var gravity = this.props.gravity.toFixed()
+        var charge = this.props.charge.toFixed()
+        var link_distance = this.props.link_distance.toFixed()
+        var link_strength = this.props.link_strength.toFixed()
+        var friction = this.props.friction.toFixed()
+        this.ax = mpld3.get_element(this.props.ax_id, this.fig)
+        var ax = this.ax;
+        this.ax.elements.push(this)
+        ax_obj = this.ax;
+        var width = d3.max(ax.x.range()) - d3.min(ax.x.range()),
+            height = d3.max(ax.y.range()) - d3.min(ax.y.range());
+        var color = d3.scale.category20();
+        this.xScale = d3.scale.linear().domain([0, 1]).range([0, width]) // ax.x;
+        this.yScale = d3.scale.linear().domain([0, 1]).range([height, 0]) // ax.y;
+        this.force = d3.layout.force()
+                            .size([width, height]);
+        this.svg = this.ax.axes.append("g");
+        for(var i = 0; i < graph.nodes.length; i++){
+            var node = graph.nodes[i];
+            if (node.hasOwnProperty('x')) {
+                node.x = this.ax.x(node.x);
+            }
+            if (node.hasOwnProperty('y')) {
+                node.y = this.ax.y(node.y);
+            }
+        }
+        this.force
+            .nodes(graph.nodes)
+            .links(graph.links)
+            .linkStrength(link_strength)
+            .friction(friction)
+            .linkDistance(link_distance)
+            .charge(charge)
+            .gravity(gravity)
+            .start();
+        this.link = this.svg.selectAll(".link")
+            .data(graph.links)
+          .enter().append("line")
+            .attr("class", "link")
+            .attr("stroke", "black")
+            .style("stroke-width", function (d) { return Math.sqrt(d.value); });
+        this.node = this.svg.selectAll(".node")
+            .data(graph.nodes)
+          .enter().append("circle")
+            .attr("class", "node")
+            .attr("r", function(d) {return d.size === undefined ? DEFAULT_NODE_SIZE : d.size ;})
+            .style("fill", function (d) { return d.color; });
+        this.node.append("title")
+            .text(function (d) { return d.name; });
+        this.force.on("tick", this.tick.bind(this));
+        this.setupDefaults()
+    };
+    NetworkXD3ForceLayoutPlugin.prototype.tick = function() {
+        this.link.attr("x1", function (d) { return this.ax.x(this.xScale.invert(d.source.x)); }.bind(this))
+                 .attr("y1", function (d) { return this.ax.y(this.yScale.invert(d.source.y)); }.bind(this))
+                 .attr("x2", function (d) { return this.ax.x(this.xScale.invert(d.target.x)); }.bind(this))
+                 .attr("y2", function (d) { return this.ax.y(this.yScale.invert(d.target.y)); }.bind(this));
+        this.node.attr("transform", function (d) {
+            return "translate(" + this.ax.x(this.xScale.invert(d.x)) + "," + this.ax.y(this.yScale.invert(d.y)) + ")";
+            }.bind(this)
+        );
+    }
+
+       mpld3.draw_figure("fig_el5382475660272540961817552016", {"axes": [{"xlim": [0.0, 1.0], "yscale": "linear", "axesbg": "#FFFFFF", "texts": [], "zoomable": true, "images": [], "xdomain": [0.0, 1.0], "ylim": [0.0, 1.0], "paths": [], "sharey": [], "sharex": [], "axesbgalpha": null, "axes": [{"scale": "linear", "tickformat": null, "grid": {"gridOn": false}, "visible": true, "fontsize": 12.0, "position": "bottom", "nticks": 6, "tickvalues": null}, {"scale": "linear", "tickformat": null, "grid": {"gridOn": false}, "visible": true, "fontsize": 12.0, "position": "left", "nticks": 6, "tickvalues": null}], "lines": [], "markers": [], "id": "el538247566027864528", "ydomain": [0.0, 1.0], "collections": [], "xscale": "linear", "bbox": [0.125, 0.099999999999999978, 0.77500000000000002, 0.80000000000000004]}], "height": 800.0, "width": 800.0, "plugins": [{"type": "reset"}, {"enabled": false, "button": true, "type": "zoom"}, {"enabled": false, "button": true, "type": "boxzoom"}, {"charge": -600, "link_distance": 20, "link_strength": 1, "ax_id": "el538247566027864528", "graph": {"directed": false, "graph": {"name": "Zachary's Karate Club"}, "nodes": [{"club": "Mr. Hi", "color": "purple", "id": 0, "size": 16}, {"club": "Mr. Hi", "color": "purple", "id": 1, "size": 9}, {"club": "Mr. Hi", "color": "purple", "id": 2, "size": 10}, {"club": "Mr. Hi", "color": "purple", "id": 3, "size": 6}, {"club": "Mr. Hi", "color": "purple", "id": 4, "size": 3}, {"club": "Mr. Hi", "color": "purple", "id": 5, "size": 4}, {"club": "Mr. Hi", "color": "purple", "id": 6, "size": 4}, {"club": "Mr. Hi", "color": "purple", "id": 7, "size": 4}, {"club": "Mr. Hi", "color": "purple", "id": 8, "size": 5}, {"club": "Officer", "color": "orange", "id": 9, "size": 2}, {"club": "Mr. Hi", "color": "purple", "id": 10, "size": 3}, {"club": "Mr. Hi", "color": "purple", "id": 11, "size": 1}, {"club": "Mr. Hi", "color": "purple", "id": 12, "size": 2}, {"club": "Mr. Hi", "color": "purple", "id": 13, "size": 5}, {"club": "Officer", "color": "orange", "id": 14, "size": 2}, {"club": "Officer", "color": "orange", "id": 15, "size": 2}, {"club": "Mr. Hi", "color": "purple", "id": 16, "size": 2}, {"club": "Mr. Hi", "color": "purple", "id": 17, "size": 2}, {"club": "Officer", "color": "orange", "id": 18, "size": 2}, {"club": "Mr. Hi", "color": "purple", "id": 19, "size": 3}, {"club": "Officer", "color": "orange", "id": 20, "size": 2}, {"club": "Mr. Hi", "color": "purple", "id": 21, "size": 2}, {"club": "Officer", "color": "orange", "id": 22, "size": 2}, {"club": "Officer", "color": "orange", "id": 23, "size": 5}, {"club": "Officer", "color": "orange", "id": 24, "size": 3}, {"club": "Officer", "color": "orange", "id": 25, "size": 3}, {"club": "Officer", "color": "orange", "id": 26, "size": 2}, {"club": "Officer", "color": "orange", "id": 27, "size": 4}, {"club": "Officer", "color": "orange", "id": 28, "size": 3}, {"club": "Officer", "color": "orange", "id": 29, "size": 4}, {"club": "Officer", "color": "orange", "id": 30, "size": 4}, {"club": "Officer", "color": "orange", "id": 31, "size": 6}, {"club": "Officer", "color": "orange", "id": 32, "size": 12}, {"club": "Officer", "color": "orange", "id": 33, "size": 17}], "links": [{"source": 0, "target": 1}, {"source": 0, "target": 2}, {"source": 0, "target": 3}, {"source": 0, "target": 4}, {"source": 0, "target": 5}, {"source": 0, "target": 6}, {"source": 0, "target": 7}, {"source": 0, "target": 8}, {"source": 0, "target": 10}, {"source": 0, "target": 11}, {"source": 0, "target": 12}, {"source": 0, "target": 13}, {"source": 0, "target": 17}, {"source": 0, "target": 19}, {"source": 0, "target": 21}, {"source": 0, "target": 31}, {"source": 1, "target": 2}, {"source": 1, "target": 3}, {"source": 1, "target": 7}, {"source": 1, "target": 13}, {"source": 1, "target": 17}, {"source": 1, "target": 19}, {"source": 1, "target": 21}, {"source": 1, "target": 30}, {"source": 2, "target": 3}, {"source": 2, "target": 32}, {"source": 2, "target": 7}, {"source": 2, "target": 8}, {"source": 2, "target": 9}, {"source": 2, "target": 13}, {"source": 2, "target": 27}, {"source": 2, "target": 28}, {"source": 3, "target": 7}, {"source": 3, "target": 12}, {"source": 3, "target": 13}, {"source": 4, "target": 10}, {"source": 4, "target": 6}, {"source": 5, "target": 16}, {"source": 5, "target": 10}, {"source": 5, "target": 6}, {"source": 6, "target": 16}, {"source": 8, "target": 32}, {"source": 8, "target": 30}, {"source": 8, "target": 33}, {"source": 9, "target": 33}, {"source": 13, "target": 33}, {"source": 14, "target": 32}, {"source": 14, "target": 33}, {"source": 15, "target": 32}, {"source": 15, "target": 33}, {"source": 18, "target": 32}, {"source": 18, "target": 33}, {"source": 19, "target": 33}, {"source": 20, "target": 32}, {"source": 20, "target": 33}, {"source": 22, "target": 32}, {"source": 22, "target": 33}, {"source": 23, "target": 32}, {"source": 23, "target": 25}, {"source": 23, "target": 27}, {"source": 23, "target": 29}, {"source": 23, "target": 33}, {"source": 24, "target": 25}, {"source": 24, "target": 27}, {"source": 24, "target": 31}, {"source": 25, "target": 31}, {"source": 26, "target": 33}, {"source": 26, "target": 29}, {"source": 27, "target": 33}, {"source": 28, "target": 33}, {"source": 28, "target": 31}, {"source": 29, "target": 32}, {"source": 29, "target": 33}, {"source": 30, "target": 33}, {"source": 30, "target": 32}, {"source": 31, "target": 33}, {"source": 31, "target": 32}, {"source": 32, "target": 33}], "multigraph": false}, "nominal_radius": 5, "type": "networkxd3forcelayout", "gravity": 0.5, "friction": 1}], "data": {}, "id": "el538247566027254096"});
+   }(mpld3);
+}else if(typeof define === "function" && define.amd){
+   // require.js is available: use it to load d3/mpld3
+   require.config({paths: {d3: "https://mpld3.github.io/js/d3.v3.min"}});
+   require(["d3"], function(d3){
+      window.d3 = d3;
+      mpld3_load_lib("https://mpld3.github.io/js/mpld3.v0.3.js", function(){
+
+    mpld3.register_plugin("networkxd3forcelayout", NetworkXD3ForceLayoutPlugin);
+    NetworkXD3ForceLayoutPlugin.prototype = Object.create(mpld3.Plugin.prototype);
+    NetworkXD3ForceLayoutPlugin.prototype.constructor = NetworkXD3ForceLayoutPlugin;
+    NetworkXD3ForceLayoutPlugin.prototype.requiredProps = ["graph",
+                                                                "ax_id",];
+    NetworkXD3ForceLayoutPlugin.prototype.defaultProps = { coordinates: "data",
+                                                               gravity: 1,
+                                                               charge: -30,
+                                                               link_strength: 1,
+                                                               friction: 0.9,
+                                                               link_distance: 20,
+                                                               maximum_stroke_width: 2,
+                                                               minimum_stroke_width: 1,
+                                                               nominal_stroke_width: 1,
+                                                               maximum_radius: 10,
+                                                               minimum_radius: 1,
+                                                               nominal_radius: 5,
+                                                            };
+    function NetworkXD3ForceLayoutPlugin(fig, props){
+        mpld3.Plugin.call(this, fig, props);
+    };
+    var color = d3.scale.category20();
+    NetworkXD3ForceLayoutPlugin.prototype.zoomScaleProp = function (nominal_prop, minimum_prop, maximum_prop) {
+        var zoom = this.ax.zoom;
+        scalerFunction = function() {
+            var prop = nominal_prop;
+            if (nominal_prop*zoom.scale()>maximum_prop) prop = maximum_prop/zoom.scale();
+            if (nominal_prop*zoom.scale()<minimum_prop) prop = minimum_prop/zoom.scale();
+            return prop
+        }
+        return scalerFunction;
+    }
+    NetworkXD3ForceLayoutPlugin.prototype.setupDefaults = function () {
+        this.zoomScaleStroke = this.zoomScaleProp(this.props.nominal_stroke_width,
+                                                  this.props.minimum_stroke_width,
+                                                  this.props.maximum_stroke_width)
+        this.zoomScaleRadius = this.zoomScaleProp(this.props.nominal_radius,
+                                                  this.props.minimum_radius,
+                                                  this.props.maximum_radius)
+    }
+    NetworkXD3ForceLayoutPlugin.prototype.zoomed = function() {
+            this.tick()
+        }
+    NetworkXD3ForceLayoutPlugin.prototype.draw = function(){
+        plugin = this
+        brush = this.fig.getBrush();
+        DEFAULT_NODE_SIZE = this.props.nominal_radius;
+        var height = this.fig.height
+        var width = this.fig.width
+        var graph = this.props.graph
+        var gravity = this.props.gravity.toFixed()
+        var charge = this.props.charge.toFixed()
+        var link_distance = this.props.link_distance.toFixed()
+        var link_strength = this.props.link_strength.toFixed()
+        var friction = this.props.friction.toFixed()
+        this.ax = mpld3.get_element(this.props.ax_id, this.fig)
+        var ax = this.ax;
+        this.ax.elements.push(this)
+        ax_obj = this.ax;
+        var width = d3.max(ax.x.range()) - d3.min(ax.x.range()),
+            height = d3.max(ax.y.range()) - d3.min(ax.y.range());
+        var color = d3.scale.category20();
+        this.xScale = d3.scale.linear().domain([0, 1]).range([0, width]) // ax.x;
+        this.yScale = d3.scale.linear().domain([0, 1]).range([height, 0]) // ax.y;
+        this.force = d3.layout.force()
+                            .size([width, height]);
+        this.svg = this.ax.axes.append("g");
+        for(var i = 0; i < graph.nodes.length; i++){
+            var node = graph.nodes[i];
+            if (node.hasOwnProperty('x')) {
+                node.x = this.ax.x(node.x);
+            }
+            if (node.hasOwnProperty('y')) {
+                node.y = this.ax.y(node.y);
+            }
+        }
+        this.force
+            .nodes(graph.nodes)
+            .links(graph.links)
+            .linkStrength(link_strength)
+            .friction(friction)
+            .linkDistance(link_distance)
+            .charge(charge)
+            .gravity(gravity)
+            .start();
+        this.link = this.svg.selectAll(".link")
+            .data(graph.links)
+          .enter().append("line")
+            .attr("class", "link")
+            .attr("stroke", "black")
+            .style("stroke-width", function (d) { return Math.sqrt(d.value); });
+        this.node = this.svg.selectAll(".node")
+            .data(graph.nodes)
+          .enter().append("circle")
+            .attr("class", "node")
+            .attr("r", function(d) {return d.size === undefined ? DEFAULT_NODE_SIZE : d.size ;})
+            .style("fill", function (d) { return d.color; });
+        this.node.append("title")
+            .text(function (d) { return d.name; });
+        this.force.on("tick", this.tick.bind(this));
+        this.setupDefaults()
+    };
+    NetworkXD3ForceLayoutPlugin.prototype.tick = function() {
+        this.link.attr("x1", function (d) { return this.ax.x(this.xScale.invert(d.source.x)); }.bind(this))
+                 .attr("y1", function (d) { return this.ax.y(this.yScale.invert(d.source.y)); }.bind(this))
+                 .attr("x2", function (d) { return this.ax.x(this.xScale.invert(d.target.x)); }.bind(this))
+                 .attr("y2", function (d) { return this.ax.y(this.yScale.invert(d.target.y)); }.bind(this));
+        this.node.attr("transform", function (d) {
+            return "translate(" + this.ax.x(this.xScale.invert(d.x)) + "," + this.ax.y(this.yScale.invert(d.y)) + ")";
+            }.bind(this)
+        );
+    }
+
+         mpld3.draw_figure("fig_el5382475660272540961817552016", {"axes": [{"xlim": [0.0, 1.0], "yscale": "linear", "axesbg": "#FFFFFF", "texts": [], "zoomable": true, "images": [], "xdomain": [0.0, 1.0], "ylim": [0.0, 1.0], "paths": [], "sharey": [], "sharex": [], "axesbgalpha": null, "axes": [{"scale": "linear", "tickformat": null, "grid": {"gridOn": false}, "visible": true, "fontsize": 12.0, "position": "bottom", "nticks": 6, "tickvalues": null}, {"scale": "linear", "tickformat": null, "grid": {"gridOn": false}, "visible": true, "fontsize": 12.0, "position": "left", "nticks": 6, "tickvalues": null}], "lines": [], "markers": [], "id": "el538247566027864528", "ydomain": [0.0, 1.0], "collections": [], "xscale": "linear", "bbox": [0.125, 0.099999999999999978, 0.77500000000000002, 0.80000000000000004]}], "height": 800.0, "width": 800.0, "plugins": [{"type": "reset"}, {"enabled": false, "button": true, "type": "zoom"}, {"enabled": false, "button": true, "type": "boxzoom"}, {"charge": -600, "link_distance": 20, "link_strength": 1, "ax_id": "el538247566027864528", "graph": {"directed": false, "graph": {"name": "Zachary's Karate Club"}, "nodes": [{"club": "Mr. Hi", "color": "purple", "id": 0, "size": 16}, {"club": "Mr. Hi", "color": "purple", "id": 1, "size": 9}, {"club": "Mr. Hi", "color": "purple", "id": 2, "size": 10}, {"club": "Mr. Hi", "color": "purple", "id": 3, "size": 6}, {"club": "Mr. Hi", "color": "purple", "id": 4, "size": 3}, {"club": "Mr. Hi", "color": "purple", "id": 5, "size": 4}, {"club": "Mr. Hi", "color": "purple", "id": 6, "size": 4}, {"club": "Mr. Hi", "color": "purple", "id": 7, "size": 4}, {"club": "Mr. Hi", "color": "purple", "id": 8, "size": 5}, {"club": "Officer", "color": "orange", "id": 9, "size": 2}, {"club": "Mr. Hi", "color": "purple", "id": 10, "size": 3}, {"club": "Mr. Hi", "color": "purple", "id": 11, "size": 1}, {"club": "Mr. Hi", "color": "purple", "id": 12, "size": 2}, {"club": "Mr. Hi", "color": "purple", "id": 13, "size": 5}, {"club": "Officer", "color": "orange", "id": 14, "size": 2}, {"club": "Officer", "color": "orange", "id": 15, "size": 2}, {"club": "Mr. Hi", "color": "purple", "id": 16, "size": 2}, {"club": "Mr. Hi", "color": "purple", "id": 17, "size": 2}, {"club": "Officer", "color": "orange", "id": 18, "size": 2}, {"club": "Mr. Hi", "color": "purple", "id": 19, "size": 3}, {"club": "Officer", "color": "orange", "id": 20, "size": 2}, {"club": "Mr. Hi", "color": "purple", "id": 21, "size": 2}, {"club": "Officer", "color": "orange", "id": 22, "size": 2}, {"club": "Officer", "color": "orange", "id": 23, "size": 5}, {"club": "Officer", "color": "orange", "id": 24, "size": 3}, {"club": "Officer", "color": "orange", "id": 25, "size": 3}, {"club": "Officer", "color": "orange", "id": 26, "size": 2}, {"club": "Officer", "color": "orange", "id": 27, "size": 4}, {"club": "Officer", "color": "orange", "id": 28, "size": 3}, {"club": "Officer", "color": "orange", "id": 29, "size": 4}, {"club": "Officer", "color": "orange", "id": 30, "size": 4}, {"club": "Officer", "color": "orange", "id": 31, "size": 6}, {"club": "Officer", "color": "orange", "id": 32, "size": 12}, {"club": "Officer", "color": "orange", "id": 33, "size": 17}], "links": [{"source": 0, "target": 1}, {"source": 0, "target": 2}, {"source": 0, "target": 3}, {"source": 0, "target": 4}, {"source": 0, "target": 5}, {"source": 0, "target": 6}, {"source": 0, "target": 7}, {"source": 0, "target": 8}, {"source": 0, "target": 10}, {"source": 0, "target": 11}, {"source": 0, "target": 12}, {"source": 0, "target": 13}, {"source": 0, "target": 17}, {"source": 0, "target": 19}, {"source": 0, "target": 21}, {"source": 0, "target": 31}, {"source": 1, "target": 2}, {"source": 1, "target": 3}, {"source": 1, "target": 7}, {"source": 1, "target": 13}, {"source": 1, "target": 17}, {"source": 1, "target": 19}, {"source": 1, "target": 21}, {"source": 1, "target": 30}, {"source": 2, "target": 3}, {"source": 2, "target": 32}, {"source": 2, "target": 7}, {"source": 2, "target": 8}, {"source": 2, "target": 9}, {"source": 2, "target": 13}, {"source": 2, "target": 27}, {"source": 2, "target": 28}, {"source": 3, "target": 7}, {"source": 3, "target": 12}, {"source": 3, "target": 13}, {"source": 4, "target": 10}, {"source": 4, "target": 6}, {"source": 5, "target": 16}, {"source": 5, "target": 10}, {"source": 5, "target": 6}, {"source": 6, "target": 16}, {"source": 8, "target": 32}, {"source": 8, "target": 30}, {"source": 8, "target": 33}, {"source": 9, "target": 33}, {"source": 13, "target": 33}, {"source": 14, "target": 32}, {"source": 14, "target": 33}, {"source": 15, "target": 32}, {"source": 15, "target": 33}, {"source": 18, "target": 32}, {"source": 18, "target": 33}, {"source": 19, "target": 33}, {"source": 20, "target": 32}, {"source": 20, "target": 33}, {"source": 22, "target": 32}, {"source": 22, "target": 33}, {"source": 23, "target": 32}, {"source": 23, "target": 25}, {"source": 23, "target": 27}, {"source": 23, "target": 29}, {"source": 23, "target": 33}, {"source": 24, "target": 25}, {"source": 24, "target": 27}, {"source": 24, "target": 31}, {"source": 25, "target": 31}, {"source": 26, "target": 33}, {"source": 26, "target": 29}, {"source": 27, "target": 33}, {"source": 28, "target": 33}, {"source": 28, "target": 31}, {"source": 29, "target": 32}, {"source": 29, "target": 33}, {"source": 30, "target": 33}, {"source": 30, "target": 32}, {"source": 31, "target": 33}, {"source": 31, "target": 32}, {"source": 32, "target": 33}], "multigraph": false}, "nominal_radius": 5, "type": "networkxd3forcelayout", "gravity": 0.5, "friction": 1}], "data": {}, "id": "el538247566027254096"});
+      });
+    });
+}else{
+    // require.js not available: dynamically load d3 & mpld3
+    mpld3_load_lib("https://mpld3.github.io/js/d3.v3.min.js", function(){
+         mpld3_load_lib("https://mpld3.github.io/js/mpld3.v0.3.js", function(){
+
+    mpld3.register_plugin("networkxd3forcelayout", NetworkXD3ForceLayoutPlugin);
+    NetworkXD3ForceLayoutPlugin.prototype = Object.create(mpld3.Plugin.prototype);
+    NetworkXD3ForceLayoutPlugin.prototype.constructor = NetworkXD3ForceLayoutPlugin;
+    NetworkXD3ForceLayoutPlugin.prototype.requiredProps = ["graph",
+                                                                "ax_id",];
+    NetworkXD3ForceLayoutPlugin.prototype.defaultProps = { coordinates: "data",
+                                                               gravity: 1,
+                                                               charge: -30,
+                                                               link_strength: 1,
+                                                               friction: 0.9,
+                                                               link_distance: 20,
+                                                               maximum_stroke_width: 2,
+                                                               minimum_stroke_width: 1,
+                                                               nominal_stroke_width: 1,
+                                                               maximum_radius: 10,
+                                                               minimum_radius: 1,
+                                                               nominal_radius: 5,
+                                                            };
+    function NetworkXD3ForceLayoutPlugin(fig, props){
+        mpld3.Plugin.call(this, fig, props);
+    };
+    var color = d3.scale.category20();
+    NetworkXD3ForceLayoutPlugin.prototype.zoomScaleProp = function (nominal_prop, minimum_prop, maximum_prop) {
+        var zoom = this.ax.zoom;
+        scalerFunction = function() {
+            var prop = nominal_prop;
+            if (nominal_prop*zoom.scale()>maximum_prop) prop = maximum_prop/zoom.scale();
+            if (nominal_prop*zoom.scale()<minimum_prop) prop = minimum_prop/zoom.scale();
+            return prop
+        }
+        return scalerFunction;
+    }
+    NetworkXD3ForceLayoutPlugin.prototype.setupDefaults = function () {
+        this.zoomScaleStroke = this.zoomScaleProp(this.props.nominal_stroke_width,
+                                                  this.props.minimum_stroke_width,
+                                                  this.props.maximum_stroke_width)
+        this.zoomScaleRadius = this.zoomScaleProp(this.props.nominal_radius,
+                                                  this.props.minimum_radius,
+                                                  this.props.maximum_radius)
+    }
+    NetworkXD3ForceLayoutPlugin.prototype.zoomed = function() {
+            this.tick()
+        }
+    NetworkXD3ForceLayoutPlugin.prototype.draw = function(){
+        plugin = this
+        brush = this.fig.getBrush();
+        DEFAULT_NODE_SIZE = this.props.nominal_radius;
+        var height = this.fig.height
+        var width = this.fig.width
+        var graph = this.props.graph
+        var gravity = this.props.gravity.toFixed()
+        var charge = this.props.charge.toFixed()
+        var link_distance = this.props.link_distance.toFixed()
+        var link_strength = this.props.link_strength.toFixed()
+        var friction = this.props.friction.toFixed()
+        this.ax = mpld3.get_element(this.props.ax_id, this.fig)
+        var ax = this.ax;
+        this.ax.elements.push(this)
+        ax_obj = this.ax;
+        var width = d3.max(ax.x.range()) - d3.min(ax.x.range()),
+            height = d3.max(ax.y.range()) - d3.min(ax.y.range());
+        var color = d3.scale.category20();
+        this.xScale = d3.scale.linear().domain([0, 1]).range([0, width]) // ax.x;
+        this.yScale = d3.scale.linear().domain([0, 1]).range([height, 0]) // ax.y;
+        this.force = d3.layout.force()
+                            .size([width, height]);
+        this.svg = this.ax.axes.append("g");
+        for(var i = 0; i < graph.nodes.length; i++){
+            var node = graph.nodes[i];
+            if (node.hasOwnProperty('x')) {
+                node.x = this.ax.x(node.x);
+            }
+            if (node.hasOwnProperty('y')) {
+                node.y = this.ax.y(node.y);
+            }
+        }
+        this.force
+            .nodes(graph.nodes)
+            .links(graph.links)
+            .linkStrength(link_strength)
+            .friction(friction)
+            .linkDistance(link_distance)
+            .charge(charge)
+            .gravity(gravity)
+            .start();
+        this.link = this.svg.selectAll(".link")
+            .data(graph.links)
+          .enter().append("line")
+            .attr("class", "link")
+            .attr("stroke", "black")
+            .style("stroke-width", function (d) { return Math.sqrt(d.value); });
+        this.node = this.svg.selectAll(".node")
+            .data(graph.nodes)
+          .enter().append("circle")
+            .attr("class", "node")
+            .attr("r", function(d) {return d.size === undefined ? DEFAULT_NODE_SIZE : d.size ;})
+            .style("fill", function (d) { return d.color; });
+        this.node.append("title")
+            .text(function (d) { return d.name; });
+        this.force.on("tick", this.tick.bind(this));
+        this.setupDefaults()
+    };
+    NetworkXD3ForceLayoutPlugin.prototype.tick = function() {
+        this.link.attr("x1", function (d) { return this.ax.x(this.xScale.invert(d.source.x)); }.bind(this))
+                 .attr("y1", function (d) { return this.ax.y(this.yScale.invert(d.source.y)); }.bind(this))
+                 .attr("x2", function (d) { return this.ax.x(this.xScale.invert(d.target.x)); }.bind(this))
+                 .attr("y2", function (d) { return this.ax.y(this.yScale.invert(d.target.y)); }.bind(this));
+        this.node.attr("transform", function (d) {
+            return "translate(" + this.ax.x(this.xScale.invert(d.x)) + "," + this.ax.y(this.yScale.invert(d.y)) + ")";
+            }.bind(this)
+        );
+    }
+
+                 mpld3.draw_figure("fig_el5382475660272540961817552016", {"axes": [{"xlim": [0.0, 1.0], "yscale": "linear", "axesbg": "#FFFFFF", "texts": [], "zoomable": true, "images": [], "xdomain": [0.0, 1.0], "ylim": [0.0, 1.0], "paths": [], "sharey": [], "sharex": [], "axesbgalpha": null, "axes": [{"scale": "linear", "tickformat": null, "grid": {"gridOn": false}, "visible": true, "fontsize": 12.0, "position": "bottom", "nticks": 6, "tickvalues": null}, {"scale": "linear", "tickformat": null, "grid": {"gridOn": false}, "visible": true, "fontsize": 12.0, "position": "left", "nticks": 6, "tickvalues": null}], "lines": [], "markers": [], "id": "el538247566027864528", "ydomain": [0.0, 1.0], "collections": [], "xscale": "linear", "bbox": [0.125, 0.099999999999999978, 0.77500000000000002, 0.80000000000000004]}], "height": 800.0, "width": 800.0, "plugins": [{"type": "reset"}, {"enabled": false, "button": true, "type": "zoom"}, {"enabled": false, "button": true, "type": "boxzoom"}, {"charge": -600, "link_distance": 20, "link_strength": 1, "ax_id": "el538247566027864528", "graph": {"directed": false, "graph": {"name": "Zachary's Karate Club"}, "nodes": [{"club": "Mr. Hi", "color": "purple", "id": 0, "size": 16}, {"club": "Mr. Hi", "color": "purple", "id": 1, "size": 9}, {"club": "Mr. Hi", "color": "purple", "id": 2, "size": 10}, {"club": "Mr. Hi", "color": "purple", "id": 3, "size": 6}, {"club": "Mr. Hi", "color": "purple", "id": 4, "size": 3}, {"club": "Mr. Hi", "color": "purple", "id": 5, "size": 4}, {"club": "Mr. Hi", "color": "purple", "id": 6, "size": 4}, {"club": "Mr. Hi", "color": "purple", "id": 7, "size": 4}, {"club": "Mr. Hi", "color": "purple", "id": 8, "size": 5}, {"club": "Officer", "color": "orange", "id": 9, "size": 2}, {"club": "Mr. Hi", "color": "purple", "id": 10, "size": 3}, {"club": "Mr. Hi", "color": "purple", "id": 11, "size": 1}, {"club": "Mr. Hi", "color": "purple", "id": 12, "size": 2}, {"club": "Mr. Hi", "color": "purple", "id": 13, "size": 5}, {"club": "Officer", "color": "orange", "id": 14, "size": 2}, {"club": "Officer", "color": "orange", "id": 15, "size": 2}, {"club": "Mr. Hi", "color": "purple", "id": 16, "size": 2}, {"club": "Mr. Hi", "color": "purple", "id": 17, "size": 2}, {"club": "Officer", "color": "orange", "id": 18, "size": 2}, {"club": "Mr. Hi", "color": "purple", "id": 19, "size": 3}, {"club": "Officer", "color": "orange", "id": 20, "size": 2}, {"club": "Mr. Hi", "color": "purple", "id": 21, "size": 2}, {"club": "Officer", "color": "orange", "id": 22, "size": 2}, {"club": "Officer", "color": "orange", "id": 23, "size": 5}, {"club": "Officer", "color": "orange", "id": 24, "size": 3}, {"club": "Officer", "color": "orange", "id": 25, "size": 3}, {"club": "Officer", "color": "orange", "id": 26, "size": 2}, {"club": "Officer", "color": "orange", "id": 27, "size": 4}, {"club": "Officer", "color": "orange", "id": 28, "size": 3}, {"club": "Officer", "color": "orange", "id": 29, "size": 4}, {"club": "Officer", "color": "orange", "id": 30, "size": 4}, {"club": "Officer", "color": "orange", "id": 31, "size": 6}, {"club": "Officer", "color": "orange", "id": 32, "size": 12}, {"club": "Officer", "color": "orange", "id": 33, "size": 17}], "links": [{"source": 0, "target": 1}, {"source": 0, "target": 2}, {"source": 0, "target": 3}, {"source": 0, "target": 4}, {"source": 0, "target": 5}, {"source": 0, "target": 6}, {"source": 0, "target": 7}, {"source": 0, "target": 8}, {"source": 0, "target": 10}, {"source": 0, "target": 11}, {"source": 0, "target": 12}, {"source": 0, "target": 13}, {"source": 0, "target": 17}, {"source": 0, "target": 19}, {"source": 0, "target": 21}, {"source": 0, "target": 31}, {"source": 1, "target": 2}, {"source": 1, "target": 3}, {"source": 1, "target": 7}, {"source": 1, "target": 13}, {"source": 1, "target": 17}, {"source": 1, "target": 19}, {"source": 1, "target": 21}, {"source": 1, "target": 30}, {"source": 2, "target": 3}, {"source": 2, "target": 32}, {"source": 2, "target": 7}, {"source": 2, "target": 8}, {"source": 2, "target": 9}, {"source": 2, "target": 13}, {"source": 2, "target": 27}, {"source": 2, "target": 28}, {"source": 3, "target": 7}, {"source": 3, "target": 12}, {"source": 3, "target": 13}, {"source": 4, "target": 10}, {"source": 4, "target": 6}, {"source": 5, "target": 16}, {"source": 5, "target": 10}, {"source": 5, "target": 6}, {"source": 6, "target": 16}, {"source": 8, "target": 32}, {"source": 8, "target": 30}, {"source": 8, "target": 33}, {"source": 9, "target": 33}, {"source": 13, "target": 33}, {"source": 14, "target": 32}, {"source": 14, "target": 33}, {"source": 15, "target": 32}, {"source": 15, "target": 33}, {"source": 18, "target": 32}, {"source": 18, "target": 33}, {"source": 19, "target": 33}, {"source": 20, "target": 32}, {"source": 20, "target": 33}, {"source": 22, "target": 32}, {"source": 22, "target": 33}, {"source": 23, "target": 32}, {"source": 23, "target": 25}, {"source": 23, "target": 27}, {"source": 23, "target": 29}, {"source": 23, "target": 33}, {"source": 24, "target": 25}, {"source": 24, "target": 27}, {"source": 24, "target": 31}, {"source": 25, "target": 31}, {"source": 26, "target": 33}, {"source": 26, "target": 29}, {"source": 27, "target": 33}, {"source": 28, "target": 33}, {"source": 28, "target": 31}, {"source": 29, "target": 32}, {"source": 29, "target": 33}, {"source": 30, "target": 33}, {"source": 30, "target": 32}, {"source": 31, "target": 33}, {"source": 31, "target": 32}, {"source": 32, "target": 33}], "multigraph": false}, "nominal_radius": 5, "type": "networkxd3forcelayout", "gravity": 0.5, "friction": 1}], "data": {}, "id": "el538247566027254096"});
+            })
+         });
+}
+</script><p><strong>Python source code:</strong> <a class="reference download internal" href="../_downloads/networkxd3forcelayout.py" download=""><code class="xref download docutils literal"><span class="pre">[download</span> <span class="pre">source:</span> <span class="pre">networkxd3forcelayout.py]</span></code></a></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>
+
+<span class="kn">import</span> <span class="nn">mpld3</span>
+
+<span class="n">graph</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;directed&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+ <span class="s1">&#39;graph&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s2">&quot;Zachary&#39;s Karate Club&quot;</span><span class="p">},</span>
+ <span class="s1">&#39;links&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">11</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">13</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">17</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">19</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">21</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">31</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">13</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">17</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">19</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">21</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">30</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">32</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">13</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">27</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">28</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">13</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">16</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">16</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">32</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">30</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">33</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">33</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">13</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">33</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">32</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">33</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">32</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">33</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">18</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">32</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">18</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">33</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">19</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">33</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">32</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">33</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">22</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">32</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">22</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">33</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">23</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">32</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">23</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">25</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">23</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">27</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">23</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">29</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">23</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">33</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">24</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">25</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">24</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">27</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">24</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">31</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">25</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">31</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">26</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">33</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">26</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">29</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">27</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">33</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">28</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">33</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">28</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">31</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">29</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">32</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">29</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">33</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">33</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">32</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">31</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">33</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">31</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">32</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mi">32</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">33</span><span class="p">}],</span>
+ <span class="s1">&#39;multigraph&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+ <span class="s1">&#39;nodes&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;club&#39;</span><span class="p">:</span> <span class="s1">&#39;Mr. Hi&#39;</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;purple&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">16</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;club&#39;</span><span class="p">:</span> <span class="s1">&#39;Mr. Hi&#39;</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;purple&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;club&#39;</span><span class="p">:</span> <span class="s1">&#39;Mr. Hi&#39;</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;purple&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;club&#39;</span><span class="p">:</span> <span class="s1">&#39;Mr. Hi&#39;</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;purple&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;club&#39;</span><span class="p">:</span> <span class="s1">&#39;Mr. Hi&#39;</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;purple&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;club&#39;</span><span class="p">:</span> <span class="s1">&#39;Mr. Hi&#39;</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;purple&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;club&#39;</span><span class="p">:</span> <span class="s1">&#39;Mr. Hi&#39;</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;purple&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;club&#39;</span><span class="p">:</span> <span class="s1">&#39;Mr. Hi&#39;</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;purple&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;club&#39;</span><span class="p">:</span> <span class="s1">&#39;Mr. Hi&#39;</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;purple&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;club&#39;</span><span class="p">:</span> <span class="s1">&#39;Officer&#39;</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span> <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;club&#39;</span><span class="p">:</span> <span class="s1">&#39;Mr. Hi&#39;</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;purple&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;club&#39;</span><span class="p">:</span> <span class="s1">&#39;Mr. Hi&#39;</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;purple&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">11</span><span class="p">,</span> <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;club&#39;</span><span class="p">:</span> <span class="s1">&#39;Mr. Hi&#39;</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;purple&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span> <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;club&#39;</span><span class="p">:</span> <span class="s1">&#39;Mr. Hi&#39;</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;purple&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">13</span><span class="p">,</span> <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;club&#39;</span><span class="p">:</span> <span class="s1">&#39;Officer&#39;</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span> <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;club&#39;</span><span class="p">:</span> <span class="s1">&#39;Officer&#39;</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;club&#39;</span><span class="p">:</span> <span class="s1">&#39;Mr. Hi&#39;</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;purple&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span> <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;club&#39;</span><span class="p">:</span> <span class="s1">&#39;Mr. Hi&#39;</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;purple&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">17</span><span class="p">,</span> <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;club&#39;</span><span class="p">:</span> <span class="s1">&#39;Officer&#39;</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">18</span><span class="p">,</span> <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;club&#39;</span><span class="p">:</span> <span class="s1">&#39;Mr. Hi&#39;</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;purple&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">19</span><span class="p">,</span> <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;club&#39;</span><span class="p">:</span> <span class="s1">&#39;Officer&#39;</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span> <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;club&#39;</span><span class="p">:</span> <span class="s1">&#39;Mr. Hi&#39;</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;purple&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">21</span><span class="p">,</span> <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;club&#39;</span><span class="p">:</span> <span class="s1">&#39;Officer&#39;</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">22</span><span class="p">,</span> <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;club&#39;</span><span class="p">:</span> <span class="s1">&#39;Officer&#39;</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">23</span><span class="p">,</span> <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;club&#39;</span><span class="p">:</span> <span class="s1">&#39;Officer&#39;</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">24</span><span class="p">,</span> <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;club&#39;</span><span class="p">:</span> <span class="s1">&#39;Officer&#39;</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">25</span><span class="p">,</span> <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;club&#39;</span><span class="p">:</span> <span class="s1">&#39;Officer&#39;</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">26</span><span class="p">,</span> <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;club&#39;</span><span class="p">:</span> <span class="s1">&#39;Officer&#39;</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">27</span><span class="p">,</span> <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;club&#39;</span><span class="p">:</span> <span class="s1">&#39;Officer&#39;</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">28</span><span class="p">,</span> <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;club&#39;</span><span class="p">:</span> <span class="s1">&#39;Officer&#39;</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">29</span><span class="p">,</span> <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;club&#39;</span><span class="p">:</span> <span class="s1">&#39;Officer&#39;</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span> <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;club&#39;</span><span class="p">:</span> <span class="s1">&#39;Officer&#39;</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">31</span><span class="p">,</span> <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;club&#39;</span><span class="p">:</span> <span class="s1">&#39;Officer&#39;</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">32</span><span class="p">,</span> <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;club&#39;</span><span class="p">:</span> <span class="s1">&#39;Officer&#39;</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">33</span><span class="p">,</span> <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">17</span><span class="p">}]}</span>
+
+<span class="k">class</span> <span class="nc">NetworkXD3ForceLayout</span><span class="p">(</span><span class="n">mpld3</span><span class="o">.</span><span class="n">plugins</span><span class="o">.</span><span class="n">PluginBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A NetworkX to D3 Force Layout Plugin&quot;&quot;&quot;</span>
+
+    <span class="n">JAVASCRIPT</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    mpld3.register_plugin(&quot;networkxd3forcelayout&quot;, NetworkXD3ForceLayoutPlugin);</span>
+<span class="s2">    NetworkXD3ForceLayoutPlugin.prototype = Object.create(mpld3.Plugin.prototype);</span>
+<span class="s2">    NetworkXD3ForceLayoutPlugin.prototype.constructor = NetworkXD3ForceLayoutPlugin;</span>
+<span class="s2">    NetworkXD3ForceLayoutPlugin.prototype.requiredProps = [&quot;graph&quot;,</span>
+<span class="s2">                                                                &quot;ax_id&quot;,];</span>
+<span class="s2">    NetworkXD3ForceLayoutPlugin.prototype.defaultProps = { coordinates: &quot;data&quot;,</span>
+<span class="s2">                                                               gravity: 1,</span>
+<span class="s2">                                                               charge: -30,</span>
+<span class="s2">                                                               link_strength: 1,</span>
+<span class="s2">                                                               friction: 0.9,</span>
+<span class="s2">                                                               link_distance: 20,</span>
+<span class="s2">                                                               maximum_stroke_width: 2,</span>
+<span class="s2">                                                               minimum_stroke_width: 1,</span>
+<span class="s2">                                                               nominal_stroke_width: 1,</span>
+<span class="s2">                                                               maximum_radius: 10,</span>
+<span class="s2">                                                               minimum_radius: 1,</span>
+<span class="s2">                                                               nominal_radius: 5,</span>
+<span class="s2">                                                            };</span>
+<span class="s2">    function NetworkXD3ForceLayoutPlugin(fig, props){</span>
+<span class="s2">        mpld3.Plugin.call(this, fig, props);</span>
+<span class="s2">    };</span>
+<span class="s2">    var color = d3.scale.category20();</span>
+<span class="s2">    NetworkXD3ForceLayoutPlugin.prototype.zoomScaleProp = function (nominal_prop, minimum_prop, maximum_prop) {</span>
+<span class="s2">        var zoom = this.ax.zoom;</span>
+<span class="s2">        scalerFunction = function() {</span>
+<span class="s2">            var prop = nominal_prop;</span>
+<span class="s2">            if (nominal_prop*zoom.scale()&gt;maximum_prop) prop = maximum_prop/zoom.scale();</span>
+<span class="s2">            if (nominal_prop*zoom.scale()&lt;minimum_prop) prop = minimum_prop/zoom.scale();</span>
+<span class="s2">            return prop</span>
+<span class="s2">        }</span>
+<span class="s2">        return scalerFunction;</span>
+<span class="s2">    }</span>
+<span class="s2">    NetworkXD3ForceLayoutPlugin.prototype.setupDefaults = function () {</span>
+<span class="s2">        this.zoomScaleStroke = this.zoomScaleProp(this.props.nominal_stroke_width,</span>
+<span class="s2">                                                  this.props.minimum_stroke_width,</span>
+<span class="s2">                                                  this.props.maximum_stroke_width)</span>
+<span class="s2">        this.zoomScaleRadius = this.zoomScaleProp(this.props.nominal_radius,</span>
+<span class="s2">                                                  this.props.minimum_radius,</span>
+<span class="s2">                                                  this.props.maximum_radius)</span>
+<span class="s2">    }</span>
+<span class="s2">    NetworkXD3ForceLayoutPlugin.prototype.zoomed = function() {</span>
+<span class="s2">            this.tick()</span>
+<span class="s2">        }</span>
+<span class="s2">    NetworkXD3ForceLayoutPlugin.prototype.draw = function(){</span>
+<span class="s2">        plugin = this</span>
+<span class="s2">        brush = this.fig.getBrush();</span>
+<span class="s2">        DEFAULT_NODE_SIZE = this.props.nominal_radius;</span>
+<span class="s2">        var height = this.fig.height</span>
+<span class="s2">        var width = this.fig.width</span>
+<span class="s2">        var graph = this.props.graph</span>
+<span class="s2">        var gravity = this.props.gravity.toFixed()</span>
+<span class="s2">        var charge = this.props.charge.toFixed()</span>
+<span class="s2">        var link_distance = this.props.link_distance.toFixed()</span>
+<span class="s2">        var link_strength = this.props.link_strength.toFixed()</span>
+<span class="s2">        var friction = this.props.friction.toFixed()</span>
+<span class="s2">        this.ax = mpld3.get_element(this.props.ax_id, this.fig)</span>
+<span class="s2">        var ax = this.ax;</span>
+<span class="s2">        this.ax.elements.push(this)</span>
+<span class="s2">        ax_obj = this.ax;</span>
+<span class="s2">        var width = d3.max(ax.x.range()) - d3.min(ax.x.range()),</span>
+<span class="s2">            height = d3.max(ax.y.range()) - d3.min(ax.y.range());</span>
+<span class="s2">        var color = d3.scale.category20();</span>
+<span class="s2">        this.xScale = d3.scale.linear().domain([0, 1]).range([0, width]) // ax.x;</span>
+<span class="s2">        this.yScale = d3.scale.linear().domain([0, 1]).range([height, 0]) // ax.y;</span>
+<span class="s2">        this.force = d3.layout.force()</span>
+<span class="s2">                            .size([width, height]);</span>
+<span class="s2">        this.svg = this.ax.axes.append(&quot;g&quot;);</span>
+<span class="s2">        for(var i = 0; i &lt; graph.nodes.length; i++){</span>
+<span class="s2">            var node = graph.nodes[i];</span>
+<span class="s2">            if (node.hasOwnProperty(&#39;x&#39;)) {</span>
+<span class="s2">                node.x = this.ax.x(node.x);</span>
+<span class="s2">            }</span>
+<span class="s2">            if (node.hasOwnProperty(&#39;y&#39;)) {</span>
+<span class="s2">                node.y = this.ax.y(node.y);</span>
+<span class="s2">            }</span>
+<span class="s2">        }</span>
+<span class="s2">        this.force</span>
+<span class="s2">            .nodes(graph.nodes)</span>
+<span class="s2">            .links(graph.links)</span>
+<span class="s2">            .linkStrength(link_strength)</span>
+<span class="s2">            .friction(friction)</span>
+<span class="s2">            .linkDistance(link_distance)</span>
+<span class="s2">            .charge(charge)</span>
+<span class="s2">            .gravity(gravity)</span>
+<span class="s2">            .start();</span>
+<span class="s2">        this.link = this.svg.selectAll(&quot;.link&quot;)</span>
+<span class="s2">            .data(graph.links)</span>
+<span class="s2">          .enter().append(&quot;line&quot;)</span>
+<span class="s2">            .attr(&quot;class&quot;, &quot;link&quot;)</span>
+<span class="s2">            .attr(&quot;stroke&quot;, &quot;black&quot;)</span>
+<span class="s2">            .style(&quot;stroke-width&quot;, function (d) { return Math.sqrt(d.value); });</span>
+<span class="s2">        this.node = this.svg.selectAll(&quot;.node&quot;)</span>
+<span class="s2">            .data(graph.nodes)</span>
+<span class="s2">          .enter().append(&quot;circle&quot;)</span>
+<span class="s2">            .attr(&quot;class&quot;, &quot;node&quot;)</span>
+<span class="s2">            .attr(&quot;r&quot;, function(d) {return d.size === undefined ? DEFAULT_NODE_SIZE : d.size ;})</span>
+<span class="s2">            .style(&quot;fill&quot;, function (d) { return d.color; });</span>
+<span class="s2">        this.node.append(&quot;title&quot;)</span>
+<span class="s2">            .text(function (d) { return d.name; });</span>
+<span class="s2">        this.force.on(&quot;tick&quot;, this.tick.bind(this));</span>
+<span class="s2">        this.setupDefaults()</span>
+<span class="s2">    };</span>
+<span class="s2">    NetworkXD3ForceLayoutPlugin.prototype.tick = function() {</span>
+<span class="s2">        this.link.attr(&quot;x1&quot;, function (d) { return this.ax.x(this.xScale.invert(d.source.x)); }.bind(this))</span>
+<span class="s2">                 .attr(&quot;y1&quot;, function (d) { return this.ax.y(this.yScale.invert(d.source.y)); }.bind(this))</span>
+<span class="s2">                 .attr(&quot;x2&quot;, function (d) { return this.ax.x(this.xScale.invert(d.target.x)); }.bind(this))</span>
+<span class="s2">                 .attr(&quot;y2&quot;, function (d) { return this.ax.y(this.yScale.invert(d.target.y)); }.bind(this));</span>
+<span class="s2">        this.node.attr(&quot;transform&quot;, function (d) {</span>
+<span class="s2">            return &quot;translate(&quot; + this.ax.x(this.xScale.invert(d.x)) + &quot;,&quot; + this.ax.y(this.yScale.invert(d.y)) + &quot;)&quot;;</span>
+<span class="s2">            }.bind(this)</span>
+<span class="s2">        );</span>
+<span class="s2">    }</span>
+<span class="s2">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span>
+                 <span class="n">gravity</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                 <span class="n">link_distance</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+                 <span class="n">charge</span><span class="o">=-</span><span class="mi">30</span><span class="p">,</span>
+                 <span class="n">node_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                 <span class="n">link_strength</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                 <span class="n">friction</span><span class="o">=</span><span class="mf">0.9</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dict_</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;networkxd3forcelayout&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;graph&quot;</span><span class="p">:</span> <span class="n">graph</span><span class="p">,</span>
+                      <span class="s2">&quot;ax_id&quot;</span><span class="p">:</span> <span class="n">mpld3</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_id</span><span class="p">(</span><span class="n">ax</span><span class="p">),</span>
+                      <span class="s2">&quot;gravity&quot;</span><span class="p">:</span> <span class="n">gravity</span><span class="p">,</span>
+                      <span class="s2">&quot;charge&quot;</span><span class="p">:</span> <span class="n">charge</span><span class="p">,</span>
+                      <span class="s2">&quot;friction&quot;</span><span class="p">:</span> <span class="n">friction</span><span class="p">,</span>
+                      <span class="s2">&quot;link_distance&quot;</span><span class="p">:</span> <span class="n">link_distance</span><span class="p">,</span>
+                      <span class="s2">&quot;link_strength&quot;</span><span class="p">:</span> <span class="n">link_strength</span><span class="p">,</span>
+                      <span class="s2">&quot;nominal_radius&quot;</span><span class="p">:</span> <span class="n">node_size</span><span class="p">}</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span>
+
+<span class="n">mpld3</span><span class="o">.</span><span class="n">plugins</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">NetworkXD3ForceLayout</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span>
+                                                 <span class="n">ax</span><span class="p">,</span>
+                                                 <span class="n">gravity</span><span class="o">=.</span><span class="mi">5</span><span class="p">,</span>
+                                                 <span class="n">link_distance</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+                                                 <span class="n">charge</span><span class="o">=-</span><span class="mi">600</span><span class="p">,</span>
+                                                 <span class="n">friction</span><span class="o">=</span><span class="mi">1</span>
+                                                <span class="p">)</span>
+                     <span class="p">)</span>
+
+<span class="n">mpld3</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+
+
+      </div>
+      <div class="bottomnav">
+      
+        <p>
+        «&#160;&#160;<a href="interactive_legend.html">Interactive legend plugin</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="../index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="scatter_tooltip.html">Scatter Plot With Tooltips</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2014, mpld3 developers.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.8.
+    </div>
+  </body>
+</html>

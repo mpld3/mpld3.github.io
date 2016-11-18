@@ -1,0 +1,557 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>mpld3._display &#8212; Bringing Matplotlib to the Browser</title>
+    
+    <link rel="stylesheet" href="../../_static/mpld3.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/print.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/theme_extras.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="top" title="Bringing Matplotlib to the Browser" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+      <div class="header"><a href="../../index.html">
+          <img class="leftlogo" src="../../_static/mpld3-medium.png" alt="Logo"/>
+        </a><h1 class="heading"><a href="../../index.html">
+          <span>Bringing Matplotlib to the Browser</span></a></h1>
+        <h2 class="heading"><span>mpld3._display</span></h2>
+      </div>
+      <div class="topnav">
+      
+        <p>
+        <a class="uplink" href="../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <h1>Source code for mpld3._display</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">jinja2</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">._server</span> <span class="k">import</span> <span class="n">serve</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="k">import</span> <span class="n">deprecated</span><span class="p">,</span> <span class="n">get_id</span><span class="p">,</span> <span class="n">write_ipynb_local_js</span>
+<span class="kn">from</span> <span class="nn">.mplexporter</span> <span class="k">import</span> <span class="n">Exporter</span>
+<span class="kn">from</span> <span class="nn">.mpld3renderer</span> <span class="k">import</span> <span class="n">MPLD3Renderer</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">urls</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;fig_to_html&quot;</span><span class="p">,</span> <span class="s2">&quot;fig_to_dict&quot;</span><span class="p">,</span> <span class="s2">&quot;fig_to_d3&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;display_d3&quot;</span><span class="p">,</span> <span class="s2">&quot;display&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;show_d3&quot;</span><span class="p">,</span> <span class="s2">&quot;show&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;enable_notebook&quot;</span><span class="p">,</span> <span class="s2">&quot;disable_notebook&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;save_html&quot;</span><span class="p">,</span> <span class="s2">&quot;save_json&quot;</span><span class="p">]</span>
+
+
+<span class="c1"># Simple HTML template. This works in standalone web pages for single figures,</span>
+<span class="c1"># but will not work within the IPython notebook due to the presence of</span>
+<span class="c1"># requirejs</span>
+<span class="n">SIMPLE_HTML</span> <span class="o">=</span> <span class="n">jinja2</span><span class="o">.</span><span class="n">Template</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">&lt;script type=&quot;text/javascript&quot; src=&quot;{{ d3_url }}&quot;&gt;&lt;/script&gt;</span>
+<span class="s2">&lt;script type=&quot;text/javascript&quot; src=&quot;{{ mpld3_url }}&quot;&gt;&lt;/script&gt;</span>
+
+<span class="s2">&lt;style&gt;</span>
+<span class="s2">{{ extra_css }}</span>
+<span class="s2">&lt;/style&gt;</span>
+
+<span class="s2">&lt;div id={{ figid }}&gt;&lt;/div&gt;</span>
+<span class="s2">&lt;script type=&quot;text/javascript&quot;&gt;</span>
+
+<span class="s2">  !function(mpld3){</span>
+<span class="s2">       {{ extra_js }}</span>
+<span class="s2">       mpld3.draw_figure({{ figid }}, {{ figure_json }});</span>
+<span class="s2">  }(mpld3);</span>
+
+
+<span class="s2">&lt;/script&gt;</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+
+
+<span class="c1"># RequireJS template.  If requirejs and jquery are not defined, this will</span>
+<span class="c1"># result in an error.  This is suitable for use within the IPython notebook.</span>
+<span class="n">REQUIREJS_HTML</span> <span class="o">=</span> <span class="n">jinja2</span><span class="o">.</span><span class="n">Template</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">&lt;style&gt;</span>
+<span class="s2">{{ extra_css }}</span>
+<span class="s2">&lt;/style&gt;</span>
+
+<span class="s2">&lt;div id={{ figid }}&gt;&lt;/div&gt;</span>
+<span class="s2">&lt;script type=&quot;text/javascript&quot;&gt;</span>
+
+<span class="s2">if(typeof(window.mpld3) !== &quot;undefined&quot; &amp;&amp; window.mpld3._mpld3IsLoaded){</span>
+<span class="s2">    !function (mpld3){</span>
+<span class="s2">            {{ extra_js }}</span>
+<span class="s2">            mpld3.draw_figure({{ figid }}, {{ figure_json }});</span>
+<span class="s2">    }(mpld3);</span>
+<span class="s2">}else{</span>
+<span class="s2">  require.config({paths: {d3: &quot;{{ d3_url[:-3] }}&quot;}});</span>
+<span class="s2">  require([&quot;d3&quot;], function(d3){</span>
+<span class="s2">    window.d3 = d3;</span>
+<span class="s2">    $.getScript(&quot;{{ mpld3_url }}&quot;, function(){</span>
+<span class="s2">       {{ extra_js }}</span>
+<span class="s2">       mpld3.draw_figure({{ figid }}, {{ figure_json }});</span>
+<span class="s2">    });</span>
+<span class="s2">  });</span>
+<span class="s2">}</span>
+<span class="s2">&lt;/script&gt;</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+
+
+<span class="c1"># General HTML template.  This should work correctly whether or not requirejs</span>
+<span class="c1"># is defined, and whether it&#39;s embedded in a notebook or in a standalone</span>
+<span class="c1"># HTML page.</span>
+<span class="n">GENERAL_HTML</span> <span class="o">=</span> <span class="n">jinja2</span><span class="o">.</span><span class="n">Template</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+
+<span class="s2">&lt;style&gt;</span>
+<span class="s2">{{ extra_css }}</span>
+<span class="s2">&lt;/style&gt;</span>
+
+<span class="s2">&lt;div id={{ figid }}&gt;&lt;/div&gt;</span>
+<span class="s2">&lt;script&gt;</span>
+<span class="s2">function mpld3_load_lib(url, callback){</span>
+<span class="s2">  var s = document.createElement(&#39;script&#39;);</span>
+<span class="s2">  s.src = url;</span>
+<span class="s2">  s.async = true;</span>
+<span class="s2">  s.onreadystatechange = s.onload = callback;</span>
+<span class="s2">  s.onerror = function(){console.warn(&quot;failed to load library &quot; + url);};</span>
+<span class="s2">  document.getElementsByTagName(&quot;head&quot;)[0].appendChild(s);</span>
+<span class="s2">}</span>
+
+<span class="s2">if(typeof(mpld3) !== &quot;undefined&quot; &amp;&amp; mpld3._mpld3IsLoaded){</span>
+<span class="s2">   // already loaded: just create the figure</span>
+<span class="s2">   !function(mpld3){</span>
+<span class="s2">       {{ extra_js }}</span>
+<span class="s2">       mpld3.draw_figure({{ figid }}, {{ figure_json }});</span>
+<span class="s2">   }(mpld3);</span>
+<span class="s2">}else if(typeof define === &quot;function&quot; &amp;&amp; define.amd){</span>
+<span class="s2">   // require.js is available: use it to load d3/mpld3</span>
+<span class="s2">   require.config({paths: {d3: &quot;{{ d3_url[:-3] }}&quot;}});</span>
+<span class="s2">   require([&quot;d3&quot;], function(d3){</span>
+<span class="s2">      window.d3 = d3;</span>
+<span class="s2">      mpld3_load_lib(&quot;{{ mpld3_url }}&quot;, function(){</span>
+<span class="s2">         {{ extra_js }}</span>
+<span class="s2">         mpld3.draw_figure({{ figid }}, {{ figure_json }});</span>
+<span class="s2">      });</span>
+<span class="s2">    });</span>
+<span class="s2">}else{</span>
+<span class="s2">    // require.js not available: dynamically load d3 &amp; mpld3</span>
+<span class="s2">    mpld3_load_lib(&quot;{{ d3_url }}&quot;, function(){</span>
+<span class="s2">         mpld3_load_lib(&quot;{{ mpld3_url }}&quot;, function(){</span>
+<span class="s2">                 {{ extra_js }}</span>
+<span class="s2">                 mpld3.draw_figure({{ figid }}, {{ figure_json }});</span>
+<span class="s2">            })</span>
+<span class="s2">         });</span>
+<span class="s2">}</span>
+<span class="s2">&lt;/script&gt;</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+
+<span class="n">TEMPLATE_DICT</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;simple&quot;</span><span class="p">:</span> <span class="n">SIMPLE_HTML</span><span class="p">,</span>
+                 <span class="s2">&quot;notebook&quot;</span><span class="p">:</span> <span class="n">REQUIREJS_HTML</span><span class="p">,</span>
+                 <span class="s2">&quot;general&quot;</span><span class="p">:</span> <span class="n">GENERAL_HTML</span><span class="p">}</span>
+
+
+<span class="k">class</span> <span class="nc">NumpyEncoder</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">JSONEncoder</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Special json encoder for numpy types &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">int_</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">intc</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">intp</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">int8</span><span class="p">,</span>
+            <span class="n">numpy</span><span class="o">.</span><span class="n">int16</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">int32</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">uint8</span><span class="p">,</span>
+            <span class="n">numpy</span><span class="o">.</span><span class="n">uint16</span><span class="p">,</span><span class="n">numpy</span><span class="o">.</span><span class="n">uint32</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">uint64</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">float_</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float16</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> 
+            <span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONEncoder</span><span class="o">.</span><span class="n">default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="fig_to_dict"><a class="viewcode-back" href="../../modules/API.html#mpld3.fig_to_dict">[docs]</a><span class="k">def</span> <span class="nf">fig_to_dict</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Output json-serializable dictionary representation of the figure</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fig : matplotlib figure</span>
+<span class="sd">        The figure to display</span>
+<span class="sd">    **kwargs :</span>
+<span class="sd">        Additional keyword arguments passed to mplexporter.Exporter</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    fig_dict : dict</span>
+<span class="sd">        the Python dictionary representation of the figure, which is</span>
+<span class="sd">        directly convertible to json using the standard json package.</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    :func:`save_json`: save json representation of a figure to file</span>
+<span class="sd">    :func:`save_html` : save html representation of a figure to file</span>
+<span class="sd">    :func:`fig_to_html` : output html representation of the figure</span>
+<span class="sd">    :func:`show` : launch a local server and show a figure in a browser</span>
+<span class="sd">    :func:`display` : embed figure within the IPython notebook</span>
+<span class="sd">    :func:`enable_notebook` : automatically embed figures in IPython notebook</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">renderer</span> <span class="o">=</span> <span class="n">MPLD3Renderer</span><span class="p">()</span>
+    <span class="n">Exporter</span><span class="p">(</span><span class="n">renderer</span><span class="p">,</span> <span class="n">close_mpl</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">figure_dict</span><span class="p">,</span> <span class="n">extra_css</span><span class="p">,</span> <span class="n">extra_js</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">finished_figures</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">figure_dict</span></div>
+
+
+<div class="viewcode-block" id="fig_to_html"><a class="viewcode-back" href="../../modules/API.html#mpld3.fig_to_html">[docs]</a><span class="k">def</span> <span class="nf">fig_to_html</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">d3_url</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mpld3_url</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">no_extras</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">template_type</span><span class="o">=</span><span class="s2">&quot;general&quot;</span><span class="p">,</span> <span class="n">figid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_http</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Output html representation of the figure</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fig : matplotlib figure</span>
+<span class="sd">        The figure to display</span>
+<span class="sd">    d3_url : string (optional)</span>
+<span class="sd">        The URL of the d3 library.  If not specified, a standard web path</span>
+<span class="sd">        will be used.</span>
+<span class="sd">    mpld3_url : string (optional)</span>
+<span class="sd">        The URL of the mpld3 library.  If not specified, a standard web path</span>
+<span class="sd">        will be used.</span>
+<span class="sd">    no_extras : boolean</span>
+<span class="sd">        If true, remove any extra javascript or CSS. The output will be similar</span>
+<span class="sd">        to that if the representation output by fig_to_json is embedded in</span>
+<span class="sd">        a web page.</span>
+<span class="sd">    template_type : string</span>
+<span class="sd">        string specifying the type of HTML template to use. Options are:</span>
+
+<span class="sd">        ``&quot;simple&quot;``</span>
+<span class="sd">             suitable for a simple html page with one figure.  Will</span>
+<span class="sd">             fail if require.js is available on the page.</span>
+<span class="sd">        ``&quot;notebook&quot;``</span>
+<span class="sd">             assumes require.js and jquery are available.</span>
+<span class="sd">        ``&quot;general&quot;``</span>
+<span class="sd">             more complicated, but works both in and out of the</span>
+<span class="sd">             notebook, whether or not require.js and jquery are available</span>
+<span class="sd">    figid : string (optional)</span>
+<span class="sd">        The html/css id of the figure div, which must not contain spaces.</span>
+<span class="sd">        If not specified, a random id will be generated.</span>
+<span class="sd">    use_http : boolean (optional)</span>
+<span class="sd">        If true, use http:// instead of https:// for d3_url and mpld3_url.</span>
+
+<span class="sd">    **kwargs :</span>
+<span class="sd">        Additional keyword arguments passed to mplexporter.Exporter</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    fig_html : string</span>
+<span class="sd">        the HTML representation of the figure</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    :func:`save_json`: save json representation of a figure to file</span>
+<span class="sd">    :func:`save_html` : save html representation of a figure to file</span>
+<span class="sd">    :func:`fig_to_dict` : output dictionary representation of the figure</span>
+<span class="sd">    :func:`show` : launch a local server and show a figure in a browser</span>
+<span class="sd">    :func:`display` : embed figure within the IPython notebook</span>
+<span class="sd">    :func:`enable_notebook` : automatically embed figures in IPython notebook</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">template</span> <span class="o">=</span> <span class="n">TEMPLATE_DICT</span><span class="p">[</span><span class="n">template_type</span><span class="p">]</span>
+
+    <span class="c1"># TODO: allow fig to be a list of figures?</span>
+    <span class="n">d3_url</span> <span class="o">=</span> <span class="n">d3_url</span> <span class="ow">or</span> <span class="n">urls</span><span class="o">.</span><span class="n">D3_URL</span>
+    <span class="n">mpld3_url</span> <span class="o">=</span> <span class="n">mpld3_url</span> <span class="ow">or</span> <span class="n">urls</span><span class="o">.</span><span class="n">MPLD3_URL</span>
+
+    <span class="k">if</span> <span class="n">use_http</span><span class="p">:</span>
+        <span class="n">d3_url</span> <span class="o">=</span> <span class="n">d3_url</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;https://&#39;</span><span class="p">,</span> <span class="s1">&#39;http://&#39;</span><span class="p">)</span>
+        <span class="n">mpld3_url</span> <span class="o">=</span> <span class="n">mpld3_url</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;https://&#39;</span><span class="p">,</span> <span class="s1">&#39;http://&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">figid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">figid</span> <span class="o">=</span> <span class="s1">&#39;fig_&#39;</span> <span class="o">+</span> <span class="n">get_id</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1</span><span class="n">E10</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;\s&#39;</span><span class="p">,</span> <span class="n">figid</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;figid must not contain spaces&quot;</span><span class="p">)</span>
+
+    <span class="n">renderer</span> <span class="o">=</span> <span class="n">MPLD3Renderer</span><span class="p">()</span>
+    <span class="n">Exporter</span><span class="p">(</span><span class="n">renderer</span><span class="p">,</span> <span class="n">close_mpl</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+
+    <span class="n">fig</span><span class="p">,</span> <span class="n">figure_json</span><span class="p">,</span> <span class="n">extra_css</span><span class="p">,</span> <span class="n">extra_js</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">finished_figures</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">no_extras</span><span class="p">:</span>
+        <span class="n">extra_css</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">extra_js</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">figid</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">figid</span><span class="p">),</span>
+                           <span class="n">d3_url</span><span class="o">=</span><span class="n">d3_url</span><span class="p">,</span>
+                           <span class="n">mpld3_url</span><span class="o">=</span><span class="n">mpld3_url</span><span class="p">,</span>
+                           <span class="n">figure_json</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">figure_json</span><span class="p">,</span> <span class="n">cls</span><span class="o">=</span><span class="n">NumpyEncoder</span><span class="p">),</span>
+                           <span class="n">extra_css</span><span class="o">=</span><span class="n">extra_css</span><span class="p">,</span>
+                           <span class="n">extra_js</span><span class="o">=</span><span class="n">extra_js</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="display"><a class="viewcode-back" href="../../modules/API.html#mpld3.display">[docs]</a><span class="k">def</span> <span class="nf">display</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">closefig</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">local</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Display figure in IPython notebook via the HTML display hook</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fig : matplotlib figure</span>
+<span class="sd">        The figure to display (grabs current figure if missing)</span>
+<span class="sd">    closefig : boolean (default: True)</span>
+<span class="sd">        If true, close the figure so that the IPython matplotlib mode will not</span>
+<span class="sd">        display the png version of the figure.</span>
+<span class="sd">    local : boolean (optional, default=False)</span>
+<span class="sd">        if True, then copy the d3 &amp; mpld3 libraries to a location visible to</span>
+<span class="sd">        the notebook server, and source them from there. See Notes below.</span>
+<span class="sd">    **kwargs :</span>
+<span class="sd">        additional keyword arguments are passed through to :func:`fig_to_html`.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    fig_d3 : IPython.display.HTML object</span>
+<span class="sd">        the IPython HTML rich display of the figure.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Known issues: using ``local=True`` may not work correctly in certain cases:</span>
+
+<span class="sd">    - In IPython &lt; 2.0, ``local=True`` may fail if the current working</span>
+<span class="sd">      directory is changed within the notebook (e.g. with the %cd command).</span>
+<span class="sd">    - In IPython 2.0+, ``local=True`` may fail if a url prefix is added</span>
+<span class="sd">      (e.g. by setting NotebookApp.base_url).</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    :func:`show` : launch a local server and show a figure in a browser</span>
+<span class="sd">    :func:`enable_notebook` : automatically embed figures in IPython notebook</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># import here, in case users don&#39;t have requirements installed</span>
+    <span class="kn">from</span> <span class="nn">IPython.display</span> <span class="k">import</span> <span class="n">HTML</span>
+    <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+    <span class="k">if</span> <span class="n">local</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s1">&#39;mpld3_url&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span> <span class="ow">or</span> <span class="s1">&#39;d3_url&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;display: specified urls are ignored when local=True&quot;</span><span class="p">)</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;d3_url&#39;</span><span class="p">],</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;mpld3_url&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">write_ipynb_local_js</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">fig</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">closefig</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">HTML</span><span class="p">(</span><span class="n">fig_to_html</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="show"><a class="viewcode-back" href="../../modules/API.html#mpld3.show">[docs]</a><span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ip</span><span class="o">=</span><span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">8888</span><span class="p">,</span> <span class="n">n_retries</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+         <span class="n">local</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">open_browser</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">http_server</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Open figure in a web browser</span>
+
+<span class="sd">    Similar behavior to plt.show().  This opens the D3 visualization of the</span>
+<span class="sd">    specified figure in the web browser.  On most platforms, the browser</span>
+<span class="sd">    will open automatically.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fig : matplotlib figure</span>
+<span class="sd">        The figure to display.  If not specified, the current active figure</span>
+<span class="sd">        will be used.</span>
+<span class="sd">    ip : string, default = &#39;127.0.0.1&#39;</span>
+<span class="sd">        the ip address used for the local server</span>
+<span class="sd">    port : int, default = 8888</span>
+<span class="sd">        the port number to use for the local server.  If already in use,</span>
+<span class="sd">        a nearby open port will be found (see n_retries)</span>
+<span class="sd">    n_retries : int, default = 50</span>
+<span class="sd">        the maximum number of ports to try when locating an empty port.</span>
+<span class="sd">    local : bool, default = True</span>
+<span class="sd">        if True, use the local d3 &amp; mpld3 javascript versions, within the</span>
+<span class="sd">        js/ folder.  If False, use the standard urls.</span>
+<span class="sd">    open_browser : bool (optional)</span>
+<span class="sd">        if True (default), then open a web browser to the given HTML</span>
+<span class="sd">    http_server : class (optional)</span>
+<span class="sd">        optionally specify an HTTPServer class to use for showing the</span>
+<span class="sd">        figure. The default is Python&#39;s basic HTTPServer.</span>
+<span class="sd">    **kwargs :</span>
+<span class="sd">        additional keyword arguments are passed through to :func:`fig_to_html`</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    :func:`display` : embed figure within the IPython notebook</span>
+<span class="sd">    :func:`enable_notebook` : automatically embed figures in IPython notebook</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">local</span><span class="p">:</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;mpld3_url&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;/mpld3.js&#39;</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;d3_url&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;/d3.js&#39;</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;/mpld3.js&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;text/javascript&quot;</span><span class="p">,</span>
+                               <span class="nb">open</span><span class="p">(</span><span class="n">urls</span><span class="o">.</span><span class="n">MPLD3_LOCAL</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()],</span>
+                 <span class="s1">&#39;/d3.js&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;text/javascript&quot;</span><span class="p">,</span>
+                            <span class="nb">open</span><span class="p">(</span><span class="n">urls</span><span class="o">.</span><span class="n">D3_LOCAL</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()]}</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">if</span> <span class="n">fig</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># import here, in case matplotlib.use(...) is called by user</span>
+        <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>
+    <span class="n">html</span> <span class="o">=</span> <span class="n">fig_to_html</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">serve</span><span class="p">(</span><span class="n">html</span><span class="p">,</span> <span class="n">ip</span><span class="o">=</span><span class="n">ip</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">port</span><span class="p">,</span> <span class="n">n_retries</span><span class="o">=</span><span class="n">n_retries</span><span class="p">,</span> <span class="n">files</span><span class="o">=</span><span class="n">files</span><span class="p">,</span>
+          <span class="n">open_browser</span><span class="o">=</span><span class="n">open_browser</span><span class="p">,</span> <span class="n">http_server</span><span class="o">=</span><span class="n">http_server</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="enable_notebook"><a class="viewcode-back" href="../../modules/API.html#mpld3.enable_notebook">[docs]</a><span class="k">def</span> <span class="nf">enable_notebook</span><span class="p">(</span><span class="n">local</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Enable the automatic display of figures in the IPython Notebook.</span>
+
+<span class="sd">    This function should be used with the inline Matplotlib backend</span>
+<span class="sd">    that ships with IPython that can be enabled with `%pylab inline`</span>
+<span class="sd">    or `%matplotlib inline`. This works by adding an HTML formatter</span>
+<span class="sd">    for Figure objects; the existing SVG/PNG formatters will remain</span>
+<span class="sd">    enabled.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    local : boolean (optional, default=False)</span>
+<span class="sd">        if True, then copy the d3 &amp; mpld3 libraries to a location visible to</span>
+<span class="sd">        the notebook server, and source them from there. See Notes below.</span>
+<span class="sd">    **kwargs :</span>
+<span class="sd">        all keyword parameters are passed through to :func:`fig_to_html`</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Known issues: using ``local=True`` may not work correctly in certain cases:</span>
+
+<span class="sd">    - In IPython &lt; 2.0, ``local=True`` may fail if the current working</span>
+<span class="sd">      directory is changed within the notebook (e.g. with the %cd command).</span>
+<span class="sd">    - In IPython 2.0+, ``local=True`` may fail if a url prefix is added</span>
+<span class="sd">      (e.g. by setting NotebookApp.base_url).</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    :func:`disable_notebook` : undo the action of enable_notebook</span>
+<span class="sd">    :func:`display` : embed figure within the IPython notebook</span>
+<span class="sd">    :func:`show` : launch a local server and show a figure in a browser</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="k">import</span> <span class="n">get_ipython</span>
+        <span class="kn">from</span> <span class="nn">matplotlib.figure</span> <span class="k">import</span> <span class="n">Figure</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s1">&#39;This feature requires IPython 1.0+ and Matplotlib&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">local</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s1">&#39;mpld3_url&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span> <span class="ow">or</span> <span class="s1">&#39;d3_url&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;enable_notebook: specified urls are ignored when local=True&quot;</span><span class="p">)</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;d3_url&#39;</span><span class="p">],</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;mpld3_url&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">write_ipynb_local_js</span><span class="p">()</span>
+
+    <span class="n">ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+    <span class="n">formatter</span> <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">display_formatter</span><span class="o">.</span><span class="n">formatters</span><span class="p">[</span><span class="s1">&#39;text/html&#39;</span><span class="p">]</span>
+    <span class="n">formatter</span><span class="o">.</span><span class="n">for_type</span><span class="p">(</span><span class="n">Figure</span><span class="p">,</span>
+                       <span class="k">lambda</span> <span class="n">fig</span><span class="p">,</span> <span class="n">kwds</span><span class="o">=</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">fig_to_html</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="disable_notebook"><a class="viewcode-back" href="../../modules/API.html#mpld3.disable_notebook">[docs]</a><span class="k">def</span> <span class="nf">disable_notebook</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Disable the automatic display of figures in the IPython Notebook.</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    :func:`enable_notebook` : automatically embed figures in IPython notebook</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="k">import</span> <span class="n">get_ipython</span>
+        <span class="kn">from</span> <span class="nn">matplotlib.figure</span> <span class="k">import</span> <span class="n">Figure</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s1">&#39;This feature requires IPython 1.0+ and Matplotlib&#39;</span><span class="p">)</span>
+    <span class="n">ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+    <span class="n">formatter</span> <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">display_formatter</span><span class="o">.</span><span class="n">formatters</span><span class="p">[</span><span class="s1">&#39;text/html&#39;</span><span class="p">]</span>
+    <span class="n">formatter</span><span class="o">.</span><span class="n">type_printers</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">Figure</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="save_html"><a class="viewcode-back" href="../../modules/API.html#mpld3.save_html">[docs]</a><span class="k">def</span> <span class="nf">save_html</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">fileobj</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Save a matplotlib figure to an html file</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fig : matplotlib Figure instance</span>
+<span class="sd">        The figure to write to file.</span>
+<span class="sd">    fileobj : filename or file object</span>
+<span class="sd">        The filename or file-like object in which to write the HTML</span>
+<span class="sd">        representation of the figure.</span>
+<span class="sd">    **kwargs :</span>
+<span class="sd">        additional keyword arguments will be passed to :func:`fig_to_html`</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    :func:`save_json`: save json representation of a figure to file</span>
+<span class="sd">    :func:`fig_to_html` : output html representation of the figure</span>
+<span class="sd">    :func:`fig_to_dict` : output dictionary representation of the figure</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fileobj</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">fileobj</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">fileobj</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">fileobj</span><span class="p">,</span> <span class="s1">&#39;write&#39;</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;fileobj should be a filename or a writable file&quot;</span><span class="p">)</span>
+    <span class="n">fileobj</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">fig_to_html</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="save_json"><a class="viewcode-back" href="../../modules/API.html#mpld3.save_json">[docs]</a><span class="k">def</span> <span class="nf">save_json</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">fileobj</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Save a matplotlib figure to a json file.</span>
+
+<span class="sd">    Note that any plugins which depend on generated HTML will not be included</span>
+<span class="sd">    in the JSON encoding.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fig : matplotlib Figure instance</span>
+<span class="sd">        The figure to write to file.</span>
+<span class="sd">    fileobj : filename or file object</span>
+<span class="sd">        The filename or file-like object in which to write the HTML</span>
+<span class="sd">        representation of the figure.</span>
+<span class="sd">    **kwargs :</span>
+<span class="sd">        additional keyword arguments will be passed to :func:`fig_to_dict`</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    :func:`save_html` : save html representation of a figure to file</span>
+<span class="sd">    :func:`fig_to_html` : output html representation of the figure</span>
+<span class="sd">    :func:`fig_to_dict` : output dictionary representation of the figure</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fileobj</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">fileobj</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">fileobj</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">fileobj</span><span class="p">,</span> <span class="s1">&#39;write&#39;</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;fileobj should be a filename or a writable file&quot;</span><span class="p">)</span>
+    <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">fig_to_dict</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">),</span> <span class="n">fileobj</span><span class="p">,</span> <span class="n">cls</span><span class="o">=</span><span class="n">NumpyEncoder</span><span class="p">)</span></div>
+
+
+<span class="c1"># Deprecated versions of these functions</span>
+<span class="n">show_d3</span> <span class="o">=</span> <span class="n">deprecated</span><span class="p">(</span><span class="n">show</span><span class="p">,</span> <span class="s2">&quot;mpld3.show_d3&quot;</span><span class="p">,</span> <span class="s2">&quot;mpld3.show&quot;</span><span class="p">)</span>
+<span class="n">fig_to_d3</span> <span class="o">=</span> <span class="n">deprecated</span><span class="p">(</span><span class="n">fig_to_html</span><span class="p">,</span> <span class="s2">&quot;mpld3.fig_to_d3&quot;</span><span class="p">,</span> <span class="s2">&quot;mpld3.fig_to_html&quot;</span><span class="p">)</span>
+<span class="n">display_d3</span> <span class="o">=</span> <span class="n">deprecated</span><span class="p">(</span><span class="n">display</span><span class="p">,</span> <span class="s2">&quot;mpld3.display_d3&quot;</span><span class="p">,</span> <span class="s2">&quot;mpld3.display&quot;</span><span class="p">)</span>
+</pre></div>
+
+      </div>
+      <div class="bottomnav">
+      
+        <p>
+        <a class="uplink" href="../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2014, mpld3 developers.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.8.
+    </div>
+  </body>
+</html>

@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>mpld3.utils &mdash; Bringing Matplotlib to the Browser</title>
+    <title>mpld3.utils &#8212; Bringing Matplotlib to the Browser</title>
     
     <link rel="stylesheet" href="../../_static/mpld3.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -17,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.2',
+        VERSION:     '0.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -28,10 +27,12 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../_static/theme_extras.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
     <link rel="top" title="Bringing Matplotlib to the Browser" href="../../index.html" />
-    <link rel="up" title="mpld3" href="../mpld3.html" /> 
+    <link rel="up" title="Module code" href="../index.html" /> 
   </head>
-  <body>
+  <body role="document">
       <div class="header"><a href="../../index.html">
           <img class="leftlogo" src="../../_static/mpld3-medium.png" alt="Logo"/>
         </a><h1 class="heading"><a href="../../index.html">
@@ -49,7 +50,7 @@
         
         
   <h1>Source code for mpld3.utils</h1><div class="highlight"><pre>
-<span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">mpld3 Utilities</span>
 <span class="sd">===============</span>
 <span class="sd">Utility routines for the mpld3 package</span>
@@ -59,53 +60,53 @@
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">urls</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">wraps</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">urls</span>
 
-<span class="c"># Make sure that DeprecationWarning gets printed</span>
-<span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s">&quot;always&quot;</span><span class="p">,</span> <span class="ne">DeprecationWarning</span><span class="p">)</span>
+<span class="c1"># Make sure that DeprecationWarning gets printed</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;always&#39;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">DeprecationWarning</span><span class="p">,</span> <span class="n">module</span><span class="o">=</span><span class="s1">&#39;mpld3&#39;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="html_id_ok"><a class="viewcode-back" href="../../modules/API.html#mpld3.utils.html_id_ok">[docs]</a><span class="k">def</span> <span class="nf">html_id_ok</span><span class="p">(</span><span class="n">objid</span><span class="p">,</span> <span class="n">html5</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="html_id_ok"><a class="viewcode-back" href="../../modules/API.html#mpld3.utils.html_id_ok">[docs]</a><span class="k">def</span> <span class="nf">html_id_ok</span><span class="p">(</span><span class="n">objid</span><span class="p">,</span> <span class="n">html5</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Check whether objid is valid as an HTML id attribute.</span>
 
 <span class="sd">    If html5 == True, then use the more liberal html5 rules.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">html5</span><span class="p">:</span>
-        <span class="k">return</span> <span class="ow">not</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s">&#39;\s&#39;</span><span class="p">,</span> <span class="n">objid</span><span class="p">)</span>
+        <span class="k">return</span> <span class="ow">not</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;\s&#39;</span><span class="p">,</span> <span class="n">objid</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s">&quot;^[a-zA-Z][a-zA-Z0-9\-\.\:\_]*$&quot;</span><span class="p">,</span> <span class="n">objid</span><span class="p">))</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;^[a-zA-Z][a-zA-Z0-9\-\.\:\_]*$&quot;</span><span class="p">,</span> <span class="n">objid</span><span class="p">))</span></div>
 
-</div>
-<div class="viewcode-block" id="get_id"><a class="viewcode-back" href="../../modules/API.html#mpld3.utils.get_id">[docs]</a><span class="k">def</span> <span class="nf">get_id</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s">&quot;el&quot;</span><span class="p">,</span> <span class="n">warn_on_invalid</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+
+<div class="viewcode-block" id="get_id"><a class="viewcode-back" href="../../modules/API.html#mpld3.utils.get_id">[docs]</a><span class="k">def</span> <span class="nf">get_id</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;el&quot;</span><span class="p">,</span> <span class="n">warn_on_invalid</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Get a unique id for the object&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">suffix</span><span class="p">:</span>
-        <span class="n">suffix</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+        <span class="n">suffix</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">prefix</span><span class="p">:</span>
-        <span class="n">prefix</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+        <span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
     <span class="n">objid</span> <span class="o">=</span> <span class="n">prefix</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">())</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="n">obj</span><span class="p">))</span> <span class="o">+</span> <span class="n">suffix</span>
 
     <span class="k">if</span> <span class="n">warn_on_invalid</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">html_id_ok</span><span class="p">(</span><span class="n">objid</span><span class="p">):</span>
-        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s">&#39;&quot;{0}&quot; is not a valid html ID. This may cause problems&#39;</span><span class="p">)</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="si">{0}</span><span class="s1">&quot; is not a valid html ID. This may cause problems&#39;</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">objid</span>
+    <span class="k">return</span> <span class="n">objid</span></div>
 
-</div>
+
 <div class="viewcode-block" id="deprecated"><a class="viewcode-back" href="../../modules/API.html#mpld3.utils.deprecated">[docs]</a><span class="k">def</span> <span class="nf">deprecated</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">old_name</span><span class="p">,</span> <span class="n">new_name</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Decorator to mark functions as deprecated.&quot;&quot;&quot;</span>
     <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">new_func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">((</span><span class="s">&quot;{0} is deprecated and will be removed.  &quot;</span>
-                       <span class="s">&quot;Use {1} instead&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">old_name</span><span class="p">,</span> <span class="n">new_name</span><span class="p">)),</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">((</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2"> is deprecated and will be removed.  &quot;</span>
+                       <span class="s2">&quot;Use </span><span class="si">{1}</span><span class="s2"> instead&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">old_name</span><span class="p">,</span> <span class="n">new_name</span><span class="p">)),</span>
                       <span class="n">category</span><span class="o">=</span><span class="ne">DeprecationWarning</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="n">new_func</span><span class="o">.</span><span class="n">__doc__</span> <span class="o">=</span> <span class="p">(</span><span class="s">&quot;*</span><span class="si">%s</span><span class="s"> is deprecated: use </span><span class="si">%s</span><span class="s"> instead*</span><span class="se">\n\n</span><span class="s">    &quot;</span>
+    <span class="n">new_func</span><span class="o">.</span><span class="n">__doc__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;*</span><span class="si">%s</span><span class="s2"> is deprecated: use </span><span class="si">%s</span><span class="s2"> instead*</span><span class="se">\n\n</span><span class="s2">    &quot;</span>
                         <span class="o">%</span> <span class="p">(</span><span class="n">old_name</span><span class="p">,</span> <span class="n">new_name</span><span class="p">))</span> <span class="o">+</span> <span class="n">new_func</span><span class="o">.</span><span class="n">__doc__</span>
-    <span class="k">return</span> <span class="n">new_func</span>
+    <span class="k">return</span> <span class="n">new_func</span></div>
 
-</div>
-<div class="viewcode-block" id="write_ipynb_local_js"><a class="viewcode-back" href="../../modules/API.html#mpld3.utils.write_ipynb_local_js">[docs]</a><span class="k">def</span> <span class="nf">write_ipynb_local_js</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">d3_src</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">mpld3_src</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="write_ipynb_local_js"><a class="viewcode-back" href="../../modules/API.html#mpld3.utils.write_ipynb_local_js">[docs]</a><span class="k">def</span> <span class="nf">write_ipynb_local_js</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">d3_src</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mpld3_src</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Write the mpld3 and d3 javascript libraries to the given file location.</span>
 
@@ -131,52 +132,61 @@
 <span class="sd">    d3_url, mpld3_url : string</span>
 <span class="sd">        The URLs to be used for loading these js files.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">location</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">location</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">IPython.html</span> <span class="kn">import</span> <span class="n">install_nbextension</span>
+            <span class="kn">from</span> <span class="nn">IPython.html</span> <span class="k">import</span> <span class="n">install_nbextension</span>
         <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
             <span class="n">location</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
-            <span class="n">nbextension</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="n">nbextension</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">nbextension</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="n">nbextension</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">nbextension</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="n">nbextension</span> <span class="o">=</span> <span class="kc">False</span>
 
-    <span class="k">if</span> <span class="n">d3_src</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">d3_src</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">d3_src</span> <span class="o">=</span> <span class="n">urls</span><span class="o">.</span><span class="n">D3_LOCAL</span>
-    <span class="k">if</span> <span class="n">mpld3_src</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">mpld3_src</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">mpld3_src</span> <span class="o">=</span> <span class="n">urls</span><span class="o">.</span><span class="n">MPLD3_LOCAL</span>
 
     <span class="n">d3js</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">d3_src</span><span class="p">)</span>
     <span class="n">mpld3js</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">mpld3_src</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">d3_src</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;d3 src not found at &#39;{0}&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">d3_src</span><span class="p">))</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;d3 src not found at &#39;</span><span class="si">{0}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">d3_src</span><span class="p">))</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">mpld3_src</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;mpld3 src not found at &#39;{0}&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mpld3_src</span><span class="p">))</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;mpld3 src not found at &#39;</span><span class="si">{0}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mpld3_src</span><span class="p">))</span>
 
     <span class="k">if</span> <span class="n">nbextension</span><span class="p">:</span>
-        <span class="c"># IPython 2.0+.</span>
-        <span class="c"># This will not work if a url prefix is added</span>
-        <span class="n">prefix</span> <span class="o">=</span> <span class="s">&#39;/nbextensions/&#39;</span>
+        <span class="c1"># IPython 2.0+.</span>
+        <span class="c1"># This will not work if a url prefix is added</span>
+        <span class="n">prefix</span> <span class="o">=</span> <span class="s1">&#39;/nbextensions/&#39;</span>
+
+        <span class="k">def</span> <span class="nf">_install_nbextension</span><span class="p">(</span><span class="n">extensions</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;Wrapper for IPython.html.install_nbextension.&quot;&quot;&quot;</span>
+            <span class="kn">import</span> <span class="nn">IPython</span>
+            <span class="k">if</span> <span class="n">IPython</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">extension</span> <span class="ow">in</span> <span class="n">extensions</span><span class="p">:</span>
+                    <span class="n">install_nbextension</span><span class="p">(</span><span class="n">extension</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">install_nbextension</span><span class="p">(</span><span class="n">extensions</span><span class="p">)</span>
 
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">install_nbextension</span><span class="p">([</span><span class="n">d3_src</span><span class="p">,</span> <span class="n">mpld3_src</span><span class="p">])</span>
+            <span class="n">_install_nbextension</span><span class="p">([</span><span class="n">d3_src</span><span class="p">,</span> <span class="n">mpld3_src</span><span class="p">])</span>
         <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
-            <span class="c"># files may be read only. We&#39;ll try deleting them and re-installing</span>
-            <span class="kn">from</span> <span class="nn">IPython.utils.path</span> <span class="kn">import</span> <span class="n">get_ipython_dir</span>
-            <span class="n">nbext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">get_ipython_dir</span><span class="p">(),</span> <span class="s">&quot;nbextensions&quot;</span><span class="p">)</span>
+            <span class="c1"># files may be read only. We&#39;ll try deleting them and re-installing</span>
+            <span class="kn">from</span> <span class="nn">IPython.utils.path</span> <span class="k">import</span> <span class="n">get_ipython_dir</span>
+            <span class="n">nbext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">get_ipython_dir</span><span class="p">(),</span> <span class="s2">&quot;nbextensions&quot;</span><span class="p">)</span>
 
             <span class="k">for</span> <span class="n">src</span> <span class="ow">in</span> <span class="p">[</span><span class="n">d3_src</span><span class="p">,</span> <span class="n">mpld3_src</span><span class="p">]:</span>
                 <span class="n">dest</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">nbext</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">src</span><span class="p">))</span>
                 <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dest</span><span class="p">):</span>
                     <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">dest</span><span class="p">)</span>
-            <span class="n">install_nbextension</span><span class="p">([</span><span class="n">d3_src</span><span class="p">,</span> <span class="n">mpld3_src</span><span class="p">])</span>
+            <span class="n">_install_nbextension</span><span class="p">([</span><span class="n">d3_src</span><span class="p">,</span> <span class="n">mpld3_src</span><span class="p">])</span>
 
     <span class="k">else</span><span class="p">:</span>
-        <span class="c"># IPython &lt; 2.0 or explicit path.</span>
-        <span class="c"># This won&#39;t work if users have changed the kernel directory.</span>
-        <span class="n">prefix</span> <span class="o">=</span> <span class="s">&#39;/files/&#39;</span>
+        <span class="c1"># IPython &lt; 2.0 or explicit path.</span>
+        <span class="c1"># This won&#39;t work if users have changed the kernel directory.</span>
+        <span class="n">prefix</span> <span class="o">=</span> <span class="s1">&#39;/files/&#39;</span>
 
         <span class="n">d3_dest</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">location</span><span class="p">,</span> <span class="n">d3js</span><span class="p">)</span>
         <span class="n">mpld3_dest</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">location</span><span class="p">,</span> <span class="n">mpld3js</span><span class="p">)</span>
@@ -185,7 +195,7 @@
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dest</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
-                <span class="c"># file may be read only. We&#39;ll try deleting it first</span>
+                <span class="c1"># file may be read only. We&#39;ll try deleting it first</span>
                 <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dest</span><span class="p">):</span>
                     <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">dest</span><span class="p">)</span>
                 <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dest</span><span class="p">)</span>
@@ -203,9 +213,9 @@
 
       </div>
 
-    <div class="footer">
-        &copy; Copyright 2014, mpld3 developers.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2014, mpld3 developers.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.8.
     </div>
   </body>
 </html>

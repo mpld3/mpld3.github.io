@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>mpld3.plugins &mdash; Bringing Matplotlib to the Browser</title>
+    <title>mpld3.plugins &#8212; Bringing Matplotlib to the Browser</title>
     
     <link rel="stylesheet" href="../../_static/mpld3.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -17,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.2',
+        VERSION:     '0.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -28,10 +27,12 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../_static/theme_extras.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
     <link rel="top" title="Bringing Matplotlib to the Browser" href="../../index.html" />
-    <link rel="up" title="mpld3" href="../mpld3.html" /> 
+    <link rel="up" title="Module code" href="../index.html" /> 
   </head>
-  <body>
+  <body role="document">
       <div class="header"><a href="../../index.html">
           <img class="leftlogo" src="../../_static/mpld3-medium.png" alt="Logo"/>
         </a><h1 class="heading"><a href="../../index.html">
@@ -49,7 +50,7 @@
         
         
   <h1>Source code for mpld3.plugins</h1><div class="highlight"><pre>
-<span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Plugins to add behavior to mpld3 charts</span>
 <span class="sd">=======================================</span>
 
@@ -58,24 +59,25 @@
 <span class="sd">to create nearly any imaginable behavior by defining your own custom plugin.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;connect&#39;</span><span class="p">,</span> <span class="s">&#39;clear&#39;</span><span class="p">,</span> <span class="s">&#39;get_plugins&#39;</span><span class="p">,</span> <span class="s">&#39;PluginBase&#39;</span><span class="p">,</span>
-           <span class="s">&#39;Reset&#39;</span><span class="p">,</span> <span class="s">&#39;Zoom&#39;</span><span class="p">,</span> <span class="s">&#39;BoxZoom&#39;</span><span class="p">,</span>
-           <span class="s">&#39;PointLabelTooltip&#39;</span><span class="p">,</span> <span class="s">&#39;PointHTMLTooltip&#39;</span><span class="p">,</span> <span class="s">&#39;LineLabelTooltip&#39;</span><span class="p">,</span>
-           <span class="s">&#39;MousePosition&#39;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;connect&#39;</span><span class="p">,</span> <span class="s1">&#39;clear&#39;</span><span class="p">,</span> <span class="s1">&#39;get_plugins&#39;</span><span class="p">,</span> <span class="s1">&#39;PluginBase&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;Reset&#39;</span><span class="p">,</span> <span class="s1">&#39;Zoom&#39;</span><span class="p">,</span> <span class="s1">&#39;BoxZoom&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;PointLabelTooltip&#39;</span><span class="p">,</span> <span class="s1">&#39;PointHTMLTooltip&#39;</span><span class="p">,</span> <span class="s1">&#39;LineLabelTooltip&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;MousePosition&#39;</span><span class="p">]</span>
 
+<span class="kn">import</span> <span class="nn">collections</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">uuid</span>
 <span class="kn">import</span> <span class="nn">matplotlib</span>
 
-<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">get_id</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="k">import</span> <span class="n">get_id</span>
 
 
 <div class="viewcode-block" id="get_plugins"><a class="viewcode-back" href="../../modules/API.html#mpld3.plugins.get_plugins">[docs]</a><span class="k">def</span> <span class="nf">get_plugins</span><span class="p">(</span><span class="n">fig</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Get the list of plugins in the figure&quot;&quot;&quot;</span>
     <span class="n">connect</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">fig</span><span class="o">.</span><span class="n">mpld3_plugins</span>
+    <span class="k">return</span> <span class="n">fig</span><span class="o">.</span><span class="n">mpld3_plugins</span></div>
 
-</div>
+
 <div class="viewcode-block" id="connect"><a class="viewcode-back" href="../../modules/API.html#mpld3.plugins.connect">[docs]</a><span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="o">*</span><span class="n">plugins</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Connect one or more plugins to a figure</span>
 
@@ -97,43 +99,43 @@
 <span class="sd">    &gt;&gt;&gt; plugins.connect(fig, plugins.LineLabelTooltip(lines[0]))</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">Figure</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;plugins.connect: first argument must be a figure&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="s">&#39;mpld3_plugins&#39;</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;plugins.connect: first argument must be a figure&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="s1">&#39;mpld3_plugins&#39;</span><span class="p">):</span>
         <span class="n">fig</span><span class="o">.</span><span class="n">mpld3_plugins</span> <span class="o">=</span> <span class="n">DEFAULT_PLUGINS</span><span class="p">[:]</span>
     <span class="k">for</span> <span class="n">plugin</span> <span class="ow">in</span> <span class="n">plugins</span><span class="p">:</span>
-        <span class="n">fig</span><span class="o">.</span><span class="n">mpld3_plugins</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">plugin</span><span class="p">)</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">mpld3_plugins</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">plugin</span><span class="p">)</span></div>
 
-</div>
+
 <div class="viewcode-block" id="clear"><a class="viewcode-back" href="../../modules/API.html#mpld3.plugins.clear">[docs]</a><span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="n">fig</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Clear all plugins from the figure, including defaults&quot;&quot;&quot;</span>
-    <span class="n">fig</span><span class="o">.</span><span class="n">mpld3_plugins</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">mpld3_plugins</span> <span class="o">=</span> <span class="p">[]</span></div>
 
-</div>
+
 <span class="k">class</span> <span class="nc">PluginBase</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">get_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict_</span>
 
     <span class="k">def</span> <span class="nf">javascript</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&quot;JAVASCRIPT&quot;</span><span class="p">):</span>
-            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&quot;js_args_&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;JAVASCRIPT&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;js_args_&quot;</span><span class="p">):</span>
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">JAVASCRIPT</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">js_args_</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">JAVASCRIPT</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="s">&quot;&quot;</span>
+            <span class="k">return</span> <span class="s2">&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">css</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&quot;css_&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;css_&quot;</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">css_</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="s">&quot;&quot;</span>
+            <span class="k">return</span> <span class="s2">&quot;&quot;</span>
 
 
 <div class="viewcode-block" id="Reset"><a class="viewcode-back" href="../../modules/API.html#mpld3.plugins.Reset">[docs]</a><span class="k">class</span> <span class="nc">Reset</span><span class="p">(</span><span class="n">PluginBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A Plugin to add a reset button&quot;&quot;&quot;</span>
-    <span class="n">dict_</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;reset&quot;</span><span class="p">}</span>
+    <span class="n">dict_</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;reset&quot;</span><span class="p">}</span></div>
 
-</div>
+
 <div class="viewcode-block" id="MousePosition"><a class="viewcode-back" href="../../modules/API.html#mpld3.plugins.MousePosition">[docs]</a><span class="k">class</span> <span class="nc">MousePosition</span><span class="p">(</span><span class="n">PluginBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A Plugin to display coordinates for the current mouse position</span>
 
@@ -147,12 +149,12 @@
 <span class="sd">    &gt;&gt;&gt; fig_to_html(fig)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s">&quot;.3g&quot;</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dict_</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;mouseposition&quot;</span><span class="p">,</span>
-                      <span class="s">&quot;fontsize&quot;</span><span class="p">:</span> <span class="n">fontsize</span><span class="p">,</span>
-                      <span class="s">&quot;fmt&quot;</span><span class="p">:</span> <span class="n">fmt</span><span class="p">}</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;.3g&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dict_</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;mouseposition&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;fontsize&quot;</span><span class="p">:</span> <span class="n">fontsize</span><span class="p">,</span>
+                      <span class="s2">&quot;fmt&quot;</span><span class="p">:</span> <span class="n">fmt</span><span class="p">}</span></div>
 
-</div>
+
 <div class="viewcode-block" id="Zoom"><a class="viewcode-back" href="../../modules/API.html#mpld3.plugins.Zoom">[docs]</a><span class="k">class</span> <span class="nc">Zoom</span><span class="p">(</span><span class="n">PluginBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A Plugin to add zoom behavior to the plot</span>
 
@@ -168,14 +170,14 @@
 <span class="sd">    -----</span>
 <span class="sd">    Even if ``enabled`` is specified, other plugins may modify this state.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">button</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">enabled</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">enabled</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">button</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">enabled</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">enabled</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">enabled</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">button</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dict_</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;zoom&quot;</span><span class="p">,</span>
-                      <span class="s">&quot;button&quot;</span><span class="p">:</span> <span class="n">button</span><span class="p">,</span>
-                      <span class="s">&quot;enabled&quot;</span><span class="p">:</span> <span class="n">enabled</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dict_</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;zoom&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;button&quot;</span><span class="p">:</span> <span class="n">button</span><span class="p">,</span>
+                      <span class="s2">&quot;enabled&quot;</span><span class="p">:</span> <span class="n">enabled</span><span class="p">}</span></div>
 
-</div>
+
 <div class="viewcode-block" id="BoxZoom"><a class="viewcode-back" href="../../modules/API.html#mpld3.plugins.BoxZoom">[docs]</a><span class="k">class</span> <span class="nc">BoxZoom</span><span class="p">(</span><span class="n">PluginBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A Plugin to add box-zoom behavior to the plot</span>
 
@@ -191,14 +193,14 @@
 <span class="sd">    -----</span>
 <span class="sd">    Even if ``enabled`` is specified, other plugins may modify this state.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">button</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">enabled</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">enabled</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">button</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">enabled</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">enabled</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">enabled</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">button</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dict_</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;boxzoom&quot;</span><span class="p">,</span>
-                      <span class="s">&quot;button&quot;</span><span class="p">:</span> <span class="n">button</span><span class="p">,</span>
-                      <span class="s">&quot;enabled&quot;</span><span class="p">:</span> <span class="n">enabled</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dict_</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;boxzoom&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;button&quot;</span><span class="p">:</span> <span class="n">button</span><span class="p">,</span>
+                      <span class="s2">&quot;enabled&quot;</span><span class="p">:</span> <span class="n">enabled</span><span class="p">}</span></div>
 
-</div>
+
 <div class="viewcode-block" id="PointLabelTooltip"><a class="viewcode-back" href="../../modules/API.html#mpld3.plugins.PointLabelTooltip">[docs]</a><span class="k">class</span> <span class="nc">PointLabelTooltip</span><span class="p">(</span><span class="n">PluginBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A Plugin to enable a tooltip: text which hovers over points.</span>
 
@@ -222,23 +224,23 @@
 <span class="sd">    &gt;&gt;&gt; plugins.connect(fig, PointLabelTooltip(points[0]))</span>
 <span class="sd">    &gt;&gt;&gt; fig_to_html(fig)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-                 <span class="n">hoffset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">voffset</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="s">&quot;mouse&quot;</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">location</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&quot;bottom left&quot;</span><span class="p">,</span> <span class="s">&quot;top left&quot;</span><span class="p">,</span> <span class="s">&quot;bottom right&quot;</span><span class="p">,</span>
-                            <span class="s">&quot;top right&quot;</span><span class="p">,</span> <span class="s">&quot;mouse&quot;</span><span class="p">]:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;invalid location: {0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">location</span><span class="p">))</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">hoffset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">voffset</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="s2">&quot;mouse&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">location</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;bottom left&quot;</span><span class="p">,</span> <span class="s2">&quot;top left&quot;</span><span class="p">,</span> <span class="s2">&quot;bottom right&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;top right&quot;</span><span class="p">,</span> <span class="s2">&quot;mouse&quot;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;invalid location: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">location</span><span class="p">))</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">Line2D</span><span class="p">):</span>
-            <span class="n">suffix</span> <span class="o">=</span> <span class="s">&quot;pts&quot;</span>
+            <span class="n">suffix</span> <span class="o">=</span> <span class="s2">&quot;pts&quot;</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">suffix</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dict_</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;tooltip&quot;</span><span class="p">,</span>
-                      <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="n">get_id</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">suffix</span><span class="p">),</span>
-                      <span class="s">&quot;labels&quot;</span><span class="p">:</span> <span class="n">labels</span><span class="p">,</span>
-                      <span class="s">&quot;hoffset&quot;</span><span class="p">:</span> <span class="n">hoffset</span><span class="p">,</span>
-                      <span class="s">&quot;voffset&quot;</span><span class="p">:</span> <span class="n">voffset</span><span class="p">,</span>
-                      <span class="s">&quot;location&quot;</span><span class="p">:</span> <span class="n">location</span><span class="p">}</span>
+            <span class="n">suffix</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dict_</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;tooltip&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">get_id</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">suffix</span><span class="p">),</span>
+                      <span class="s2">&quot;labels&quot;</span><span class="p">:</span> <span class="n">labels</span><span class="p">,</span>
+                      <span class="s2">&quot;hoffset&quot;</span><span class="p">:</span> <span class="n">hoffset</span><span class="p">,</span>
+                      <span class="s2">&quot;voffset&quot;</span><span class="p">:</span> <span class="n">voffset</span><span class="p">,</span>
+                      <span class="s2">&quot;location&quot;</span><span class="p">:</span> <span class="n">location</span><span class="p">}</span></div>
 
-</div>
+
 <div class="viewcode-block" id="LineLabelTooltip"><a class="viewcode-back" href="../../modules/API.html#mpld3.plugins.LineLabelTooltip">[docs]</a><span class="k">class</span> <span class="nc">LineLabelTooltip</span><span class="p">(</span><span class="n">PluginBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A Plugin to enable a tooltip: text which hovers over a line.</span>
 
@@ -258,23 +260,23 @@
 <span class="sd">    &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
 <span class="sd">    &gt;&gt;&gt; from mpld3 import fig_to_html, plugins</span>
 <span class="sd">    &gt;&gt;&gt; fig, ax = plt.subplots()</span>
-<span class="sd">    &gt;&gt;&gt; points = ax.plot(range(10), &#39;o&#39;)</span>
-<span class="sd">    &gt;&gt;&gt; plugins.connect(fig, PointLabelTooltip(points[0]))</span>
+<span class="sd">    &gt;&gt;&gt; lines = ax.plot(range(10), &#39;o&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; plugins.connect(fig, LineLabelTooltip(lines[0]))</span>
 <span class="sd">    &gt;&gt;&gt; fig_to_html(fig)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-                 <span class="n">hoffset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">voffset</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="s">&quot;mouse&quot;</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">location</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&quot;bottom left&quot;</span><span class="p">,</span> <span class="s">&quot;top left&quot;</span><span class="p">,</span> <span class="s">&quot;bottom right&quot;</span><span class="p">,</span>
-                            <span class="s">&quot;top right&quot;</span><span class="p">,</span> <span class="s">&quot;mouse&quot;</span><span class="p">]:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;invalid location: {0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">location</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dict_</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;tooltip&quot;</span><span class="p">,</span>
-                      <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="n">get_id</span><span class="p">(</span><span class="n">points</span><span class="p">),</span>
-                      <span class="s">&quot;labels&quot;</span><span class="p">:</span> <span class="n">label</span> <span class="k">if</span> <span class="n">label</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="p">[</span><span class="n">label</span><span class="p">],</span>
-                      <span class="s">&quot;hoffset&quot;</span><span class="p">:</span> <span class="n">hoffset</span><span class="p">,</span>
-                      <span class="s">&quot;voffset&quot;</span><span class="p">:</span> <span class="n">voffset</span><span class="p">,</span>
-                      <span class="s">&quot;location&quot;</span><span class="p">:</span> <span class="n">location</span><span class="p">}</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">hoffset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">voffset</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="s2">&quot;mouse&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">location</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;bottom left&quot;</span><span class="p">,</span> <span class="s2">&quot;top left&quot;</span><span class="p">,</span> <span class="s2">&quot;bottom right&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;top right&quot;</span><span class="p">,</span> <span class="s2">&quot;mouse&quot;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;invalid location: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">location</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dict_</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;tooltip&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">get_id</span><span class="p">(</span><span class="n">points</span><span class="p">),</span>
+                      <span class="s2">&quot;labels&quot;</span><span class="p">:</span> <span class="n">label</span> <span class="k">if</span> <span class="n">label</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">[</span><span class="n">label</span><span class="p">],</span>
+                      <span class="s2">&quot;hoffset&quot;</span><span class="p">:</span> <span class="n">hoffset</span><span class="p">,</span>
+                      <span class="s2">&quot;voffset&quot;</span><span class="p">:</span> <span class="n">voffset</span><span class="p">,</span>
+                      <span class="s2">&quot;location&quot;</span><span class="p">:</span> <span class="n">location</span><span class="p">}</span></div>
 
-</div>
+
 <span class="k">class</span> <span class="nc">LinkedBrush</span><span class="p">(</span><span class="n">PluginBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A Plugin to enable linked brushing between plots</span>
 
@@ -312,16 +314,16 @@
 <span class="sd">    have different sizes, so that mpld3 is unable to link the related points.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">button</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">enabled</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">button</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">enabled</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">Line2D</span><span class="p">):</span>
-            <span class="n">suffix</span> <span class="o">=</span> <span class="s">&quot;pts&quot;</span>
+            <span class="n">suffix</span> <span class="o">=</span> <span class="s2">&quot;pts&quot;</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">suffix</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="n">suffix</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">dict_</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;linkedbrush&quot;</span><span class="p">,</span>
-                      <span class="s">&quot;button&quot;</span><span class="p">:</span> <span class="n">button</span><span class="p">,</span>
-                      <span class="s">&quot;enabled&quot;</span><span class="p">:</span> <span class="n">enabled</span><span class="p">,</span>
-                      <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="n">get_id</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">suffix</span><span class="p">)}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dict_</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;linkedbrush&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;button&quot;</span><span class="p">:</span> <span class="n">button</span><span class="p">,</span>
+                      <span class="s2">&quot;enabled&quot;</span><span class="p">:</span> <span class="n">enabled</span><span class="p">,</span>
+                      <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">get_id</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">suffix</span><span class="p">)}</span>
 
 
 <div class="viewcode-block" id="PointHTMLTooltip"><a class="viewcode-back" href="../../modules/API.html#mpld3.plugins.PointHTMLTooltip">[docs]</a><span class="k">class</span> <span class="nc">PointHTMLTooltip</span><span class="p">(</span><span class="n">PluginBase</span><span class="p">):</span>
@@ -350,57 +352,544 @@
 <span class="sd">    &gt;&gt;&gt; fig_to_html(fig)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">JAVASCRIPT</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;</span>
-<span class="s">    mpld3.register_plugin(&quot;htmltooltip&quot;, HtmlTooltipPlugin);</span>
-<span class="s">    HtmlTooltipPlugin.prototype = Object.create(mpld3.Plugin.prototype);</span>
-<span class="s">    HtmlTooltipPlugin.prototype.constructor = HtmlTooltipPlugin;</span>
-<span class="s">    HtmlTooltipPlugin.prototype.requiredProps = [&quot;id&quot;];</span>
-<span class="s">    HtmlTooltipPlugin.prototype.defaultProps = {labels:null, hoffset:0, voffset:10};</span>
-<span class="s">    function HtmlTooltipPlugin(fig, props){</span>
-<span class="s">        mpld3.Plugin.call(this, fig, props);</span>
-<span class="s">    };</span>
+    <span class="n">JAVASCRIPT</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    mpld3.register_plugin(&quot;htmltooltip&quot;, HtmlTooltipPlugin);</span>
+<span class="s2">    HtmlTooltipPlugin.prototype = Object.create(mpld3.Plugin.prototype);</span>
+<span class="s2">    HtmlTooltipPlugin.prototype.constructor = HtmlTooltipPlugin;</span>
+<span class="s2">    HtmlTooltipPlugin.prototype.requiredProps = [&quot;id&quot;];</span>
+<span class="s2">    HtmlTooltipPlugin.prototype.defaultProps = {labels:null,</span>
+<span class="s2">                                                hoffset:0,</span>
+<span class="s2">                                                voffset:10};</span>
+<span class="s2">    function HtmlTooltipPlugin(fig, props){</span>
+<span class="s2">        mpld3.Plugin.call(this, fig, props);</span>
+<span class="s2">    };</span>
 
-<span class="s">    HtmlTooltipPlugin.prototype.draw = function(){</span>
-<span class="s">       var obj = mpld3.get_element(this.props.id);</span>
-<span class="s">       var labels = this.props.labels;</span>
-<span class="s">       var tooltip = d3.select(&quot;body&quot;).append(&quot;div&quot;)</span>
-<span class="s">                    .attr(&quot;class&quot;, &quot;mpld3-tooltip&quot;)</span>
-<span class="s">                    .style(&quot;position&quot;, &quot;absolute&quot;)</span>
-<span class="s">                    .style(&quot;z-index&quot;, &quot;10&quot;)</span>
-<span class="s">                    .style(&quot;visibility&quot;, &quot;hidden&quot;);</span>
+<span class="s2">    HtmlTooltipPlugin.prototype.draw = function(){</span>
+<span class="s2">       var obj = mpld3.get_element(this.props.id);</span>
+<span class="s2">       var labels = this.props.labels;</span>
+<span class="s2">       var tooltip = d3.select(&quot;body&quot;).append(&quot;div&quot;)</span>
+<span class="s2">                    .attr(&quot;class&quot;, &quot;mpld3-tooltip&quot;)</span>
+<span class="s2">                    .style(&quot;position&quot;, &quot;absolute&quot;)</span>
+<span class="s2">                    .style(&quot;z-index&quot;, &quot;10&quot;)</span>
+<span class="s2">                    .style(&quot;visibility&quot;, &quot;hidden&quot;);</span>
 
-<span class="s">       obj.elements()</span>
-<span class="s">           .on(&quot;mouseover&quot;, function(d, i){</span>
-<span class="s">                              tooltip.html(labels[i])</span>
-<span class="s">                                     .style(&quot;visibility&quot;, &quot;visible&quot;);})</span>
-<span class="s">           .on(&quot;mousemove&quot;, function(d, i){</span>
-<span class="s">                    tooltip</span>
-<span class="s">                      .style(&quot;top&quot;, d3.event.pageY + this.props.voffset + &quot;px&quot;)</span>
-<span class="s">                      .style(&quot;left&quot;,d3.event.pageX + this.props.hoffset + &quot;px&quot;);</span>
-<span class="s">                 }.bind(this))</span>
-<span class="s">           .on(&quot;mouseout&quot;,  function(d, i){</span>
-<span class="s">                           tooltip.style(&quot;visibility&quot;, &quot;hidden&quot;);});</span>
-<span class="s">    };</span>
-<span class="s">    &quot;&quot;&quot;</span>
+<span class="s2">       obj.elements()</span>
+<span class="s2">           .on(&quot;mouseover&quot;, function(d, i){</span>
+<span class="s2">                              tooltip.html(labels[i])</span>
+<span class="s2">                                     .style(&quot;visibility&quot;, &quot;visible&quot;);})</span>
+<span class="s2">           .on(&quot;mousemove&quot;, function(d, i){</span>
+<span class="s2">                  tooltip</span>
+<span class="s2">                    .style(&quot;top&quot;, d3.event.pageY + this.props.voffset + &quot;px&quot;)</span>
+<span class="s2">                    .style(&quot;left&quot;,d3.event.pageX + this.props.hoffset + &quot;px&quot;);</span>
+<span class="s2">                 }.bind(this))</span>
+<span class="s2">           .on(&quot;mouseout&quot;,  function(d, i){</span>
+<span class="s2">                           tooltip.style(&quot;visibility&quot;, &quot;hidden&quot;);});</span>
+<span class="s2">    };</span>
+<span class="s2">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-                 <span class="n">hoffset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">voffset</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">css</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">hoffset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">voffset</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">css</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">points</span> <span class="o">=</span> <span class="n">points</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">labels</span> <span class="o">=</span> <span class="n">labels</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">voffset</span> <span class="o">=</span> <span class="n">voffset</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">hoffset</span> <span class="o">=</span> <span class="n">hoffset</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">css_</span> <span class="o">=</span> <span class="n">css</span> <span class="ow">or</span> <span class="s">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">css_</span> <span class="o">=</span> <span class="n">css</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">Line2D</span><span class="p">):</span>
-            <span class="n">suffix</span> <span class="o">=</span> <span class="s">&quot;pts&quot;</span>
+            <span class="n">suffix</span> <span class="o">=</span> <span class="s2">&quot;pts&quot;</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">suffix</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dict_</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;htmltooltip&quot;</span><span class="p">,</span>
-                      <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="n">get_id</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">suffix</span><span class="p">),</span>
-                      <span class="s">&quot;labels&quot;</span><span class="p">:</span> <span class="n">labels</span><span class="p">,</span>
-                      <span class="s">&quot;hoffset&quot;</span><span class="p">:</span> <span class="n">hoffset</span><span class="p">,</span>
-                      <span class="s">&quot;voffset&quot;</span><span class="p">:</span> <span class="n">voffset</span><span class="p">}</span>
+            <span class="n">suffix</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dict_</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;htmltooltip&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">get_id</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">suffix</span><span class="p">),</span>
+                      <span class="s2">&quot;labels&quot;</span><span class="p">:</span> <span class="n">labels</span><span class="p">,</span>
+                      <span class="s2">&quot;hoffset&quot;</span><span class="p">:</span> <span class="n">hoffset</span><span class="p">,</span>
+                      <span class="s2">&quot;voffset&quot;</span><span class="p">:</span> <span class="n">voffset</span><span class="p">}</span></div>
 
-</div>
+
+<span class="k">class</span> <span class="nc">LineHTMLTooltip</span><span class="p">(</span><span class="n">PluginBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A Plugin to enable an HTML tooltip:</span>
+<span class="sd">    formated text which hovers over points.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    points : matplotlib Line2D object</span>
+<span class="sd">        The figure element to apply the tooltip to</span>
+<span class="sd">    label : string</span>
+<span class="sd">        The label for the line, as strings of unescaped HTML.</span>
+<span class="sd">    hoffset, voffset : integer, optional</span>
+<span class="sd">        The number of pixels to offset the tooltip text.  Default is</span>
+<span class="sd">        hoffset = 0, voffset = 10</span>
+<span class="sd">    css : str, optional</span>
+<span class="sd">        css to be included, for styling the label html if desired</span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
+<span class="sd">    &gt;&gt;&gt; from mpld3 import fig_to_html, plugins</span>
+<span class="sd">    &gt;&gt;&gt; fig, ax = plt.subplots()</span>
+<span class="sd">    &gt;&gt;&gt; lines = ax.plot(range(10))</span>
+<span class="sd">    &gt;&gt;&gt; label = &#39;&lt;h1&gt;line {title}&lt;/h1&gt;&#39;.format(title=&#39;A&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; plugins.connect(fig, LineHTMLTooltip(lines[0], label))</span>
+<span class="sd">    &gt;&gt;&gt; fig_to_html(fig)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">JAVASCRIPT</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    mpld3.register_plugin(&quot;linehtmltooltip&quot;, LineHTMLTooltip);</span>
+<span class="s2">    LineHTMLTooltip.prototype = Object.create(mpld3.Plugin.prototype);</span>
+<span class="s2">    LineHTMLTooltip.prototype.constructor = LineHTMLTooltip;</span>
+<span class="s2">    LineHTMLTooltip.prototype.requiredProps = [&quot;id&quot;];</span>
+<span class="s2">    LineHTMLTooltip.prototype.defaultProps = {label:null,</span>
+<span class="s2">                                              hoffset:0,</span>
+<span class="s2">                                              voffset:10};</span>
+<span class="s2">    function LineHTMLTooltip(fig, props){</span>
+<span class="s2">        mpld3.Plugin.call(this, fig, props);</span>
+<span class="s2">    };</span>
+
+<span class="s2">    LineHTMLTooltip.prototype.draw = function(){</span>
+<span class="s2">        var obj = mpld3.get_element(this.props.id, this.fig);</span>
+<span class="s2">        var label = this.props.label</span>
+<span class="s2">        var tooltip = d3.select(&quot;body&quot;).append(&quot;div&quot;)</span>
+<span class="s2">                    .attr(&quot;class&quot;, &quot;mpld3-tooltip&quot;)</span>
+<span class="s2">                    .style(&quot;position&quot;, &quot;absolute&quot;)</span>
+<span class="s2">                    .style(&quot;z-index&quot;, &quot;10&quot;)</span>
+<span class="s2">                    .style(&quot;visibility&quot;, &quot;hidden&quot;);</span>
+
+<span class="s2">        obj.elements()</span>
+<span class="s2">           .on(&quot;mouseover&quot;, function(d, i){</span>
+<span class="s2">                               tooltip.html(label)</span>
+<span class="s2">                                      .style(&quot;visibility&quot;, &quot;visible&quot;);</span>
+<span class="s2">                                     })</span>
+<span class="s2">            .on(&quot;mousemove&quot;, function(d, i){</span>
+<span class="s2">                  tooltip</span>
+<span class="s2">                    .style(&quot;top&quot;, d3.event.pageY + this.props.voffset + &quot;px&quot;)</span>
+<span class="s2">                    .style(&quot;left&quot;,d3.event.pageX + this.props.hoffset + &quot;px&quot;);</span>
+<span class="s2">                 }.bind(this))</span>
+<span class="s2">           .on(&quot;mouseout&quot;,  function(d, i){</span>
+<span class="s2">                           tooltip.style(&quot;visibility&quot;, &quot;hidden&quot;);})</span>
+<span class="s2">    };</span>
+<span class="s2">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">hoffset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">voffset</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                 <span class="n">css</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">line</span> <span class="o">=</span> <span class="n">line</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="n">label</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">voffset</span> <span class="o">=</span> <span class="n">voffset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hoffset</span> <span class="o">=</span> <span class="n">hoffset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">css_</span> <span class="o">=</span> <span class="n">css</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dict_</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;linehtmltooltip&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">get_id</span><span class="p">(</span><span class="n">line</span><span class="p">),</span>
+                      <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="n">label</span><span class="p">,</span>
+                      <span class="s2">&quot;hoffset&quot;</span><span class="p">:</span> <span class="n">hoffset</span><span class="p">,</span>
+                      <span class="s2">&quot;voffset&quot;</span><span class="p">:</span> <span class="n">voffset</span><span class="p">}</span>
+
+
+<span class="k">class</span> <span class="nc">InteractiveLegendPlugin</span><span class="p">(</span><span class="n">PluginBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A plugin for an interactive legends.</span>
+
+<span class="sd">    Inspired by http://bl.ocks.org/simzou/6439398</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    plot_elements : iterable of matplotlib elements</span>
+<span class="sd">        the elements to associate with a given legend items</span>
+<span class="sd">    labels : iterable of strings</span>
+<span class="sd">        The labels for each legend element</span>
+<span class="sd">    ax :  matplotlib axes instance, optional</span>
+<span class="sd">        the ax to which the legend belongs. Default is the first</span>
+<span class="sd">        axes. The legend will be plotted to the right of the specified</span>
+<span class="sd">        axes</span>
+<span class="sd">    alpha_unsel : float, optional</span>
+<span class="sd">        the alpha value to multiply the plot_element(s) associated alpha</span>
+<span class="sd">        with the legend item when the legend item is unselected.</span>
+<span class="sd">        Default is 0.2</span>
+<span class="sd">    alpha_over : float, optional</span>
+<span class="sd">        the alpha value to multiply the plot_element(s) associated alpha</span>
+<span class="sd">        with the legend item when the legend item is overlaid.</span>
+<span class="sd">        Default is 1 (no effect), 1.5 works nicely !</span>
+<span class="sd">    start_visible : boolean, optional (could be a list of booleans)</span>
+<span class="sd">        defines if objects should start selected on not.</span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
+<span class="sd">    &gt;&gt;&gt; from mpld3 import fig_to_html, plugins</span>
+<span class="sd">    &gt;&gt;&gt; N_paths = 5</span>
+<span class="sd">    &gt;&gt;&gt; N_steps = 100</span>
+<span class="sd">    &gt;&gt;&gt; x = np.linspace(0, 10, 100)</span>
+<span class="sd">    &gt;&gt;&gt; y = 0.1 * (np.random.random((N_paths, N_steps)) - 0.5)</span>
+<span class="sd">    &gt;&gt;&gt; y = y.cumsum(1)</span>
+<span class="sd">    &gt;&gt;&gt; fig, ax = plt.subplots()</span>
+<span class="sd">    &gt;&gt;&gt; labels = [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;, &quot;e&quot;]</span>
+<span class="sd">    &gt;&gt;&gt; line_collections = ax.plot(x, y.T, lw=4, alpha=0.6)</span>
+<span class="sd">    &gt;&gt;&gt; interactive_legend = plugins.InteractiveLegendPlugin(line_collections,</span>
+<span class="sd">    ...                                                      labels,</span>
+<span class="sd">    ...                                                      alpha_unsel=0.2,</span>
+<span class="sd">    ...                                                      alpha_over=1.5,</span>
+<span class="sd">    ...                                                      start_visible=True)</span>
+<span class="sd">    &gt;&gt;&gt; plugins.connect(fig, interactive_legend)</span>
+<span class="sd">    &gt;&gt;&gt; fig_to_html(fig)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">JAVASCRIPT</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    mpld3.register_plugin(&quot;interactive_legend&quot;, InteractiveLegend);</span>
+<span class="s2">    InteractiveLegend.prototype = Object.create(mpld3.Plugin.prototype);</span>
+<span class="s2">    InteractiveLegend.prototype.constructor = InteractiveLegend;</span>
+<span class="s2">    InteractiveLegend.prototype.requiredProps = [&quot;element_ids&quot;, &quot;labels&quot;];</span>
+<span class="s2">    InteractiveLegend.prototype.defaultProps = {&quot;ax&quot;:null,</span>
+<span class="s2">                                                &quot;alpha_unsel&quot;:0.2,</span>
+<span class="s2">                                                &quot;alpha_over&quot;:1.0,</span>
+<span class="s2">                                                &quot;start_visible&quot;:true}</span>
+<span class="s2">    function InteractiveLegend(fig, props){</span>
+<span class="s2">        mpld3.Plugin.call(this, fig, props);</span>
+<span class="s2">    };</span>
+
+<span class="s2">    InteractiveLegend.prototype.draw = function(){</span>
+<span class="s2">        var alpha_unsel = this.props.alpha_unsel;</span>
+<span class="s2">        var alpha_over = this.props.alpha_over;</span>
+
+<span class="s2">        var legendItems = new Array();</span>
+<span class="s2">        for(var i=0; i&lt;this.props.labels.length; i++){</span>
+<span class="s2">            var obj = </span><span class="si">{}</span><span class="s2">;</span>
+<span class="s2">            obj.label = this.props.labels[i];</span>
+
+<span class="s2">            var element_id = this.props.element_ids[i];</span>
+<span class="s2">            mpld3_elements = [];</span>
+<span class="s2">            for(var j=0; j&lt;element_id.length; j++){</span>
+<span class="s2">                var mpld3_element = mpld3.get_element(element_id[j], this.fig);</span>
+
+<span class="s2">                // mpld3_element might be null in case of Line2D instances</span>
+<span class="s2">                // for we pass the id for both the line and the markers. Either</span>
+<span class="s2">                // one might not exist on the D3 side</span>
+<span class="s2">                if(mpld3_element){</span>
+<span class="s2">                    mpld3_elements.push(mpld3_element);</span>
+<span class="s2">                }</span>
+<span class="s2">            }</span>
+
+<span class="s2">            obj.mpld3_elements = mpld3_elements;</span>
+<span class="s2">            obj.visible = this.props.start_visible[i]; // should become be setable from python side</span>
+<span class="s2">            legendItems.push(obj);</span>
+<span class="s2">            set_alphas(obj, false);</span>
+<span class="s2">        }</span>
+
+<span class="s2">        // determine the axes with which this legend is associated</span>
+<span class="s2">        var ax = this.props.ax</span>
+<span class="s2">        if(!ax){</span>
+<span class="s2">            ax = this.fig.axes[0];</span>
+<span class="s2">        } else{</span>
+<span class="s2">            ax = mpld3.get_element(ax, this.fig);</span>
+<span class="s2">        }</span>
+
+<span class="s2">        // add a legend group to the canvas of the figure</span>
+<span class="s2">        var legend = this.fig.canvas.append(&quot;svg:g&quot;)</span>
+<span class="s2">                               .attr(&quot;class&quot;, &quot;legend&quot;);</span>
+
+<span class="s2">        // add the rectangles</span>
+<span class="s2">        legend.selectAll(&quot;rect&quot;)</span>
+<span class="s2">                .data(legendItems)</span>
+<span class="s2">                .enter().append(&quot;rect&quot;)</span>
+<span class="s2">                .attr(&quot;height&quot;, 10)</span>
+<span class="s2">                .attr(&quot;width&quot;, 25)</span>
+<span class="s2">                .attr(&quot;x&quot;, ax.width + ax.position[0] + 25)</span>
+<span class="s2">                .attr(&quot;y&quot;,function(d,i) {</span>
+<span class="s2">                           return ax.position[1] + i * 25 + 10;})</span>
+<span class="s2">                .attr(&quot;stroke&quot;, get_color)</span>
+<span class="s2">                .attr(&quot;class&quot;, &quot;legend-box&quot;)</span>
+<span class="s2">                .style(&quot;fill&quot;, function(d, i) {</span>
+<span class="s2">                           return d.visible ? get_color(d) : &quot;white&quot;;})</span>
+<span class="s2">                .on(&quot;click&quot;, click).on(&#39;mouseover&#39;, over).on(&#39;mouseout&#39;, out);</span>
+
+<span class="s2">        // add the labels</span>
+<span class="s2">        legend.selectAll(&quot;text&quot;)</span>
+<span class="s2">              .data(legendItems)</span>
+<span class="s2">              .enter().append(&quot;text&quot;)</span>
+<span class="s2">              .attr(&quot;x&quot;, function (d) {</span>
+<span class="s2">                           return ax.width + ax.position[0] + 25 + 40;})</span>
+<span class="s2">              .attr(&quot;y&quot;, function(d,i) {</span>
+<span class="s2">                           return ax.position[1] + i * 25 + 10 + 10 - 1;})</span>
+<span class="s2">              .text(function(d) { return d.label });</span>
+
+
+<span class="s2">        // specify the action on click</span>
+<span class="s2">        function click(d,i){</span>
+<span class="s2">            d.visible = !d.visible;</span>
+<span class="s2">            d3.select(this)</span>
+<span class="s2">              .style(&quot;fill&quot;,function(d, i) {</span>
+<span class="s2">                return d.visible ? get_color(d) : &quot;white&quot;;</span>
+<span class="s2">              })</span>
+<span class="s2">            set_alphas(d, false);</span>
+
+<span class="s2">        };</span>
+
+<span class="s2">        // specify the action on legend overlay </span>
+<span class="s2">        function over(d,i){</span>
+<span class="s2">             set_alphas(d, true);</span>
+<span class="s2">        };</span>
+
+<span class="s2">        // specify the action on legend overlay </span>
+<span class="s2">        function out(d,i){</span>
+<span class="s2">             set_alphas(d, false);</span>
+<span class="s2">        };</span>
+
+<span class="s2">        // helper function for setting alphas</span>
+<span class="s2">        function set_alphas(d, is_over){</span>
+<span class="s2">            for(var i=0; i&lt;d.mpld3_elements.length; i++){</span>
+<span class="s2">                var type = d.mpld3_elements[i].constructor.name;</span>
+
+<span class="s2">                if(type ==&quot;mpld3_Line&quot;){</span>
+<span class="s2">                    var current_alpha = d.mpld3_elements[i].props.alpha;</span>
+<span class="s2">                    var current_alpha_unsel = current_alpha * alpha_unsel;</span>
+<span class="s2">                    var current_alpha_over = current_alpha * alpha_over;</span>
+<span class="s2">                    d3.select(d.mpld3_elements[i].path[0][0])</span>
+<span class="s2">                        .style(&quot;stroke-opacity&quot;, is_over ? current_alpha_over :</span>
+<span class="s2">                                                (d.visible ? current_alpha : current_alpha_unsel))</span>
+<span class="s2">                        .style(&quot;stroke-width&quot;, is_over ? </span>
+<span class="s2">                                alpha_over * d.mpld3_elements[i].props.edgewidth : d.mpld3_elements[i].props.edgewidth);</span>
+<span class="s2">                } else if((type==&quot;mpld3_PathCollection&quot;)||</span>
+<span class="s2">                         (type==&quot;mpld3_Markers&quot;)){</span>
+<span class="s2">                    var current_alpha = d.mpld3_elements[i].props.alphas[0];</span>
+<span class="s2">                    var current_alpha_unsel = current_alpha * alpha_unsel;</span>
+<span class="s2">                    var current_alpha_over = current_alpha * alpha_over;</span>
+<span class="s2">                    d3.selectAll(d.mpld3_elements[i].pathsobj[0])</span>
+<span class="s2">                        .style(&quot;stroke-opacity&quot;, is_over ? current_alpha_over :</span>
+<span class="s2">                                                (d.visible ? current_alpha : current_alpha_unsel))</span>
+<span class="s2">                        .style(&quot;fill-opacity&quot;, is_over ? current_alpha_over :</span>
+<span class="s2">                                                (d.visible ? current_alpha : current_alpha_unsel));</span>
+<span class="s2">                } else{</span>
+<span class="s2">                    console.log(type + &quot; not yet supported&quot;);</span>
+<span class="s2">                }</span>
+<span class="s2">            }</span>
+<span class="s2">        };</span>
+
+
+<span class="s2">        // helper function for determining the color of the rectangles</span>
+<span class="s2">        function get_color(d){</span>
+<span class="s2">            var type = d.mpld3_elements[0].constructor.name;</span>
+<span class="s2">            var color = &quot;black&quot;;</span>
+<span class="s2">            if(type ==&quot;mpld3_Line&quot;){</span>
+<span class="s2">                color = d.mpld3_elements[0].props.edgecolor;</span>
+<span class="s2">            } else if((type==&quot;mpld3_PathCollection&quot;)||</span>
+<span class="s2">                      (type==&quot;mpld3_Markers&quot;)){</span>
+<span class="s2">                color = d.mpld3_elements[0].props.facecolors[0];</span>
+<span class="s2">            } else{</span>
+<span class="s2">                console.log(type + &quot; not yet supported&quot;);</span>
+<span class="s2">            }</span>
+<span class="s2">            return color;</span>
+<span class="s2">        };</span>
+<span class="s2">    };</span>
+<span class="s2">    &quot;&quot;&quot;</span>
+
+    <span class="n">css_</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    .legend-box {</span>
+<span class="s2">      cursor: pointer;</span>
+<span class="s2">    }</span>
+<span class="s2">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plot_elements</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">alpha_unsel</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">alpha_over</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">start_visible</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ax</span> <span class="o">=</span> <span class="n">ax</span>
+
+        <span class="k">if</span> <span class="n">ax</span><span class="p">:</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="n">get_id</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+
+        <span class="c1"># start_visible could be a list</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">start_visible</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="n">start_visible</span> <span class="o">=</span> <span class="p">[</span><span class="n">start_visible</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">start_visible</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> out of </span><span class="si">{}</span><span class="s2"> visible params has been set&quot;</span>
+                             <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">start_visible</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)))</span>     
+
+        <span class="n">mpld3_element_ids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_determine_mpld3ids</span><span class="p">(</span><span class="n">plot_elements</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mpld3_element_ids</span> <span class="o">=</span> <span class="n">mpld3_element_ids</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dict_</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;interactive_legend&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;element_ids&quot;</span><span class="p">:</span> <span class="n">mpld3_element_ids</span><span class="p">,</span>
+                      <span class="s2">&quot;labels&quot;</span><span class="p">:</span> <span class="n">labels</span><span class="p">,</span>
+                      <span class="s2">&quot;ax&quot;</span><span class="p">:</span> <span class="n">ax</span><span class="p">,</span>
+                      <span class="s2">&quot;alpha_unsel&quot;</span><span class="p">:</span> <span class="n">alpha_unsel</span><span class="p">,</span>
+                      <span class="s2">&quot;alpha_over&quot;</span><span class="p">:</span> <span class="n">alpha_over</span><span class="p">,</span>
+                      <span class="s2">&quot;start_visible&quot;</span><span class="p">:</span> <span class="n">start_visible</span><span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">_determine_mpld3ids</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plot_elements</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Helper function to get the mpld3_id for each</span>
+<span class="sd">        of the specified elements.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mpld3_element_ids</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># There are two things being done here. First,</span>
+        <span class="c1"># we make sure that we have a list of lists, where</span>
+        <span class="c1"># each inner list is associated with a single legend</span>
+        <span class="c1"># item. Second, in case of Line2D object we pass</span>
+        <span class="c1"># the id for both the marker and the line.</span>
+        <span class="c1"># on the javascript side we filter out the nulls in</span>
+        <span class="c1"># case either the line or the marker has no equivalent</span>
+        <span class="c1"># D3 representation.</span>
+        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">plot_elements</span><span class="p">:</span>
+            <span class="n">ids</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">Iterable</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">entry</span><span class="p">:</span>
+                    <span class="n">mpld3_id</span> <span class="o">=</span> <span class="n">get_id</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
+                    <span class="n">ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mpld3_id</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">Line2D</span><span class="p">):</span>
+                        <span class="n">mpld3_id</span> <span class="o">=</span> <span class="n">get_id</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="s1">&#39;pts&#39;</span><span class="p">)</span>
+                        <span class="n">ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mpld3_id</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">get_id</span><span class="p">(</span><span class="n">entry</span><span class="p">))</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">Line2D</span><span class="p">):</span>
+                    <span class="n">mpld3_id</span> <span class="o">=</span> <span class="n">get_id</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="s1">&#39;pts&#39;</span><span class="p">)</span>
+                    <span class="n">ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mpld3_id</span><span class="p">)</span>
+            <span class="n">mpld3_element_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ids</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">mpld3_element_ids</span>
+
+
+<span class="k">class</span> <span class="nc">PointClickableHTMLTooltip</span><span class="p">(</span><span class="n">PluginBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A plugin for pop-up windows with data with rich HTML</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    points : matplotlib Collection object</span>
+<span class="sd">        The figure element to apply the tooltip to</span>
+<span class="sd">    labels : list</span>
+<span class="sd">        The labels for each point in points, as strings of unescaped HTML.</span>
+<span class="sd">    targets : list</span>
+<span class="sd">        The target data or rich HTML to be displayed when each collection element is clicked</span>
+<span class="sd">    hoffset, voffset : integer, optional</span>
+<span class="sd">        The number of pixels to offset the tooltip text.  Default is</span>
+<span class="sd">        hoffset = 0, voffset = 10</span>
+<span class="sd">    css : str, optional</span>
+<span class="sd">        css to be included, for styling the label html and target data/tables, if desired</span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
+<span class="sd">    &gt;&gt;&gt; from mpld3 import plugins</span>
+<span class="sd">    &gt;&gt;&gt; fig, ax = plt.subplots(1,1)</span>
+<span class="sd">    &gt;&gt;&gt; xx = yy = range(10)</span>
+<span class="sd">    &gt;&gt;&gt; scat = ax.scatter(xx, range(10))</span>
+<span class="sd">    &gt;&gt;&gt; targets = map(lambda (x, y): &quot;&lt;marquee&gt;It works!&lt;br&gt;&lt;h1&gt;{}, {}&lt;/h1&gt;&lt;/marquee&gt;&quot;.format(x, y),</span>
+<span class="sd">    &gt;&gt;&gt;               zip(xx, yy))</span>
+<span class="sd">    &gt;&gt;&gt; labels = map(lambda (x, y): &quot;{}, {}&quot;.format(x,y), zip(xx, yy))</span>
+<span class="sd">    &gt;&gt;&gt; from mpld3.plugins import PointClickableHTMLTooltip</span>
+<span class="sd">    &gt;&gt;&gt; plugins.connect(fig, PointClickableHTMLTooltip(scat, labels=labels, targets=targets))</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">JAVASCRIPT</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    mpld3.register_plugin(&quot;clickablehtmltooltip&quot;, PointClickableHTMLTooltip);</span>
+<span class="s2">    PointClickableHTMLTooltip.prototype = Object.create(mpld3.Plugin.prototype);</span>
+<span class="s2">    PointClickableHTMLTooltip.prototype.constructor = PointClickableHTMLTooltip;</span>
+<span class="s2">    PointClickableHTMLTooltip.prototype.requiredProps = [&quot;id&quot;];</span>
+<span class="s2">    PointClickableHTMLTooltip.prototype.defaultProps = {labels:null,</span>
+<span class="s2">                                                 targets:null,</span>
+<span class="s2">                                                 hoffset:0,</span>
+<span class="s2">                                                 voffset:10};</span>
+<span class="s2">    function PointClickableHTMLTooltip(fig, props){</span>
+<span class="s2">        mpld3.Plugin.call(this, fig, props);</span>
+<span class="s2">    };</span>
+
+<span class="s2">    PointClickableHTMLTooltip.prototype.draw = function(){</span>
+<span class="s2">       var obj = mpld3.get_element(this.props.id);</span>
+<span class="s2">       var labels = this.props.labels;</span>
+<span class="s2">       var targets = this.props.targets;</span>
+
+<span class="s2">       var tooltip = d3.select(&quot;body&quot;).append(&quot;div&quot;)</span>
+<span class="s2">                    .attr(&quot;class&quot;, &quot;mpld3-tooltip&quot;)</span>
+<span class="s2">                    .style(&quot;position&quot;, &quot;absolute&quot;)</span>
+<span class="s2">                    .style(&quot;z-index&quot;, &quot;10&quot;)</span>
+<span class="s2">                    .style(&quot;visibility&quot;, &quot;hidden&quot;);</span>
+
+<span class="s2">       obj.elements()</span>
+<span class="s2">           .on(&quot;mouseover&quot;, function(d, i){</span>
+<span class="s2">                  if ($(obj.elements()[0][0]).css( &quot;fill-opacity&quot; ) &gt; 0 || $(obj.elements()[0][0]).css( &quot;stroke-opacity&quot; ) &gt; 0) {</span>
+<span class="s2">                              tooltip.html(labels[i])</span>
+<span class="s2">                                     .style(&quot;visibility&quot;, &quot;visible&quot;);</span>
+<span class="s2">                              } })</span>
+
+<span class="s2">           .on(&quot;mousedown&quot;, function(d, i){</span>
+<span class="s2">                              window.open().document.write(targets[i]);</span>
+<span class="s2">                               })</span>
+<span class="s2">           .on(&quot;mousemove&quot;, function(d, i){</span>
+<span class="s2">                  tooltip</span>
+<span class="s2">                    .style(&quot;top&quot;, d3.event.pageY + this.props.voffset + &quot;px&quot;)</span>
+<span class="s2">                    .style(&quot;left&quot;,d3.event.pageX + this.props.hoffset + &quot;px&quot;);</span>
+<span class="s2">                 }.bind(this))</span>
+<span class="s2">           .on(&quot;mouseout&quot;,  function(d, i){</span>
+<span class="s2">                           tooltip.style(&quot;visibility&quot;, &quot;hidden&quot;);});</span>
+<span class="s2">    };</span>
+<span class="s2">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">hoffset</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">voffset</span><span class="o">=-</span><span class="mi">6</span><span class="p">,</span> <span class="n">css</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">points</span> <span class="o">=</span> <span class="n">points</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">labels</span> <span class="o">=</span> <span class="n">labels</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">targets</span> <span class="o">=</span> <span class="n">targets</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">voffset</span> <span class="o">=</span> <span class="n">voffset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hoffset</span> <span class="o">=</span> <span class="n">hoffset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">css_</span> <span class="o">=</span> <span class="n">css</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">targets</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">styled_targets</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">css_</span> <span class="o">+</span> <span class="n">x</span><span class="p">,</span> <span class="n">targets</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">styled_targets</span> <span class="o">=</span> <span class="kc">None</span>
+
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">Line2D</span><span class="p">):</span>
+            <span class="n">suffix</span> <span class="o">=</span> <span class="s2">&quot;pts&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">suffix</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dict_</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;clickablehtmltooltip&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">get_id</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">suffix</span><span class="p">),</span>
+                      <span class="s2">&quot;labels&quot;</span><span class="p">:</span> <span class="n">labels</span><span class="p">,</span>
+                      <span class="s2">&quot;targets&quot;</span><span class="p">:</span> <span class="n">styled_targets</span><span class="p">,</span>
+                      <span class="s2">&quot;hoffset&quot;</span><span class="p">:</span> <span class="n">hoffset</span><span class="p">,</span>
+                      <span class="s2">&quot;voffset&quot;</span><span class="p">:</span> <span class="n">voffset</span><span class="p">}</span>
+
+
+<span class="k">class</span> <span class="nc">MouseXPosition</span><span class="p">(</span><span class="n">PluginBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Like MousePosition, but only show the X coordinate&quot;&quot;&quot;</span>
+
+    <span class="n">JAVASCRIPT</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">  mpld3.register_plugin(&quot;mousexposition&quot;, MouseXPositionPlugin);</span>
+<span class="s2">  MouseXPositionPlugin.prototype = Object.create(mpld3.Plugin.prototype);</span>
+<span class="s2">  MouseXPositionPlugin.prototype.constructor = MouseXPositionPlugin;</span>
+<span class="s2">  MouseXPositionPlugin.prototype.requiredProps = [];</span>
+<span class="s2">  MouseXPositionPlugin.prototype.defaultProps = {</span>
+<span class="s2">    fontsize: 12,</span>
+<span class="s2">    fmt: &quot;0d&quot;</span>
+<span class="s2">  };</span>
+<span class="s2">  function MouseXPositionPlugin(fig, props) {</span>
+<span class="s2">    mpld3.Plugin.call(this, fig, props);</span>
+<span class="s2">  }</span>
+<span class="s2">  MouseXPositionPlugin.prototype.draw = function() {</span>
+<span class="s2">    var fig = this.fig;</span>
+<span class="s2">    var fmt = d3.format(this.props.fmt);</span>
+<span class="s2">    var coords = fig.canvas.append(&quot;text&quot;).attr(&quot;class&quot;, &quot;mpld3-coordinates&quot;).style(&quot;text-anchor&quot;, &quot;end&quot;).style(&quot;font-size&quot;, this.props.fontsize).attr(&quot;x&quot;, this.fig.width - 5).attr(&quot;y&quot;, this.fig.height - 5);</span>
+<span class="s2">    for (var i = 0; i &lt; this.fig.axes.length; i++) {</span>
+<span class="s2">      var update_coords = function() {</span>
+<span class="s2">        var ax = fig.axes[i];</span>
+<span class="s2">        return function() {</span>
+<span class="s2">          var pos = d3.mouse(this), x = ax.x.invert(pos[0]), y = ax.y.invert(pos[1]);</span>
+<span class="s2">          coords.text(fmt(x));</span>
+<span class="s2">        };</span>
+<span class="s2">      }();</span>
+<span class="s2">      fig.axes[i].baseaxes.on(&quot;mousemove&quot;, update_coords).on(&quot;mouseout&quot;, function() {</span>
+<span class="s2">        coords.text(&quot;&quot;);</span>
+<span class="s2">      });</span>
+<span class="s2">    }</span>
+<span class="s2">  };&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;A Plugin to display coordinates for the current mouse position</span>
+
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
+<span class="sd">    &gt;&gt;&gt; from mpld3 import fig_to_html, plugins</span>
+<span class="sd">    &gt;&gt;&gt; fig, ax = plt.subplots()</span>
+<span class="sd">    &gt;&gt;&gt; points = ax.plot(range(10), &#39;o&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; plugins.connect(fig, plugins.MouseXPosition())</span>
+<span class="sd">    &gt;&gt;&gt; fig_to_html(fig)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;8.0f&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dict_</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;mousexposition&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;fontsize&quot;</span><span class="p">:</span> <span class="n">fontsize</span><span class="p">,</span>
+                      <span class="s2">&quot;fmt&quot;</span><span class="p">:</span> <span class="n">fmt</span><span class="p">}</span>
+
 <span class="n">DEFAULT_PLUGINS</span> <span class="o">=</span> <span class="p">[</span><span class="n">Reset</span><span class="p">(),</span> <span class="n">Zoom</span><span class="p">(),</span> <span class="n">BoxZoom</span><span class="p">()]</span>
 </pre></div>
 
@@ -413,9 +902,9 @@
 
       </div>
 
-    <div class="footer">
-        &copy; Copyright 2014, mpld3 developers.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2014, mpld3 developers.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.8.
     </div>
   </body>
 </html>

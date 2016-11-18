@@ -1,6 +1,6 @@
 
-Demo of mpld3
-=============
+mpld3_demo
+==========
 
 [
 :download:`mpld3_demo.html <rendered/mpld3_demo.html>`

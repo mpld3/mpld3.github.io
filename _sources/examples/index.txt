@@ -40,51 +40,49 @@ Example Gallery
 .. toctree::
    :hidden:
 
-   ./custom_plugin
+   ./interactive_legend
 
-   ./drag_points
+   ./networkxd3forcelayout
 
-   ./heart_path
-
-   ./html_tooltips
+   ./scatter_tooltip
 
    ./linked_brush
 
    ./mouse_position
 
+   ./custom_plugin
+
    ./mpld3_logo
+
+   ./heart_path
 
    ./random_walk
 
-   ./scatter_tooltip
+   ./drag_points
+
+   ./html_tooltips
 
 
 
 
 
-.. figure:: ./custom_plugin.png
-    :target: ./custom_plugin.html
+.. figure:: ./interactive_legend.png
+    :target: ./interactive_legend.html
     :align: center
 
-    :ref:`custom_plugin`
+    :ref:`interactive_legend`
 
-.. figure:: ./drag_points.png
-    :target: ./drag_points.html
+.. figure:: ./networkxd3forcelayout.png
+    :target: ./networkxd3forcelayout.html
     :align: center
 
-    :ref:`drag_points`
+    :ref:`networkxd3forcelayout`
 
-.. figure:: ./heart_path.png
-    :target: ./heart_path.html
+.. figure:: ./scatter_tooltip.png
+    :target: ./scatter_tooltip.html
     :align: center
 
-    :ref:`heart_path`
-
-.. figure:: ./html_tooltips.png
-    :target: ./html_tooltips.html
-    :align: center
-
-    :ref:`html_tooltips`
+    :ref:`scatter_tooltip`
 
 .. figure:: ./linked_brush.png
     :target: ./linked_brush.html
@@ -98,11 +96,23 @@ Example Gallery
 
     :ref:`mouse_position`
 
+.. figure:: ./custom_plugin.png
+    :target: ./custom_plugin.html
+    :align: center
+
+    :ref:`custom_plugin`
+
 .. figure:: ./mpld3_logo.png
     :target: ./mpld3_logo.html
     :align: center
 
     :ref:`mpld3_logo`
+
+.. figure:: ./heart_path.png
+    :target: ./heart_path.html
+    :align: center
+
+    :ref:`heart_path`
 
 .. figure:: ./random_walk.png
     :target: ./random_walk.html
@@ -110,11 +120,17 @@ Example Gallery
 
     :ref:`random_walk`
 
-.. figure:: ./scatter_tooltip.png
-    :target: ./scatter_tooltip.html
+.. figure:: ./drag_points.png
+    :target: ./drag_points.html
     :align: center
 
-    :ref:`scatter_tooltip`
+    :ref:`drag_points`
+
+.. figure:: ./html_tooltips.png
+    :target: ./html_tooltips.html
+    :align: center
+
+    :ref:`html_tooltips`
 
 
 

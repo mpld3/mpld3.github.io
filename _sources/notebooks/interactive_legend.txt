@@ -1,0 +1,14 @@
+
+interactive_legend
+==================
+
+[
+:download:`interactive_legend.html <rendered/interactive_legend.html>`
+|
+:download:`interactive_legend.ipynb <interactive_legend.ipynb>`
+]
+
+.. raw:: html
+
+    <iframe src="../_downloads/interactive_legend.html"
+      width="100%" height="400px"></iframe>
