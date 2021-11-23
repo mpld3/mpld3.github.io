@@ -1,39 +1,27 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Frequently Asked Questions &#8212; Bringing Matplotlib to the Browser</title>
-    
-    <link rel="stylesheet" href="_static/mpld3.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mpld3.css" />
     <link rel="stylesheet" href="_static/print.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '0.3',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/theme_extras.js"></script>
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/theme_extras.js"></script>
     <link rel="shortcut icon" href="_static/favicon.png"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="top" title="Bringing Matplotlib to the Browser" href="index.html" />
     <link rel="next" title="Plugins" href="plugins.html" />
     <link rel="prev" title="Installing mpld3" href="install.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
       <div class="header"><a href="index.html">
           <img class="leftlogo" src="_static/mpld3-medium.png" alt="Logo"/>
         </a><h1 class="heading"><a href="index.html">
@@ -54,72 +42,72 @@
       <div class="content">
         
         
-  <div class="section" id="frequently-asked-questions">
+  <section id="frequently-asked-questions">
 <span id="faq"></span><h1>Frequently Asked Questions<a class="headerlink" href="#frequently-asked-questions" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="general">
+<section id="general">
 <h2>General<a class="headerlink" href="#general" title="Permalink to this headline">¶</a></h2>
 <ul>
-<li><p class="first"><strong>Does mpld3 work for large datasets?</strong></p>
-<p>Short answer: not really.  Mpld3, like matplolib itself, is designed for small to medium-scale visualizations, and this is unlikely to change. The reason is that mpld3 is built upon the foundation of HTML&#8217;s SVG, which is not particularly well-suited for large datasets. Plots with more than a few thousand elements will have noticeably slow response for interactive features.</p>
-<p>Big data visualization requires specialized tools which do careful automatic data summarization and/or take direct advantage of your system&#8217;s GPU. There are a couple other Python projects that are making great headway in this area:</p>
+<li><p><strong>Does mpld3 work for large datasets?</strong></p>
+<p>Short answer: not really.  Mpld3, like matplolib itself, is designed for small to medium-scale visualizations, and this is unlikely to change. The reason is that mpld3 is built upon the foundation of HTML’s SVG, which is not particularly well-suited for large datasets. Plots with more than a few thousand elements will have noticeably slow response for interactive features.</p>
+<p>Big data visualization requires specialized tools which do careful automatic data summarization and/or take direct advantage of your system’s GPU. There are a couple other Python projects that are making great headway in this area:</p>
 <ul class="simple">
-<li><a class="reference external" href="http://bokeh.pydata.org/">Bokeh</a> is a project which targets browser-based graphics, and recent releases are beginning to do big data in the browser the right way.</li>
-<li><a class="reference external" href="http://vispy.org">VisPy</a> is another effort to provide easy visualization of large datasets. It is based on OpenGL, with plans to add a WebGL backend.</li>
+<li><p><a class="reference external" href="http://bokeh.pydata.org/">Bokeh</a> is a project which targets browser-based graphics, and recent releases are beginning to do big data in the browser the right way.</p></li>
+<li><p><a class="reference external" href="http://vispy.org">VisPy</a> is another effort to provide easy visualization of large datasets. It is based on OpenGL, with plans to add a WebGL backend.</p></li>
 </ul>
 </li>
-<li><p class="first"><strong>What matplotlib features are not supported?</strong></p>
+<li><p><strong>What matplotlib features are not supported?</strong></p>
 <p>matplotlib is a complicated system, and there are lots of small corner cases that are difficult to render correctly in d3. mpld3 correctly handles a large majority of matplotlib plots, but some pieces remain unsupported either because they have not yet been implemented, or because there are fundamental difficulties preventing their inclusion.</p>
-<p>We keep a list of unsupported features at <a class="reference external" href="https://github.com/jakevdp/mpld3/wiki#mpld3-missing-features">https://github.com/jakevdp/mpld3/wiki#mpld3-missing-features</a>.  If you find something missing that&#8217;s not on that list, please feel free to add it.</p>
+<p>We keep a list of unsupported features at <a class="reference external" href="https://github.com/jakevdp/mpld3/wiki#mpld3-missing-features">https://github.com/jakevdp/mpld3/wiki#mpld3-missing-features</a>.  If you find something missing that’s not on that list, please feel free to add it.</p>
 </li>
-<li><p class="first"><strong>Can I use mpld3 without matplotlib?</strong></p>
-<p>Yes! The client-side interface of mpld3 is a pure JavaScript library, which builds figures based on a well-defined JSON specification. This specification was designed with matplotlib in mind, but there&#8217;s nothing stopping you from generating the JSON from another source, or even editing it by hand. Unfortunately, at the moment, this JSON spec is not well-documented, but we hope to address that in the future.</p>
+<li><p><strong>Can I use mpld3 without matplotlib?</strong></p>
+<p>Yes! The client-side interface of mpld3 is a pure JavaScript library, which builds figures based on a well-defined JSON specification. This specification was designed with matplotlib in mind, but there’s nothing stopping you from generating the JSON from another source, or even editing it by hand. Unfortunately, at the moment, this JSON spec is not well-documented, but we hope to address that in the future.</p>
 </li>
-<li><p class="first"><strong>Can mpld3 render to HTML5 canvas rather than SVG?</strong></p>
+<li><p><strong>Can mpld3 render to HTML5 canvas rather than SVG?</strong></p>
 <p>At the moment, mpld3 only renders to SVG via D3, not to canvas.  However, the mpld3 JSON output is not specific to the display protocol, so it would be possible to create a canvas backend on top of the mpld3 architecture.</p>
-<p>If you&#8217;re interested in a Python to canvas visualization package, you might check out the <a class="reference external" href="http://bokeh.pydata.org/">Bokeh</a> project.</p>
+<p>If you’re interested in a Python to canvas visualization package, you might check out the <a class="reference external" href="http://bokeh.pydata.org/">Bokeh</a> project.</p>
 </li>
 </ul>
-</div>
-<div class="section" id="ipython-notebook">
+</section>
+<section id="ipython-notebook">
 <h2>IPython Notebook<a class="headerlink" href="#ipython-notebook" title="Permalink to this headline">¶</a></h2>
 <ul>
-<li><p class="first"><strong>Why does IPython notebook freeze when I run an mpld3 example?</strong></p>
-<p>Short answer: This most often happens when someone uses <a class="reference internal" href="modules/API.html#mpld3.show" title="mpld3.show"><code class="xref py py-func docutils literal"><span class="pre">mpld3.show()</span></code></a> within the IPython notebook. Instead, you should use <a class="reference internal" href="modules/API.html#mpld3.display" title="mpld3.display"><code class="xref py py-func docutils literal"><span class="pre">mpld3.display()</span></code></a> or <a class="reference internal" href="modules/API.html#mpld3.enable_notebook" title="mpld3.enable_notebook"><code class="xref py py-func docutils literal"><span class="pre">mpld3.enable_notebook()</span></code></a>. See the <a class="reference internal" href="quickstart.html#quickstart-guide"><span class="std std-ref">Quick Start Guide</span></a> for a description of the various mpld3 functions.</p>
-<p>Long answer: like matplotlib&#8217;s <code class="xref py py-func docutils literal"><span class="pre">plt.show()</span></code> function, <a class="reference internal" href="modules/API.html#mpld3.show" title="mpld3.show"><code class="xref py py-func docutils literal"><span class="pre">mpld3.show()</span></code></a> does not play well with the IPython notebook. <a class="reference internal" href="modules/API.html#mpld3.show" title="mpld3.show"><code class="xref py py-func docutils literal"><span class="pre">mpld3.show()</span></code></a> generates an HTML representation of a figure, then launches a local web server and attempts to open a browser page to display it. This behavior is nice when running a stand-alone script, but is generally not what you want within the IPython notebook, which is already in a browser window! Try <a class="reference internal" href="modules/API.html#mpld3.display" title="mpld3.display"><code class="xref py py-func docutils literal"><span class="pre">mpld3.display()</span></code></a> or <a class="reference internal" href="modules/API.html#mpld3.enable_notebook" title="mpld3.enable_notebook"><code class="xref py py-func docutils literal"><span class="pre">mpld3.enable_notebook()</span></code></a> instead; these are specifically designed for embedding figures within the IPython notebook.</p>
-<p>If you accidentally use <a class="reference internal" href="modules/API.html#mpld3.show" title="mpld3.show"><code class="xref py py-func docutils literal"><span class="pre">mpld3.show()</span></code></a> within the notebook, you will have to interrupt the kernel (Kernel → Interrupt) to be able to continue.</p>
+<li><p><strong>Why does IPython notebook freeze when I run an mpld3 example?</strong></p>
+<p>Short answer: This most often happens when someone uses <a class="reference internal" href="modules/API.html#mpld3.show" title="mpld3.show"><code class="xref py py-func docutils literal notranslate"><span class="pre">mpld3.show()</span></code></a> within the IPython notebook. Instead, you should use <a class="reference internal" href="modules/API.html#mpld3.display" title="mpld3.display"><code class="xref py py-func docutils literal notranslate"><span class="pre">mpld3.display()</span></code></a> or <a class="reference internal" href="modules/API.html#mpld3.enable_notebook" title="mpld3.enable_notebook"><code class="xref py py-func docutils literal notranslate"><span class="pre">mpld3.enable_notebook()</span></code></a>. See the <a class="reference internal" href="quickstart.html#quickstart-guide"><span class="std std-ref">Quick Start Guide</span></a> for a description of the various mpld3 functions.</p>
+<p>Long answer: like matplotlib’s <code class="xref py py-func docutils literal notranslate"><span class="pre">plt.show()</span></code> function, <a class="reference internal" href="modules/API.html#mpld3.show" title="mpld3.show"><code class="xref py py-func docutils literal notranslate"><span class="pre">mpld3.show()</span></code></a> does not play well with the IPython notebook. <a class="reference internal" href="modules/API.html#mpld3.show" title="mpld3.show"><code class="xref py py-func docutils literal notranslate"><span class="pre">mpld3.show()</span></code></a> generates an HTML representation of a figure, then launches a local web server and attempts to open a browser page to display it. This behavior is nice when running a stand-alone script, but is generally not what you want within the IPython notebook, which is already in a browser window! Try <a class="reference internal" href="modules/API.html#mpld3.display" title="mpld3.display"><code class="xref py py-func docutils literal notranslate"><span class="pre">mpld3.display()</span></code></a> or <a class="reference internal" href="modules/API.html#mpld3.enable_notebook" title="mpld3.enable_notebook"><code class="xref py py-func docutils literal notranslate"><span class="pre">mpld3.enable_notebook()</span></code></a> instead; these are specifically designed for embedding figures within the IPython notebook.</p>
+<p>If you accidentally use <a class="reference internal" href="modules/API.html#mpld3.show" title="mpld3.show"><code class="xref py py-func docutils literal notranslate"><span class="pre">mpld3.show()</span></code></a> within the notebook, you will have to interrupt the kernel (Kernel → Interrupt) to be able to continue.</p>
 </li>
 </ul>
-</div>
-<div class="section" id="javascript">
+</section>
+<section id="javascript">
 <h2>JavaScript<a class="headerlink" href="#javascript" title="Permalink to this headline">¶</a></h2>
 <ul>
-<li><p class="first"><strong>Where is the mpld3 JavaScript library located?</strong></p>
-<p>There is a local copy of the mpld3 library bundled with the package, which you can find in <code class="docutils literal"><span class="pre">mpld3/js/mpld3.v0.2.js</span></code> where <code class="docutils literal"><span class="pre">v0.2</span></code> indicates the library version, and matches the version of the mpld3 Python package. This local copy is used with the command <code class="docutils literal"><span class="pre">mpld3.show</span></code>, so that no internet connection is needed. Online copies of the library can be found at <a class="reference external" href="https://mpld3.github.io/js/mpld3.v0.2.js">https://mpld3.github.io/js/mpld3.v0.2.js</a>. This is automatically used within the IPython notebook, and commands like <a class="reference internal" href="modules/API.html#mpld3.save_html" title="mpld3.save_html"><code class="xref py py-func docutils literal"><span class="pre">mpld3.save_html()</span></code></a>, <a class="reference internal" href="modules/API.html#mpld3.fig_to_html" title="mpld3.fig_to_html"><code class="xref py py-func docutils literal"><span class="pre">mpld3.fig_to_html()</span></code></a>, etc.</p>
+<li><p><strong>Where is the mpld3 JavaScript library located?</strong></p>
+<p>There is a local copy of the mpld3 library bundled with the package, which you can find in <code class="docutils literal notranslate"><span class="pre">mpld3/js/mpld3.v0.2.js</span></code> where <code class="docutils literal notranslate"><span class="pre">v0.2</span></code> indicates the library version, and matches the version of the mpld3 Python package. This local copy is used with the command <code class="docutils literal notranslate"><span class="pre">mpld3.show</span></code>, so that no internet connection is needed. Online copies of the library can be found at <a class="reference external" href="https://mpld3.github.io/js/mpld3.v0.2.js">https://mpld3.github.io/js/mpld3.v0.2.js</a>. This is automatically used within the IPython notebook, and commands like <a class="reference internal" href="modules/API.html#mpld3.save_html" title="mpld3.save_html"><code class="xref py py-func docutils literal notranslate"><span class="pre">mpld3.save_html()</span></code></a>, <a class="reference internal" href="modules/API.html#mpld3.fig_to_html" title="mpld3.fig_to_html"><code class="xref py py-func docutils literal notranslate"><span class="pre">mpld3.fig_to_html()</span></code></a>, etc.</p>
 </li>
-<li><p class="first"><strong>How can I use mpld3 without an internet connection?</strong></p>
-<p>To use mpld3 without an internet connection, you need to use a local version of the mpld3 and d3 libraries. Outside the IPython notebook, you can use the <a class="reference internal" href="modules/API.html#mpld3.show" title="mpld3.show"><code class="xref py py-func docutils literal"><span class="pre">mpld3.show()</span></code></a> function, which automatically uses local copies of the JavaScript libraries.</p>
-<p>Inside the IPython notebook, both the <a class="reference internal" href="modules/API.html#mpld3.enable_notebook" title="mpld3.enable_notebook"><code class="xref py py-func docutils literal"><span class="pre">mpld3.enable_notebook()</span></code></a> and <a class="reference internal" href="modules/API.html#mpld3.display" title="mpld3.display"><code class="xref py py-func docutils literal"><span class="pre">mpld3.display()</span></code></a> functions take a boolean keyword <code class="docutils literal"><span class="pre">local</span></code>. Setting this to <code class="docutils literal"><span class="pre">True</span></code> will copy the mpld3 and d3 JavaScript libraries to the notebook directory, and will use the appropriate path within IPython (<code class="docutils literal"><span class="pre">/files/*.js</span></code>) to load the libraries. Be aware, though, that currently <code class="docutils literal"><span class="pre">local=True</span></code> will fail for some use-cases of the notebook. See the documentation of the above functions for details.</p>
+<li><p><strong>How can I use mpld3 without an internet connection?</strong></p>
+<p>To use mpld3 without an internet connection, you need to use a local version of the mpld3 and d3 libraries. Outside the IPython notebook, you can use the <a class="reference internal" href="modules/API.html#mpld3.show" title="mpld3.show"><code class="xref py py-func docutils literal notranslate"><span class="pre">mpld3.show()</span></code></a> function, which automatically uses local copies of the JavaScript libraries.</p>
+<p>Inside the IPython notebook, both the <a class="reference internal" href="modules/API.html#mpld3.enable_notebook" title="mpld3.enable_notebook"><code class="xref py py-func docutils literal notranslate"><span class="pre">mpld3.enable_notebook()</span></code></a> and <a class="reference internal" href="modules/API.html#mpld3.display" title="mpld3.display"><code class="xref py py-func docutils literal notranslate"><span class="pre">mpld3.display()</span></code></a> functions take a boolean keyword <code class="docutils literal notranslate"><span class="pre">local</span></code>. Setting this to <code class="docutils literal notranslate"><span class="pre">True</span></code> will copy the mpld3 and d3 JavaScript libraries to the notebook directory, and will use the appropriate path within IPython (<code class="docutils literal notranslate"><span class="pre">/files/*.js</span></code>) to load the libraries. Be aware, though, that currently <code class="docutils literal notranslate"><span class="pre">local=True</span></code> will fail for some use-cases of the notebook. See the documentation of the above functions for details.</p>
 </li>
 </ul>
-</div>
-<div class="section" id="troubleshooting">
+</section>
+<section id="troubleshooting">
 <h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline">¶</a></h2>
 <ul>
-<li><p class="first"><strong>Why is the notebook behavior breaking when I update mpld3?</strong></p>
+<li><p><strong>Why is the notebook behavior breaking when I update mpld3?</strong></p>
 <p>Short answer: you must make sure that your notebook is pointing to the correct JavaScript libraries. The best way to do this is to follow the following steps:</p>
 <ol class="arabic simple">
-<li>Clear all the output in the notebook (This can be done via the toolbar, with Cell → All Output → Clear)</li>
-<li>Save your notebook</li>
-<li>Close the notebook window</li>
-<li>Re-open the notebook window</li>
+<li><p>Clear all the output in the notebook (This can be done via the toolbar, with Cell → All Output → Clear)</p></li>
+<li><p>Save your notebook</p></li>
+<li><p>Close the notebook window</p></li>
+<li><p>Re-open the notebook window</p></li>
 </ol>
 <p>Long answer: mpld3 is a bit more complicated than the average Python package, especially when it is used in the IPython notebook. You must keep in mind that there are two distinct components which interact: the Python library, and the JavaScript library.</p>
-<p>If you have an IPython notebook that uses mpld3 and you update the library, you must make sure that your notebook is using <strong>both</strong> the updated Python package and the updated JavaScript package. Using the updated Python package can be as simple as restarting the kernel and running the notebook again. However, because the JavaScript library is referenced in the output cells, loaded on page load, and cached by the browser, it is very easy to find yourself using old versions of the JavaScript library even if you&#8217;re using the newer version of the Python library.</p>
+<p>If you have an IPython notebook that uses mpld3 and you update the library, you must make sure that your notebook is using <strong>both</strong> the updated Python package and the updated JavaScript package. Using the updated Python package can be as simple as restarting the kernel and running the notebook again. However, because the JavaScript library is referenced in the output cells, loaded on page load, and cached by the browser, it is very easy to find yourself using old versions of the JavaScript library even if you’re using the newer version of the Python library.</p>
 <p>If you have any strange notebook issues after updating mpld3, then it is best to wipe the output, restart the browser, and start again from a clean slate. This can be done using the steps outlined above.</p>
 </li>
 </ul>
-</div>
-</div>
+</section>
+</section>
 
 
       </div>
@@ -137,7 +125,7 @@
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2014, mpld3 developers.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.8.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.0.
     </div>
   </body>
 </html>

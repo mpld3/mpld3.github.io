@@ -1,0 +1,14 @@
+
+custom_widgin_general
+=====================
+
+[
+:download:`custom_widgin_general.html <rendered/custom_widgin_general.html>`
+|
+:download:`custom_widgin_general.ipynb <custom_widgin_general.ipynb>`
+]
+
+.. raw:: html
+
+    <iframe src="../_downloads/custom_widgin_general.html"
+      width="100%" height="400px"></iframe>

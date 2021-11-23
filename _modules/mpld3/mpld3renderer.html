@@ -1,38 +1,24 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>mpld3.mpld3renderer &#8212; Bringing Matplotlib to the Browser</title>
-    
-    <link rel="stylesheet" href="../../_static/mpld3.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mpld3.css" />
     <link rel="stylesheet" href="../../_static/print.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '0.3',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../_static/theme_extras.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/theme_extras.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.png"/>
     <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Bringing Matplotlib to the Browser" href="../../index.html" />
-    <link rel="up" title="Module code" href="../index.html" /> 
-  </head>
-  <body role="document">
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
       <div class="header"><a href="../../index.html">
           <img class="leftlogo" src="../../_static/mpld3-medium.png" alt="Logo"/>
         </a><h1 class="heading"><a href="../../index.html">
@@ -65,12 +51,12 @@
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">.mplexporter.utils</span> <span class="k">import</span> <span class="n">color_to_hex</span>
-<span class="kn">from</span> <span class="nn">.mplexporter.exporter</span> <span class="k">import</span> <span class="n">Exporter</span>
-<span class="kn">from</span> <span class="nn">.mplexporter.renderers</span> <span class="k">import</span> <span class="n">Renderer</span>
+<span class="kn">from</span> <span class="nn">.mplexporter.utils</span> <span class="kn">import</span> <span class="n">export_color</span>
+<span class="kn">from</span> <span class="nn">.mplexporter.exporter</span> <span class="kn">import</span> <span class="n">Exporter</span>
+<span class="kn">from</span> <span class="nn">.mplexporter.renderers</span> <span class="kn">import</span> <span class="n">Renderer</span>
 
-<span class="kn">from</span> <span class="nn">.utils</span> <span class="k">import</span> <span class="n">get_id</span>
-<span class="kn">from</span> <span class="nn">.plugins</span> <span class="k">import</span> <span class="n">get_plugins</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">get_id</span>
+<span class="kn">from</span> <span class="nn">.plugins</span> <span class="kn">import</span> <span class="n">get_plugins</span>
 
 
 <div class="viewcode-block" id="MPLD3Renderer"><a class="viewcode-back" href="../../modules/API.html#mpld3.mpld3renderer.MPLD3Renderer">[docs]</a><span class="k">class</span> <span class="nc">MPLD3Renderer</span><span class="p">(</span><span class="n">Renderer</span><span class="p">):</span>
@@ -80,14 +66,14 @@
 <span class="sd">    convert matplotlib figures into a JSON-serializable dictionary</span>
 <span class="sd">    representation which can be read by mpld3.js.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">figure_json</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">axes_json</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">finished_figures</span> <span class="o">=</span> <span class="p">[]</span>
 
-    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="MPLD3Renderer.datalabel"><a class="viewcode-back" href="../../modules/API.html#mpld3.mpld3renderer.MPLD3Renderer.datalabel">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">datalabel</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s2">&quot;data</span><span class="si">{0:02d}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;data</span><span class="si">{0:02d}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="MPLD3Renderer.add_data"><a class="viewcode-back" href="../../modules/API.html#mpld3.mpld3renderer.MPLD3Renderer.add_data">[docs]</a>    <span class="k">def</span> <span class="nf">add_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s2">&quot;data&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Add a dataset to the current figure</span>
@@ -149,16 +135,16 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">datalabels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">datalabel</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">datalabel</span><span class="p">,</span> <span class="s2">&quot;xindex&quot;</span><span class="p">:</span> <span class="n">xindex</span><span class="p">,</span> <span class="s2">&quot;yindex&quot;</span><span class="p">:</span> <span class="n">yindex</span><span class="p">}</span></div>
 
-    <span class="k">def</span> <span class="nf">open_figure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">props</span><span class="p">):</span>
+<div class="viewcode-block" id="MPLD3Renderer.open_figure"><a class="viewcode-back" href="../../modules/API.html#mpld3.mpld3renderer.MPLD3Renderer.open_figure">[docs]</a>    <span class="k">def</span> <span class="nf">open_figure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">props</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">datalabels</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">figure_json</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="n">props</span><span class="p">[</span><span class="s1">&#39;figwidth&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">props</span><span class="p">[</span><span class="s1">&#39;dpi&#39;</span><span class="p">],</span>
                                 <span class="n">height</span><span class="o">=</span><span class="n">props</span><span class="p">[</span><span class="s1">&#39;figheight&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">props</span><span class="p">[</span><span class="s1">&#39;dpi&#39;</span><span class="p">],</span>
                                 <span class="n">axes</span><span class="o">=</span><span class="p">[],</span>
                                 <span class="n">data</span><span class="o">=</span><span class="p">{},</span>
-                                <span class="nb">id</span><span class="o">=</span><span class="n">get_id</span><span class="p">(</span><span class="n">fig</span><span class="p">))</span>
+                                <span class="nb">id</span><span class="o">=</span><span class="n">get_id</span><span class="p">(</span><span class="n">fig</span><span class="p">))</span></div>
 
-    <span class="k">def</span> <span class="nf">close_figure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fig</span><span class="p">):</span>
+<div class="viewcode-block" id="MPLD3Renderer.close_figure"><a class="viewcode-back" href="../../modules/API.html#mpld3.mpld3renderer.MPLD3Renderer.close_figure">[docs]</a>    <span class="k">def</span> <span class="nf">close_figure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fig</span><span class="p">):</span>
         <span class="n">additional_css</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">additional_js</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">dataset</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="p">):</span>
@@ -171,9 +157,9 @@
             <span class="n">additional_js</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">plugin</span><span class="o">.</span><span class="n">javascript</span><span class="p">())</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">finished_figures</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">fig</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure_json</span><span class="p">,</span>
                                       <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">additional_css</span><span class="p">),</span>
-                                      <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">additional_js</span><span class="p">)))</span>
+                                      <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">additional_js</span><span class="p">)))</span></div>
 
-    <span class="k">def</span> <span class="nf">open_axes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">props</span><span class="p">):</span>
+<div class="viewcode-block" id="MPLD3Renderer.open_axes"><a class="viewcode-back" href="../../modules/API.html#mpld3.mpld3renderer.MPLD3Renderer.open_axes">[docs]</a>    <span class="k">def</span> <span class="nf">open_axes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">props</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">axes_json</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">bbox</span><span class="o">=</span><span class="n">props</span><span class="p">[</span><span class="s1">&#39;bounds&#39;</span><span class="p">],</span>
                               <span class="n">xlim</span><span class="o">=</span><span class="n">props</span><span class="p">[</span><span class="s1">&#39;xlim&#39;</span><span class="p">],</span>
                               <span class="n">ylim</span><span class="o">=</span><span class="n">props</span><span class="p">[</span><span class="s1">&#39;ylim&#39;</span><span class="p">],</span>
@@ -200,14 +186,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">axes_json</span><span class="p">[</span><span class="s1">&#39;sharex&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">get_id</span><span class="p">(</span><span class="n">axi</span><span class="p">)</span> <span class="k">for</span> <span class="n">axi</span> <span class="ow">in</span> <span class="n">xsib</span>
                                     <span class="k">if</span> <span class="n">axi</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">ax</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">axes_json</span><span class="p">[</span><span class="s1">&#39;sharey&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">get_id</span><span class="p">(</span><span class="n">axi</span><span class="p">)</span> <span class="k">for</span> <span class="n">axi</span> <span class="ow">in</span> <span class="n">ysib</span>
-                                    <span class="k">if</span> <span class="n">axi</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">ax</span><span class="p">]</span>
+                                    <span class="k">if</span> <span class="n">axi</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">ax</span><span class="p">]</span></div>
 
-    <span class="k">def</span> <span class="nf">close_axes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">axes_json</span> <span class="o">=</span> <span class="kc">None</span>
+<div class="viewcode-block" id="MPLD3Renderer.close_axes"><a class="viewcode-back" href="../../modules/API.html#mpld3.mpld3renderer.MPLD3Renderer.close_axes">[docs]</a>    <span class="k">def</span> <span class="nf">close_axes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">axes_json</span> <span class="o">=</span> <span class="kc">None</span></div>
 
     <span class="c1"># If draw_line() is not implemented, it will be delegated to draw_path</span>
     <span class="c1"># Should we get rid of this? There&#39;s not really any advantage here</span>
-    <span class="k">def</span> <span class="nf">draw_line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">coordinates</span><span class="p">,</span> <span class="n">style</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">mplobj</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="MPLD3Renderer.draw_line"><a class="viewcode-back" href="../../modules/API.html#mpld3.mpld3renderer.MPLD3Renderer.draw_line">[docs]</a>    <span class="k">def</span> <span class="nf">draw_line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">coordinates</span><span class="p">,</span> <span class="n">style</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">mplobj</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="n">line</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
         <span class="n">line</span><span class="p">[</span><span class="s1">&#39;coordinates&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">coordinates</span>
         <span class="n">line</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_id</span><span class="p">(</span><span class="n">mplobj</span><span class="p">)</span>
@@ -221,9 +207,9 @@
         <span class="k">if</span> <span class="n">line</span><span class="p">[</span><span class="s1">&#39;dasharray&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;10,0&quot;</span><span class="p">:</span>
             <span class="n">line</span><span class="p">[</span><span class="s1">&#39;dasharray&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">axes_json</span><span class="p">[</span><span class="s1">&#39;lines&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">axes_json</span><span class="p">[</span><span class="s1">&#39;lines&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">draw_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">coordinates</span><span class="p">,</span> <span class="n">pathcodes</span><span class="p">,</span> <span class="n">style</span><span class="p">,</span>
+<div class="viewcode-block" id="MPLD3Renderer.draw_path"><a class="viewcode-back" href="../../modules/API.html#mpld3.mpld3renderer.MPLD3Renderer.draw_path">[docs]</a>    <span class="k">def</span> <span class="nf">draw_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">coordinates</span><span class="p">,</span> <span class="n">pathcodes</span><span class="p">,</span> <span class="n">style</span><span class="p">,</span>
                   <span class="n">offset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">offset_coordinates</span><span class="o">=</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="n">mplobj</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
         <span class="n">path</span><span class="p">[</span><span class="s1">&#39;coordinates&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">coordinates</span>
@@ -242,10 +228,10 @@
         <span class="k">if</span> <span class="n">path</span><span class="p">[</span><span class="s1">&#39;dasharray&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;10,0&quot;</span><span class="p">:</span>
             <span class="n">path</span><span class="p">[</span><span class="s1">&#39;dasharray&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">axes_json</span><span class="p">[</span><span class="s1">&#39;paths&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">axes_json</span><span class="p">[</span><span class="s1">&#39;paths&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">path</span><span class="p">)</span></div>
 
     <span class="c1"># If draw_markers is not implemented, it will be delegated to draw_path</span>
-    <span class="k">def</span> <span class="nf">draw_markers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">coordinates</span><span class="p">,</span> <span class="n">style</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">mplobj</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="MPLD3Renderer.draw_markers"><a class="viewcode-back" href="../../modules/API.html#mpld3.mpld3renderer.MPLD3Renderer.draw_markers">[docs]</a>    <span class="k">def</span> <span class="nf">draw_markers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">coordinates</span><span class="p">,</span> <span class="n">style</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">mplobj</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="n">markers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
         <span class="n">markers</span><span class="p">[</span><span class="s2">&quot;coordinates&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">coordinates</span>
         <span class="n">markers</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_id</span><span class="p">(</span><span class="n">mplobj</span><span class="p">,</span> <span class="s1">&#39;pts&#39;</span><span class="p">)</span>
@@ -255,20 +241,20 @@
         <span class="k">if</span> <span class="n">style</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;markerpath&#39;</span><span class="p">):</span>
             <span class="n">vertices</span><span class="p">,</span> <span class="n">codes</span> <span class="o">=</span> <span class="n">style</span><span class="p">[</span><span class="s1">&#39;markerpath&#39;</span><span class="p">]</span>
             <span class="n">markers</span><span class="p">[</span><span class="s1">&#39;markerpath&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">vertices</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">codes</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">axes_json</span><span class="p">[</span><span class="s1">&#39;markers&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">markers</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">axes_json</span><span class="p">[</span><span class="s1">&#39;markers&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">markers</span><span class="p">)</span></div>
 
     <span class="c1"># If draw_path_collection is not implemented,</span>
     <span class="c1"># it will be delegated to draw_path</span>
-    <span class="k">def</span> <span class="nf">draw_path_collection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">paths</span><span class="p">,</span> <span class="n">path_coordinates</span><span class="p">,</span> <span class="n">path_transforms</span><span class="p">,</span>
+<div class="viewcode-block" id="MPLD3Renderer.draw_path_collection"><a class="viewcode-back" href="../../modules/API.html#mpld3.mpld3renderer.MPLD3Renderer.draw_path_collection">[docs]</a>    <span class="k">def</span> <span class="nf">draw_path_collection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">paths</span><span class="p">,</span> <span class="n">path_coordinates</span><span class="p">,</span> <span class="n">path_transforms</span><span class="p">,</span>
                              <span class="n">offsets</span><span class="p">,</span> <span class="n">offset_coordinates</span><span class="p">,</span> <span class="n">offset_order</span><span class="p">,</span>
                              <span class="n">styles</span><span class="p">,</span> <span class="n">mplobj</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">paths</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">styles</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">alphas</span><span class="o">=</span><span class="p">[</span><span class="n">styles</span><span class="p">[</span><span class="s1">&#39;alpha&#39;</span><span class="p">]],</span>
-                          <span class="n">edgecolors</span><span class="o">=</span><span class="p">[</span><span class="n">color_to_hex</span><span class="p">(</span><span class="n">ec</span><span class="p">)</span>
+                          <span class="n">edgecolors</span><span class="o">=</span><span class="p">[</span><span class="n">export_color</span><span class="p">(</span><span class="n">ec</span><span class="p">)</span>
                                       <span class="k">for</span> <span class="n">ec</span> <span class="ow">in</span> <span class="n">styles</span><span class="p">[</span><span class="s1">&#39;edgecolor&#39;</span><span class="p">]],</span>
-                          <span class="n">facecolors</span><span class="o">=</span><span class="p">[</span><span class="n">color_to_hex</span><span class="p">(</span><span class="n">fc</span><span class="p">)</span>
+                          <span class="n">facecolors</span><span class="o">=</span><span class="p">[</span><span class="n">export_color</span><span class="p">(</span><span class="n">fc</span><span class="p">)</span>
                                       <span class="k">for</span> <span class="n">fc</span> <span class="ow">in</span> <span class="n">styles</span><span class="p">[</span><span class="s1">&#39;facecolor&#39;</span><span class="p">]],</span>
-                          <span class="n">edgewidths</span><span class="o">=</span><span class="n">styles</span><span class="p">[</span><span class="s1">&#39;linewidth&#39;</span><span class="p">],</span>
+                          <span class="n">edgewidths</span><span class="o">=</span><span class="p">[</span><span class="n">lw</span> <span class="k">for</span> <span class="n">lw</span> <span class="ow">in</span> <span class="n">styles</span><span class="p">[</span><span class="s1">&#39;linewidth&#39;</span><span class="p">]],</span>
                           <span class="n">offsetcoordinates</span><span class="o">=</span><span class="n">offset_coordinates</span><span class="p">,</span>
                           <span class="n">pathcoordinates</span><span class="o">=</span><span class="n">path_coordinates</span><span class="p">,</span>
                           <span class="n">zorder</span><span class="o">=</span><span class="n">styles</span><span class="p">[</span><span class="s1">&#39;zorder&#39;</span><span class="p">])</span>
@@ -281,9 +267,9 @@
                                            <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">path_transforms</span><span class="p">]</span>
             <span class="n">pathsdict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">styles</span><span class="p">)</span>
             <span class="n">pathsdict</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_id</span><span class="p">(</span><span class="n">mplobj</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">axes_json</span><span class="p">[</span><span class="s1">&#39;collections&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pathsdict</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">axes_json</span><span class="p">[</span><span class="s1">&#39;collections&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pathsdict</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">draw_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">coordinates</span><span class="p">,</span> <span class="n">style</span><span class="p">,</span>
+<div class="viewcode-block" id="MPLD3Renderer.draw_text"><a class="viewcode-back" href="../../modules/API.html#mpld3.mpld3renderer.MPLD3Renderer.draw_text">[docs]</a>    <span class="k">def</span> <span class="nf">draw_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">coordinates</span><span class="p">,</span> <span class="n">style</span><span class="p">,</span>
                   <span class="n">text_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mplobj</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="n">text</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span>
                     <span class="n">position</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="n">position</span><span class="p">),</span>
@@ -296,13 +282,13 @@
                     <span class="n">alpha</span><span class="o">=</span><span class="n">style</span><span class="p">[</span><span class="s1">&#39;alpha&#39;</span><span class="p">],</span>
                     <span class="n">zorder</span><span class="o">=</span><span class="n">style</span><span class="p">[</span><span class="s1">&#39;zorder&#39;</span><span class="p">],</span>
                     <span class="nb">id</span><span class="o">=</span><span class="n">get_id</span><span class="p">(</span><span class="n">mplobj</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">axes_json</span><span class="p">[</span><span class="s1">&#39;texts&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">axes_json</span><span class="p">[</span><span class="s1">&#39;texts&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">text</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">draw_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">imdata</span><span class="p">,</span> <span class="n">extent</span><span class="p">,</span> <span class="n">coordinates</span><span class="p">,</span> <span class="n">style</span><span class="p">,</span> <span class="n">mplobj</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="MPLD3Renderer.draw_image"><a class="viewcode-back" href="../../modules/API.html#mpld3.mpld3renderer.MPLD3Renderer.draw_image">[docs]</a>    <span class="k">def</span> <span class="nf">draw_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">imdata</span><span class="p">,</span> <span class="n">extent</span><span class="p">,</span> <span class="n">coordinates</span><span class="p">,</span> <span class="n">style</span><span class="p">,</span> <span class="n">mplobj</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="n">image</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">imdata</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span> <span class="n">coordinates</span><span class="o">=</span><span class="n">coordinates</span><span class="p">)</span>
         <span class="n">image</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">style</span><span class="p">)</span>
         <span class="n">image</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_id</span><span class="p">(</span><span class="n">mplobj</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">axes_json</span><span class="p">[</span><span class="s1">&#39;images&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">image</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">axes_json</span><span class="p">[</span><span class="s1">&#39;images&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">image</span><span class="p">)</span></div></div>
 
 
 <span class="n">TEXT_VA_DICT</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;bottom&#39;</span><span class="p">:</span> <span class="s1">&#39;auto&#39;</span><span class="p">,</span>
@@ -325,7 +311,7 @@
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2014, mpld3 developers.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.8.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.0.
     </div>
   </body>
 </html>

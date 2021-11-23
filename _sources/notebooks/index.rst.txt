@@ -1,0 +1,18 @@
+
+.. _notebook-examples:
+
+Notebook Examples
+=================
+
+.. toctree::
+   
+   ./custom_plugins
+   
+   ./mpld3_demo
+   
+   ./interactive_legend
+   
+   ./sliderPlugin
+   
+   ./custom_widgin_general
+   

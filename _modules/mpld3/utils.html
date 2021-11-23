@@ -1,38 +1,24 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>mpld3.utils &#8212; Bringing Matplotlib to the Browser</title>
-    
-    <link rel="stylesheet" href="../../_static/mpld3.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mpld3.css" />
     <link rel="stylesheet" href="../../_static/print.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '0.3',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../_static/theme_extras.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/theme_extras.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.png"/>
     <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Bringing Matplotlib to the Browser" href="../../index.html" />
-    <link rel="up" title="Module code" href="../index.html" /> 
-  </head>
-  <body role="document">
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
       <div class="header"><a href="../../index.html">
           <img class="leftlogo" src="../../_static/mpld3-medium.png" alt="Logo"/>
         </a><h1 class="heading"><a href="../../index.html">
@@ -60,8 +46,8 @@
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">wraps</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">urls</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">urls</span>
 
 <span class="c1"># Make sure that DeprecationWarning gets printed</span>
 <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;always&#39;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">DeprecationWarning</span><span class="p">,</span> <span class="n">module</span><span class="o">=</span><span class="s1">&#39;mpld3&#39;</span><span class="p">)</span>
@@ -101,8 +87,8 @@
                        <span class="s2">&quot;Use </span><span class="si">{1}</span><span class="s2"> instead&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">old_name</span><span class="p">,</span> <span class="n">new_name</span><span class="p">)),</span>
                       <span class="n">category</span><span class="o">=</span><span class="ne">DeprecationWarning</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="n">new_func</span><span class="o">.</span><span class="n">__doc__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;*</span><span class="si">%s</span><span class="s2"> is deprecated: use </span><span class="si">%s</span><span class="s2"> instead*</span><span class="se">\n\n</span><span class="s2">    &quot;</span>
-                        <span class="o">%</span> <span class="p">(</span><span class="n">old_name</span><span class="p">,</span> <span class="n">new_name</span><span class="p">))</span> <span class="o">+</span> <span class="n">new_func</span><span class="o">.</span><span class="n">__doc__</span>
+    <span class="n">new_func</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;*</span><span class="si">%s</span><span class="s2"> is deprecated: use </span><span class="si">%s</span><span class="s2"> instead*</span><span class="se">\n\n</span><span class="s2">    &quot;</span>
+                        <span class="o">%</span> <span class="p">(</span><span class="n">old_name</span><span class="p">,</span> <span class="n">new_name</span><span class="p">))</span> <span class="o">+</span> <span class="n">new_func</span><span class="o">.</span><span class="vm">__doc__</span>
     <span class="k">return</span> <span class="n">new_func</span></div>
 
 
@@ -134,7 +120,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">location</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">IPython.html</span> <span class="k">import</span> <span class="n">install_nbextension</span>
+            <span class="kn">from</span> <span class="nn">IPython.html</span> <span class="kn">import</span> <span class="n">install_nbextension</span>
         <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
             <span class="n">location</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
             <span class="n">nbextension</span> <span class="o">=</span> <span class="kc">False</span>
@@ -174,7 +160,7 @@
             <span class="n">_install_nbextension</span><span class="p">([</span><span class="n">d3_src</span><span class="p">,</span> <span class="n">mpld3_src</span><span class="p">])</span>
         <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
             <span class="c1"># files may be read only. We&#39;ll try deleting them and re-installing</span>
-            <span class="kn">from</span> <span class="nn">IPython.utils.path</span> <span class="k">import</span> <span class="n">get_ipython_dir</span>
+            <span class="kn">from</span> <span class="nn">IPython.utils.path</span> <span class="kn">import</span> <span class="n">get_ipython_dir</span>
             <span class="n">nbext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">get_ipython_dir</span><span class="p">(),</span> <span class="s2">&quot;nbextensions&quot;</span><span class="p">)</span>
 
             <span class="k">for</span> <span class="n">src</span> <span class="ow">in</span> <span class="p">[</span><span class="n">d3_src</span><span class="p">,</span> <span class="n">mpld3_src</span><span class="p">]:</span>
@@ -215,7 +201,7 @@
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2014, mpld3 developers.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.8.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.0.
     </div>
   </body>
 </html>

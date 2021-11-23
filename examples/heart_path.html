@@ -1,72 +1,52 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Patches and Paths &#8212; Bringing Matplotlib to the Browser</title>
-    
-    <link rel="stylesheet" href="../_static/mpld3.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>&lt;no title&gt; &#8212; Bringing Matplotlib to the Browser</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mpld3.css" />
     <link rel="stylesheet" href="../_static/print.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '0.3',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/theme_extras.js"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/theme_extras.js"></script>
     <link rel="shortcut icon" href="../_static/favicon.png"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="top" title="Bringing Matplotlib to the Browser" href="../index.html" />
-    <link rel="up" title="Example Gallery" href="index.html" />
-    <link rel="next" title="Visualizing Random Walks" href="random_walk.html" />
-    <link rel="prev" title="mpld3 Logo Idea" href="mpld3_logo.html" /> 
-  </head>
-  <body role="document">
+    <link rel="next" title="&lt;no title&gt;" href="drag_points.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="networkxd3forcelayout.html" /> 
+  </head><body>
       <div class="header"><a href="../index.html">
           <img class="leftlogo" src="../_static/mpld3-medium.png" alt="Logo"/>
         </a><h1 class="heading"><a href="../index.html">
           <span>Bringing Matplotlib to the Browser</span></a></h1>
-        <h2 class="heading"><span>Patches and Paths</span></h2>
+        <h2 class="heading"><span>&lt;no title&gt;</span></h2>
       </div>
       <div class="topnav">
       
         <p>
-        «&#160;&#160;<a href="mpld3_logo.html">mpld3 Logo Idea</a>
+        «&#160;&#160;<a href="networkxd3forcelayout.html">&lt;no title&gt;</a>
         &#160;&#160;::&#160;&#160;
         <a class="uplink" href="../index.html">Contents</a>
         &#160;&#160;::&#160;&#160;
-        <a href="random_walk.html">Visualizing Random Walks</a>&#160;&#160;»
+        <a href="drag_points.html">&lt;no title&gt;</a>&#160;&#160;»
         </p>
 
       </div>
       <div class="content">
         
         
-  <div class="section" id="patches-and-paths">
-<span id="heart-path"></span><h1>Patches and Paths<a class="headerlink" href="#patches-and-paths" title="Permalink to this headline">¶</a></h1>
-<p>This is a demo adapted from a <a class="reference external" href="http://matplotlib.org/examples/shapes_and_collections/path_patch_demo.html">matplotlib gallery example</a></p>
-<p>This example adds a custom D3 plugin allowing the user to drag the path
-control-points and see the effect on the path.</p>
-<p>Use the toolbar buttons at the bottom-right of the plot to enable zooming
-and panning, and to reset the view.</p>
-<style>
+  <style>
 
 </style>
 
-<div id="fig_el538247566031794512391700174"></div>
+<div id="fig_el587581402278378525924763825864"></div>
 <script>
 function mpld3_load_lib(url, callback){
   var s = document.createElement('script');
@@ -95,12 +75,12 @@ if(typeof(mpld3) !== "undefined" && mpld3._mpld3IsLoaded){
         var ptsobj = mpld3.get_element(this.props.idpts, this.fig);
         var lineobj = mpld3.get_element(this.props.idline, this.fig);
 
-        var drag = d3.behavior.drag()
-            .origin(function(d) { return {x:ptsobj.ax.x(d[0]),
+        var drag = d3.drag()
+            .subject(function(d) { return {x:ptsobj.ax.x(d[0]),
                                           y:ptsobj.ax.y(d[1])}; })
-            .on("dragstart", dragstarted)
+            .on("start", dragstarted)
             .on("drag", dragged)
-            .on("dragend", dragended);
+            .on("end", dragended);
 
         lineobj.path.attr("d", lineobj.datafunc(ptsobj.offsets));
         patchobj.path.attr("d", patchobj.datafunc(ptsobj.offsets,
@@ -135,14 +115,14 @@ if(typeof(mpld3) !== "undefined" && mpld3._mpld3IsLoaded){
 
     mpld3.register_plugin("drag", DragPlugin);
 
-       mpld3.draw_figure("fig_el538247566031794512391700174", {"axes": [{"xlim": [-4.020833333333333, 5.020833333333333], "yscale": "linear", "axesbg": "#FFFFFF", "texts": [{"v_baseline": "auto", "h_anchor": "middle", "color": "#000000", "text": "Drag Points to Change Path", "coordinates": "axes", "zorder": 3, "alpha": 1, "fontsize": 18.0, "position": [0.5, 1.0144675925925926], "rotation": -0.0, "id": "el538247566171397904"}], "zoomable": true, "images": [], "xdomain": [-4.020833333333333, 5.020833333333333], "ylim": [-3.0, 4.0], "paths": [{"edgecolor": "#000000", "facecolor": "#FF0000", "edgewidth": 1.0, "pathcodes": ["M", "C", "L", "C", "Z"], "yindex": 1, "coordinates": "data", "dasharray": "none", "zorder": 1, "alpha": 0.5, "xindex": 0, "data": "data01", "id": "el538247566031967312"}], "sharey": [], "sharex": [], "axesbgalpha": null, "axes": [{"scale": "linear", "tickformat": null, "grid": {"color": "#808080", "alpha": 0.5, "dasharray": "2,2", "gridOn": true}, "visible": true, "fontsize": 12.0, "position": "bottom", "nticks": 7, "tickvalues": null}, {"scale": "linear", "tickformat": null, "grid": {"color": "#808080", "alpha": 0.5, "dasharray": "2,2", "gridOn": true}, "visible": true, "fontsize": 12.0, "position": "left", "nticks": 8, "tickvalues": null}], "lines": [{"drawstyle": "default", "color": "#000000", "yindex": 1, "coordinates": "data", "dasharray": "none", "zorder": 2, "alpha": 1, "xindex": 0, "linewidth": 1.0, "data": "data01", "id": "el538247566048118160"}], "markers": [{"edgecolor": "#000000", "facecolor": "#007F00", "edgewidth": 0.5, "yindex": 1, "coordinates": "data", "zorder": 2, "markerpath": [[[0.0, 5.0], [1.3260155, 5.0], [2.597899353924267, 4.473168457941209], [3.5355339059327378, 3.5355339059327378], [4.473168457941209, 2.597899353924267], [5.0, 1.3260155], [5.0, 0.0], [5.0, -1.3260155], [4.473168457941209, -2.597899353924267], [3.5355339059327378, -3.5355339059327378], [2.597899353924267, -4.473168457941209], [1.3260155, -5.0], [0.0, -5.0], [-1.3260155, -5.0], [-2.597899353924267, -4.473168457941209], [-3.5355339059327378, -3.5355339059327378], [-4.473168457941209, -2.597899353924267], [-5.0, -1.3260155], [-5.0, 0.0], [-5.0, 1.3260155], [-4.473168457941209, 2.597899353924267], [-3.5355339059327378, 3.5355339059327378], [-2.597899353924267, 4.473168457941209], [-1.3260155, 5.0], [0.0, 5.0]], ["M", "C", "C", "C", "C", "C", "C", "C", "C", "Z"]], "alpha": 1, "xindex": 0, "data": "data01", "id": "el538247566048117200pts"}], "id": "el538247566028071888", "ydomain": [-3.0, 4.0], "collections": [], "xscale": "linear", "bbox": [0.125, 0.099999999999999978, 0.77500000000000002, 0.80000000000000004]}], "height": 480.0, "width": 640.0, "plugins": [{"type": "reset"}, {"enabled": false, "button": true, "type": "zoom"}, {"enabled": false, "button": true, "type": "boxzoom"}, {"idpatch": "el538247566031967312", "idline": "el538247566048118160", "type": "drag", "idpts": "el538247566048117200pts"}], "data": {"data01": [[1.58, -2.57], [0.35, -1.1], [-1.75, 2.0], [0.375, 2.0], [0.85, 1.15], [2.2, 3.2], [3.0, 0.05], [2.0, -0.5]]}, "id": "el538247566031794512"});
+       mpld3.draw_figure("fig_el587581402278378525924763825864", {"width": 640.0, "height": 480.0, "axes": [{"bbox": [0.125, 0.10999999999999999, 0.775, 0.77], "xlim": [-3.633809523809524, 4.883809523809524], "ylim": [-2.8585, 3.4885], "xdomain": [-3.633809523809524, 4.883809523809524], "ydomain": [-2.8585, 3.4885], "xscale": "linear", "yscale": "linear", "axes": [{"position": "bottom", "nticks": 10, "tickvalues": null, "tickformat_formatter": "", "tickformat": null, "scale": "linear", "fontsize": 10.0, "grid": {"gridOn": true, "color": "#808080", "dasharray": "none", "alpha": 0.5}, "visible": true}, {"position": "left", "nticks": 8, "tickvalues": null, "tickformat_formatter": "", "tickformat": null, "scale": "linear", "fontsize": 10.0, "grid": {"gridOn": true, "color": "#808080", "dasharray": "none", "alpha": 0.5}, "visible": true}], "axesbg": "#FFFFFF", "axesbgalpha": null, "zoomable": true, "id": "el58758140227820177872", "lines": [{"data": "data01", "xindex": 0, "yindex": 1, "coordinates": "data", "id": "el58758140227836774576", "color": "#000000", "linewidth": 1.5, "dasharray": "none", "alpha": 1, "zorder": 2, "drawstyle": "default"}], "paths": [{"data": "data01", "xindex": 0, "yindex": 1, "coordinates": "data", "pathcodes": ["M", "C", "L", "C", "Z"], "id": "el58758140227820177920", "dasharray": "none", "alpha": 0.5, "facecolor": "rgba(255, 0, 0, 0.5)", "edgecolor": "rgba(0, 0, 0, 0.5)", "edgewidth": 1.0, "zorder": 1}], "markers": [{"data": "data01", "xindex": 0, "yindex": 1, "coordinates": "data", "id": "el58758140227836774336pts", "facecolor": "#007F00", "edgecolor": "#007F00", "edgewidth": 1.0, "alpha": 1, "zorder": 2, "markerpath": [[[0.0, 5.0], [1.3260155, 5.0], [2.597899353924267, 4.473168457941209], [3.5355339059327378, 3.5355339059327378], [4.473168457941209, 2.597899353924267], [5.0, 1.3260155], [5.0, 0.0], [5.0, -1.3260155], [4.473168457941209, -2.597899353924267], [3.5355339059327378, -3.5355339059327378], [2.597899353924267, -4.473168457941209], [1.3260155, -5.0], [0.0, -5.0], [-1.3260155, -5.0], [-2.597899353924267, -4.473168457941209], [-3.5355339059327378, -3.5355339059327378], [-4.473168457941209, -2.597899353924267], [-5.0, -1.3260155], [-5.0, 0.0], [-5.0, 1.3260155], [-4.473168457941209, 2.597899353924267], [-3.5355339059327378, 3.5355339059327378], [-2.597899353924267, 4.473168457941209], [-1.3260155, 5.0], [0.0, 5.0]], ["M", "C", "C", "C", "C", "C", "C", "C", "C", "Z"]]}], "texts": [{"text": "Drag Points to Change Path", "position": [0.5, 1.0225468975468974], "coordinates": "axes", "h_anchor": "middle", "v_baseline": "auto", "rotation": -0.0, "fontsize": 18.0, "color": "#000000", "alpha": 1, "zorder": 3, "id": "el58758140227836927952"}], "collections": [], "images": [], "sharex": [], "sharey": []}], "data": {"data01": [[1.58, -2.57], [0.35, -1.1], [-1.75, 2.0], [0.375, 2.0], [0.85, 1.15], [2.2, 3.2], [3.0, 0.05], [2.0, -0.5]]}, "id": "el58758140227837852592", "plugins": [{"type": "reset"}, {"type": "zoom", "button": true, "enabled": false}, {"type": "boxzoom", "button": true, "enabled": false}, {"type": "drag", "idpts": "el58758140227836774336pts", "idline": "el58758140227836774576", "idpatch": "el58758140227820177920"}]});
    }(mpld3);
 }else if(typeof define === "function" && define.amd){
    // require.js is available: use it to load d3/mpld3
-   require.config({paths: {d3: "https://mpld3.github.io/js/d3.v3.min"}});
+   require.config({paths: {d3: "https://d3js.org/d3.v5"}});
    require(["d3"], function(d3){
       window.d3 = d3;
-      mpld3_load_lib("https://mpld3.github.io/js/mpld3.v0.3.js", function(){
+      mpld3_load_lib("https://mpld3.github.io/js/mpld3.v0.5.6.js", function(){
 
     mpld3.register_plugin("drag", DragPlugin);
     DragPlugin.prototype = Object.create(mpld3.Plugin.prototype);
@@ -158,12 +138,12 @@ if(typeof(mpld3) !== "undefined" && mpld3._mpld3IsLoaded){
         var ptsobj = mpld3.get_element(this.props.idpts, this.fig);
         var lineobj = mpld3.get_element(this.props.idline, this.fig);
 
-        var drag = d3.behavior.drag()
-            .origin(function(d) { return {x:ptsobj.ax.x(d[0]),
+        var drag = d3.drag()
+            .subject(function(d) { return {x:ptsobj.ax.x(d[0]),
                                           y:ptsobj.ax.y(d[1])}; })
-            .on("dragstart", dragstarted)
+            .on("start", dragstarted)
             .on("drag", dragged)
-            .on("dragend", dragended);
+            .on("end", dragended);
 
         lineobj.path.attr("d", lineobj.datafunc(ptsobj.offsets));
         patchobj.path.attr("d", patchobj.datafunc(ptsobj.offsets,
@@ -198,13 +178,13 @@ if(typeof(mpld3) !== "undefined" && mpld3._mpld3IsLoaded){
 
     mpld3.register_plugin("drag", DragPlugin);
 
-         mpld3.draw_figure("fig_el538247566031794512391700174", {"axes": [{"xlim": [-4.020833333333333, 5.020833333333333], "yscale": "linear", "axesbg": "#FFFFFF", "texts": [{"v_baseline": "auto", "h_anchor": "middle", "color": "#000000", "text": "Drag Points to Change Path", "coordinates": "axes", "zorder": 3, "alpha": 1, "fontsize": 18.0, "position": [0.5, 1.0144675925925926], "rotation": -0.0, "id": "el538247566171397904"}], "zoomable": true, "images": [], "xdomain": [-4.020833333333333, 5.020833333333333], "ylim": [-3.0, 4.0], "paths": [{"edgecolor": "#000000", "facecolor": "#FF0000", "edgewidth": 1.0, "pathcodes": ["M", "C", "L", "C", "Z"], "yindex": 1, "coordinates": "data", "dasharray": "none", "zorder": 1, "alpha": 0.5, "xindex": 0, "data": "data01", "id": "el538247566031967312"}], "sharey": [], "sharex": [], "axesbgalpha": null, "axes": [{"scale": "linear", "tickformat": null, "grid": {"color": "#808080", "alpha": 0.5, "dasharray": "2,2", "gridOn": true}, "visible": true, "fontsize": 12.0, "position": "bottom", "nticks": 7, "tickvalues": null}, {"scale": "linear", "tickformat": null, "grid": {"color": "#808080", "alpha": 0.5, "dasharray": "2,2", "gridOn": true}, "visible": true, "fontsize": 12.0, "position": "left", "nticks": 8, "tickvalues": null}], "lines": [{"drawstyle": "default", "color": "#000000", "yindex": 1, "coordinates": "data", "dasharray": "none", "zorder": 2, "alpha": 1, "xindex": 0, "linewidth": 1.0, "data": "data01", "id": "el538247566048118160"}], "markers": [{"edgecolor": "#000000", "facecolor": "#007F00", "edgewidth": 0.5, "yindex": 1, "coordinates": "data", "zorder": 2, "markerpath": [[[0.0, 5.0], [1.3260155, 5.0], [2.597899353924267, 4.473168457941209], [3.5355339059327378, 3.5355339059327378], [4.473168457941209, 2.597899353924267], [5.0, 1.3260155], [5.0, 0.0], [5.0, -1.3260155], [4.473168457941209, -2.597899353924267], [3.5355339059327378, -3.5355339059327378], [2.597899353924267, -4.473168457941209], [1.3260155, -5.0], [0.0, -5.0], [-1.3260155, -5.0], [-2.597899353924267, -4.473168457941209], [-3.5355339059327378, -3.5355339059327378], [-4.473168457941209, -2.597899353924267], [-5.0, -1.3260155], [-5.0, 0.0], [-5.0, 1.3260155], [-4.473168457941209, 2.597899353924267], [-3.5355339059327378, 3.5355339059327378], [-2.597899353924267, 4.473168457941209], [-1.3260155, 5.0], [0.0, 5.0]], ["M", "C", "C", "C", "C", "C", "C", "C", "C", "Z"]], "alpha": 1, "xindex": 0, "data": "data01", "id": "el538247566048117200pts"}], "id": "el538247566028071888", "ydomain": [-3.0, 4.0], "collections": [], "xscale": "linear", "bbox": [0.125, 0.099999999999999978, 0.77500000000000002, 0.80000000000000004]}], "height": 480.0, "width": 640.0, "plugins": [{"type": "reset"}, {"enabled": false, "button": true, "type": "zoom"}, {"enabled": false, "button": true, "type": "boxzoom"}, {"idpatch": "el538247566031967312", "idline": "el538247566048118160", "type": "drag", "idpts": "el538247566048117200pts"}], "data": {"data01": [[1.58, -2.57], [0.35, -1.1], [-1.75, 2.0], [0.375, 2.0], [0.85, 1.15], [2.2, 3.2], [3.0, 0.05], [2.0, -0.5]]}, "id": "el538247566031794512"});
+         mpld3.draw_figure("fig_el587581402278378525924763825864", {"width": 640.0, "height": 480.0, "axes": [{"bbox": [0.125, 0.10999999999999999, 0.775, 0.77], "xlim": [-3.633809523809524, 4.883809523809524], "ylim": [-2.8585, 3.4885], "xdomain": [-3.633809523809524, 4.883809523809524], "ydomain": [-2.8585, 3.4885], "xscale": "linear", "yscale": "linear", "axes": [{"position": "bottom", "nticks": 10, "tickvalues": null, "tickformat_formatter": "", "tickformat": null, "scale": "linear", "fontsize": 10.0, "grid": {"gridOn": true, "color": "#808080", "dasharray": "none", "alpha": 0.5}, "visible": true}, {"position": "left", "nticks": 8, "tickvalues": null, "tickformat_formatter": "", "tickformat": null, "scale": "linear", "fontsize": 10.0, "grid": {"gridOn": true, "color": "#808080", "dasharray": "none", "alpha": 0.5}, "visible": true}], "axesbg": "#FFFFFF", "axesbgalpha": null, "zoomable": true, "id": "el58758140227820177872", "lines": [{"data": "data01", "xindex": 0, "yindex": 1, "coordinates": "data", "id": "el58758140227836774576", "color": "#000000", "linewidth": 1.5, "dasharray": "none", "alpha": 1, "zorder": 2, "drawstyle": "default"}], "paths": [{"data": "data01", "xindex": 0, "yindex": 1, "coordinates": "data", "pathcodes": ["M", "C", "L", "C", "Z"], "id": "el58758140227820177920", "dasharray": "none", "alpha": 0.5, "facecolor": "rgba(255, 0, 0, 0.5)", "edgecolor": "rgba(0, 0, 0, 0.5)", "edgewidth": 1.0, "zorder": 1}], "markers": [{"data": "data01", "xindex": 0, "yindex": 1, "coordinates": "data", "id": "el58758140227836774336pts", "facecolor": "#007F00", "edgecolor": "#007F00", "edgewidth": 1.0, "alpha": 1, "zorder": 2, "markerpath": [[[0.0, 5.0], [1.3260155, 5.0], [2.597899353924267, 4.473168457941209], [3.5355339059327378, 3.5355339059327378], [4.473168457941209, 2.597899353924267], [5.0, 1.3260155], [5.0, 0.0], [5.0, -1.3260155], [4.473168457941209, -2.597899353924267], [3.5355339059327378, -3.5355339059327378], [2.597899353924267, -4.473168457941209], [1.3260155, -5.0], [0.0, -5.0], [-1.3260155, -5.0], [-2.597899353924267, -4.473168457941209], [-3.5355339059327378, -3.5355339059327378], [-4.473168457941209, -2.597899353924267], [-5.0, -1.3260155], [-5.0, 0.0], [-5.0, 1.3260155], [-4.473168457941209, 2.597899353924267], [-3.5355339059327378, 3.5355339059327378], [-2.597899353924267, 4.473168457941209], [-1.3260155, 5.0], [0.0, 5.0]], ["M", "C", "C", "C", "C", "C", "C", "C", "C", "Z"]]}], "texts": [{"text": "Drag Points to Change Path", "position": [0.5, 1.0225468975468974], "coordinates": "axes", "h_anchor": "middle", "v_baseline": "auto", "rotation": -0.0, "fontsize": 18.0, "color": "#000000", "alpha": 1, "zorder": 3, "id": "el58758140227836927952"}], "collections": [], "images": [], "sharex": [], "sharey": []}], "data": {"data01": [[1.58, -2.57], [0.35, -1.1], [-1.75, 2.0], [0.375, 2.0], [0.85, 1.15], [2.2, 3.2], [3.0, 0.05], [2.0, -0.5]]}, "id": "el58758140227837852592", "plugins": [{"type": "reset"}, {"type": "zoom", "button": true, "enabled": false}, {"type": "boxzoom", "button": true, "enabled": false}, {"type": "drag", "idpts": "el58758140227836774336pts", "idline": "el58758140227836774576", "idpatch": "el58758140227820177920"}]});
       });
     });
 }else{
     // require.js not available: dynamically load d3 & mpld3
-    mpld3_load_lib("https://mpld3.github.io/js/d3.v3.min.js", function(){
-         mpld3_load_lib("https://mpld3.github.io/js/mpld3.v0.3.js", function(){
+    mpld3_load_lib("https://d3js.org/d3.v5.js", function(){
+         mpld3_load_lib("https://mpld3.github.io/js/mpld3.v0.5.6.js", function(){
 
     mpld3.register_plugin("drag", DragPlugin);
     DragPlugin.prototype = Object.create(mpld3.Plugin.prototype);
@@ -220,12 +200,12 @@ if(typeof(mpld3) !== "undefined" && mpld3._mpld3IsLoaded){
         var ptsobj = mpld3.get_element(this.props.idpts, this.fig);
         var lineobj = mpld3.get_element(this.props.idline, this.fig);
 
-        var drag = d3.behavior.drag()
-            .origin(function(d) { return {x:ptsobj.ax.x(d[0]),
+        var drag = d3.drag()
+            .subject(function(d) { return {x:ptsobj.ax.x(d[0]),
                                           y:ptsobj.ax.y(d[1])}; })
-            .on("dragstart", dragstarted)
+            .on("start", dragstarted)
             .on("drag", dragged)
-            .on("dragend", dragended);
+            .on("end", dragended);
 
         lineobj.path.attr("d", lineobj.datafunc(ptsobj.offsets));
         patchobj.path.attr("d", patchobj.datafunc(ptsobj.offsets,
@@ -260,123 +240,133 @@ if(typeof(mpld3) !== "undefined" && mpld3._mpld3IsLoaded){
 
     mpld3.register_plugin("drag", DragPlugin);
 
-                 mpld3.draw_figure("fig_el538247566031794512391700174", {"axes": [{"xlim": [-4.020833333333333, 5.020833333333333], "yscale": "linear", "axesbg": "#FFFFFF", "texts": [{"v_baseline": "auto", "h_anchor": "middle", "color": "#000000", "text": "Drag Points to Change Path", "coordinates": "axes", "zorder": 3, "alpha": 1, "fontsize": 18.0, "position": [0.5, 1.0144675925925926], "rotation": -0.0, "id": "el538247566171397904"}], "zoomable": true, "images": [], "xdomain": [-4.020833333333333, 5.020833333333333], "ylim": [-3.0, 4.0], "paths": [{"edgecolor": "#000000", "facecolor": "#FF0000", "edgewidth": 1.0, "pathcodes": ["M", "C", "L", "C", "Z"], "yindex": 1, "coordinates": "data", "dasharray": "none", "zorder": 1, "alpha": 0.5, "xindex": 0, "data": "data01", "id": "el538247566031967312"}], "sharey": [], "sharex": [], "axesbgalpha": null, "axes": [{"scale": "linear", "tickformat": null, "grid": {"color": "#808080", "alpha": 0.5, "dasharray": "2,2", "gridOn": true}, "visible": true, "fontsize": 12.0, "position": "bottom", "nticks": 7, "tickvalues": null}, {"scale": "linear", "tickformat": null, "grid": {"color": "#808080", "alpha": 0.5, "dasharray": "2,2", "gridOn": true}, "visible": true, "fontsize": 12.0, "position": "left", "nticks": 8, "tickvalues": null}], "lines": [{"drawstyle": "default", "color": "#000000", "yindex": 1, "coordinates": "data", "dasharray": "none", "zorder": 2, "alpha": 1, "xindex": 0, "linewidth": 1.0, "data": "data01", "id": "el538247566048118160"}], "markers": [{"edgecolor": "#000000", "facecolor": "#007F00", "edgewidth": 0.5, "yindex": 1, "coordinates": "data", "zorder": 2, "markerpath": [[[0.0, 5.0], [1.3260155, 5.0], [2.597899353924267, 4.473168457941209], [3.5355339059327378, 3.5355339059327378], [4.473168457941209, 2.597899353924267], [5.0, 1.3260155], [5.0, 0.0], [5.0, -1.3260155], [4.473168457941209, -2.597899353924267], [3.5355339059327378, -3.5355339059327378], [2.597899353924267, -4.473168457941209], [1.3260155, -5.0], [0.0, -5.0], [-1.3260155, -5.0], [-2.597899353924267, -4.473168457941209], [-3.5355339059327378, -3.5355339059327378], [-4.473168457941209, -2.597899353924267], [-5.0, -1.3260155], [-5.0, 0.0], [-5.0, 1.3260155], [-4.473168457941209, 2.597899353924267], [-3.5355339059327378, 3.5355339059327378], [-2.597899353924267, 4.473168457941209], [-1.3260155, 5.0], [0.0, 5.0]], ["M", "C", "C", "C", "C", "C", "C", "C", "C", "Z"]], "alpha": 1, "xindex": 0, "data": "data01", "id": "el538247566048117200pts"}], "id": "el538247566028071888", "ydomain": [-3.0, 4.0], "collections": [], "xscale": "linear", "bbox": [0.125, 0.099999999999999978, 0.77500000000000002, 0.80000000000000004]}], "height": 480.0, "width": 640.0, "plugins": [{"type": "reset"}, {"enabled": false, "button": true, "type": "zoom"}, {"enabled": false, "button": true, "type": "boxzoom"}, {"idpatch": "el538247566031967312", "idline": "el538247566048118160", "type": "drag", "idpts": "el538247566048117200pts"}], "data": {"data01": [[1.58, -2.57], [0.35, -1.1], [-1.75, 2.0], [0.375, 2.0], [0.85, 1.15], [2.2, 3.2], [3.0, 0.05], [2.0, -0.5]]}, "id": "el538247566031794512"});
+                 mpld3.draw_figure("fig_el587581402278378525924763825864", {"width": 640.0, "height": 480.0, "axes": [{"bbox": [0.125, 0.10999999999999999, 0.775, 0.77], "xlim": [-3.633809523809524, 4.883809523809524], "ylim": [-2.8585, 3.4885], "xdomain": [-3.633809523809524, 4.883809523809524], "ydomain": [-2.8585, 3.4885], "xscale": "linear", "yscale": "linear", "axes": [{"position": "bottom", "nticks": 10, "tickvalues": null, "tickformat_formatter": "", "tickformat": null, "scale": "linear", "fontsize": 10.0, "grid": {"gridOn": true, "color": "#808080", "dasharray": "none", "alpha": 0.5}, "visible": true}, {"position": "left", "nticks": 8, "tickvalues": null, "tickformat_formatter": "", "tickformat": null, "scale": "linear", "fontsize": 10.0, "grid": {"gridOn": true, "color": "#808080", "dasharray": "none", "alpha": 0.5}, "visible": true}], "axesbg": "#FFFFFF", "axesbgalpha": null, "zoomable": true, "id": "el58758140227820177872", "lines": [{"data": "data01", "xindex": 0, "yindex": 1, "coordinates": "data", "id": "el58758140227836774576", "color": "#000000", "linewidth": 1.5, "dasharray": "none", "alpha": 1, "zorder": 2, "drawstyle": "default"}], "paths": [{"data": "data01", "xindex": 0, "yindex": 1, "coordinates": "data", "pathcodes": ["M", "C", "L", "C", "Z"], "id": "el58758140227820177920", "dasharray": "none", "alpha": 0.5, "facecolor": "rgba(255, 0, 0, 0.5)", "edgecolor": "rgba(0, 0, 0, 0.5)", "edgewidth": 1.0, "zorder": 1}], "markers": [{"data": "data01", "xindex": 0, "yindex": 1, "coordinates": "data", "id": "el58758140227836774336pts", "facecolor": "#007F00", "edgecolor": "#007F00", "edgewidth": 1.0, "alpha": 1, "zorder": 2, "markerpath": [[[0.0, 5.0], [1.3260155, 5.0], [2.597899353924267, 4.473168457941209], [3.5355339059327378, 3.5355339059327378], [4.473168457941209, 2.597899353924267], [5.0, 1.3260155], [5.0, 0.0], [5.0, -1.3260155], [4.473168457941209, -2.597899353924267], [3.5355339059327378, -3.5355339059327378], [2.597899353924267, -4.473168457941209], [1.3260155, -5.0], [0.0, -5.0], [-1.3260155, -5.0], [-2.597899353924267, -4.473168457941209], [-3.5355339059327378, -3.5355339059327378], [-4.473168457941209, -2.597899353924267], [-5.0, -1.3260155], [-5.0, 0.0], [-5.0, 1.3260155], [-4.473168457941209, 2.597899353924267], [-3.5355339059327378, 3.5355339059327378], [-2.597899353924267, 4.473168457941209], [-1.3260155, 5.0], [0.0, 5.0]], ["M", "C", "C", "C", "C", "C", "C", "C", "C", "Z"]]}], "texts": [{"text": "Drag Points to Change Path", "position": [0.5, 1.0225468975468974], "coordinates": "axes", "h_anchor": "middle", "v_baseline": "auto", "rotation": -0.0, "fontsize": 18.0, "color": "#000000", "alpha": 1, "zorder": 3, "id": "el58758140227836927952"}], "collections": [], "images": [], "sharex": [], "sharey": []}], "data": {"data01": [[1.58, -2.57], [0.35, -1.1], [-1.75, 2.0], [0.375, 2.0], [0.85, 1.15], [2.2, 3.2], [3.0, 0.05], [2.0, -0.5]]}, "id": "el58758140227837852592", "plugins": [{"type": "reset"}, {"type": "zoom", "button": true, "enabled": false}, {"type": "boxzoom", "button": true, "enabled": false}, {"type": "drag", "idpts": "el58758140227836774336pts", "idline": "el58758140227836774576", "idpatch": "el58758140227820177920"}]});
             })
          });
 }
-</script><p><strong>Python source code:</strong> <a class="reference download internal" href="../_downloads/heart_path.py" download=""><code class="xref download docutils literal"><span class="pre">[download</span> <span class="pre">source:</span> <span class="pre">heart_path.py]</span></code></a></p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
-<span class="kn">import</span> <span class="nn">matplotlib.path</span> <span class="k">as</span> <span class="nn">mpath</span>
-<span class="kn">import</span> <span class="nn">matplotlib.patches</span> <span class="k">as</span> <span class="nn">mpatches</span>
+</script><p><strong>Python source code:</strong> <a class="reference download internal" download="" href="../_downloads/4326615eb99ad2b859664f5a280e4ab7/heart_path.py"><code class="xref download docutils literal notranslate"><span class="pre">[download</span> <span class="pre">source:</span> <span class="pre">heart_path.py]</span></code></a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Patches and Paths
+=================
+This is a demo adapted from a `matplotlib gallery example
+&lt;http://matplotlib.org/examples/shapes_and_collections/path_patch_demo.html&gt;`_
 
-<span class="kn">import</span> <span class="nn">mpld3</span>
-<span class="kn">from</span> <span class="nn">mpld3</span> <span class="k">import</span> <span class="n">plugins</span><span class="p">,</span> <span class="n">utils</span>
+This example adds a custom D3 plugin allowing the user to drag the path
+control-points and see the effect on the path.
 
+Use the toolbar buttons at the bottom-right of the plot to enable zooming
+and panning, and to reset the view.
+&quot;&quot;&quot;
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib as mpl
+import matplotlib.path as mpath
+import matplotlib.patches as mpatches
 
-<span class="k">class</span> <span class="nc">LinkedDragPlugin</span><span class="p">(</span><span class="n">plugins</span><span class="o">.</span><span class="n">PluginBase</span><span class="p">):</span>
-    <span class="n">JAVASCRIPT</span> <span class="o">=</span> <span class="s2">r&quot;&quot;&quot;</span>
-<span class="s2">    mpld3.register_plugin(&quot;drag&quot;, DragPlugin);</span>
-<span class="s2">    DragPlugin.prototype = Object.create(mpld3.Plugin.prototype);</span>
-<span class="s2">    DragPlugin.prototype.constructor = DragPlugin;</span>
-<span class="s2">    DragPlugin.prototype.requiredProps = [&quot;idpts&quot;, &quot;idline&quot;, &quot;idpatch&quot;];</span>
-<span class="s2">    DragPlugin.prototype.defaultProps = </span><span class="si">{}</span><span class="s2"></span>
-<span class="s2">    function DragPlugin(fig, props){</span>
-<span class="s2">        mpld3.Plugin.call(this, fig, props);</span>
-<span class="s2">    };</span>
-
-<span class="s2">    DragPlugin.prototype.draw = function(){</span>
-<span class="s2">        var patchobj = mpld3.get_element(this.props.idpatch, this.fig);</span>
-<span class="s2">        var ptsobj = mpld3.get_element(this.props.idpts, this.fig);</span>
-<span class="s2">        var lineobj = mpld3.get_element(this.props.idline, this.fig);</span>
-
-<span class="s2">        var drag = d3.behavior.drag()</span>
-<span class="s2">            .origin(function(d) { return {x:ptsobj.ax.x(d[0]),</span>
-<span class="s2">                                          y:ptsobj.ax.y(d[1])}; })</span>
-<span class="s2">            .on(&quot;dragstart&quot;, dragstarted)</span>
-<span class="s2">            .on(&quot;drag&quot;, dragged)</span>
-<span class="s2">            .on(&quot;dragend&quot;, dragended);</span>
-
-<span class="s2">        lineobj.path.attr(&quot;d&quot;, lineobj.datafunc(ptsobj.offsets));</span>
-<span class="s2">        patchobj.path.attr(&quot;d&quot;, patchobj.datafunc(ptsobj.offsets,</span>
-<span class="s2">                                                  patchobj.pathcodes));</span>
-<span class="s2">        lineobj.data = ptsobj.offsets;</span>
-<span class="s2">        patchobj.data = ptsobj.offsets;</span>
-
-<span class="s2">        ptsobj.elements()</span>
-<span class="s2">           .data(ptsobj.offsets)</span>
-<span class="s2">           .style(&quot;cursor&quot;, &quot;default&quot;)</span>
-<span class="s2">           .call(drag);</span>
-
-<span class="s2">        function dragstarted(d) {</span>
-<span class="s2">          d3.event.sourceEvent.stopPropagation();</span>
-<span class="s2">          d3.select(this).classed(&quot;dragging&quot;, true);</span>
-<span class="s2">        }</span>
-
-<span class="s2">        function dragged(d, i) {</span>
-<span class="s2">          d[0] = ptsobj.ax.x.invert(d3.event.x);</span>
-<span class="s2">          d[1] = ptsobj.ax.y.invert(d3.event.y);</span>
-<span class="s2">          d3.select(this)</span>
-<span class="s2">            .attr(&quot;transform&quot;, &quot;translate(&quot; + [d3.event.x,d3.event.y] + &quot;)&quot;);</span>
-<span class="s2">          lineobj.path.attr(&quot;d&quot;, lineobj.datafunc(ptsobj.offsets));</span>
-<span class="s2">          patchobj.path.attr(&quot;d&quot;, patchobj.datafunc(ptsobj.offsets,</span>
-<span class="s2">                                                    patchobj.pathcodes));</span>
-<span class="s2">        }</span>
-
-<span class="s2">        function dragended(d, i) {</span>
-<span class="s2">          d3.select(this).classed(&quot;dragging&quot;, false);</span>
-<span class="s2">        }</span>
-<span class="s2">    }</span>
-
-<span class="s2">    mpld3.register_plugin(&quot;drag&quot;, DragPlugin);</span>
-<span class="s2">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">patch</span><span class="p">):</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">mpl</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">Line2D</span><span class="p">):</span>
-            <span class="n">suffix</span> <span class="o">=</span> <span class="s2">&quot;pts&quot;</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">suffix</span> <span class="o">=</span> <span class="kc">None</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">dict_</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;drag&quot;</span><span class="p">,</span>
-                      <span class="s2">&quot;idpts&quot;</span><span class="p">:</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_id</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">suffix</span><span class="p">),</span>
-                      <span class="s2">&quot;idline&quot;</span><span class="p">:</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_id</span><span class="p">(</span><span class="n">line</span><span class="p">),</span>
-                      <span class="s2">&quot;idpatch&quot;</span><span class="p">:</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_id</span><span class="p">(</span><span class="n">patch</span><span class="p">)}</span>
+import mpld3
+from mpld3 import plugins, utils
 
 
-<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+class LinkedDragPlugin(plugins.PluginBase):
+    JAVASCRIPT = r&quot;&quot;&quot;
+    mpld3.register_plugin(&quot;drag&quot;, DragPlugin);
+    DragPlugin.prototype = Object.create(mpld3.Plugin.prototype);
+    DragPlugin.prototype.constructor = DragPlugin;
+    DragPlugin.prototype.requiredProps = [&quot;idpts&quot;, &quot;idline&quot;, &quot;idpatch&quot;];
+    DragPlugin.prototype.defaultProps = {}
+    function DragPlugin(fig, props){
+        mpld3.Plugin.call(this, fig, props);
+    };
 
-<span class="n">Path</span> <span class="o">=</span> <span class="n">mpath</span><span class="o">.</span><span class="n">Path</span>
-<span class="n">path_data</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">MOVETO</span><span class="p">,</span> <span class="p">(</span><span class="mf">1.58</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.57</span><span class="p">)),</span>
-    <span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">CURVE4</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.35</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.1</span><span class="p">)),</span>
-    <span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">CURVE4</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="mf">1.75</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">)),</span>
-    <span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">CURVE4</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.375</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">)),</span>
-    <span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">LINETO</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.85</span><span class="p">,</span> <span class="mf">1.15</span><span class="p">)),</span>
-    <span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">CURVE4</span><span class="p">,</span> <span class="p">(</span><span class="mf">2.2</span><span class="p">,</span> <span class="mf">3.2</span><span class="p">)),</span>
-    <span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">CURVE4</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">)),</span>
-    <span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">CURVE4</span><span class="p">,</span> <span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">)),</span>
-    <span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">CLOSEPOLY</span><span class="p">,</span> <span class="p">(</span><span class="mf">1.58</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.57</span><span class="p">)),</span>
-    <span class="p">]</span>
-<span class="n">codes</span><span class="p">,</span> <span class="n">verts</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">path_data</span><span class="p">)</span>
-<span class="n">path</span> <span class="o">=</span> <span class="n">mpath</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">verts</span><span class="p">,</span> <span class="n">codes</span><span class="p">)</span>
-<span class="n">patch</span> <span class="o">=</span> <span class="n">mpatches</span><span class="o">.</span><span class="n">PathPatch</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">patch</span><span class="p">)</span>
+    DragPlugin.prototype.draw = function(){
+        var patchobj = mpld3.get_element(this.props.idpatch, this.fig);
+        var ptsobj = mpld3.get_element(this.props.idpts, this.fig);
+        var lineobj = mpld3.get_element(this.props.idline, this.fig);
 
-<span class="c1"># plot control points and connecting lines</span>
-<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">path</span><span class="o">.</span><span class="n">vertices</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-<span class="n">points</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;go&#39;</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-<span class="n">line</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;-k&#39;</span><span class="p">)</span>
+        var drag = d3.drag()
+            .subject(function(d) { return {x:ptsobj.ax.x(d[0]),
+                                          y:ptsobj.ax.y(d[1])}; })
+            .on(&quot;start&quot;, dragstarted)
+            .on(&quot;drag&quot;, dragged)
+            .on(&quot;end&quot;, dragended);
 
-<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Drag Points to Change Path&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+        lineobj.path.attr(&quot;d&quot;, lineobj.datafunc(ptsobj.offsets));
+        patchobj.path.attr(&quot;d&quot;, patchobj.datafunc(ptsobj.offsets,
+                                                  patchobj.pathcodes));
+        lineobj.data = ptsobj.offsets;
+        patchobj.data = ptsobj.offsets;
 
-<span class="n">plugins</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">LinkedDragPlugin</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">patch</span><span class="p">))</span>
+        ptsobj.elements()
+           .data(ptsobj.offsets)
+           .style(&quot;cursor&quot;, &quot;default&quot;)
+           .call(drag);
 
-<span class="n">mpld3</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        function dragstarted(d) {
+          d3.event.sourceEvent.stopPropagation();
+          d3.select(this).classed(&quot;dragging&quot;, true);
+        }
+
+        function dragged(d, i) {
+          d[0] = ptsobj.ax.x.invert(d3.event.x);
+          d[1] = ptsobj.ax.y.invert(d3.event.y);
+          d3.select(this)
+            .attr(&quot;transform&quot;, &quot;translate(&quot; + [d3.event.x,d3.event.y] + &quot;)&quot;);
+          lineobj.path.attr(&quot;d&quot;, lineobj.datafunc(ptsobj.offsets));
+          patchobj.path.attr(&quot;d&quot;, patchobj.datafunc(ptsobj.offsets,
+                                                    patchobj.pathcodes));
+        }
+
+        function dragended(d, i) {
+          d3.select(this).classed(&quot;dragging&quot;, false);
+        }
+    }
+
+    mpld3.register_plugin(&quot;drag&quot;, DragPlugin);
+    &quot;&quot;&quot;
+
+    def __init__(self, points, line, patch):
+        if isinstance(points, mpl.lines.Line2D):
+            suffix = &quot;pts&quot;
+        else:
+            suffix = None
+
+        self.dict_ = {&quot;type&quot;: &quot;drag&quot;,
+                      &quot;idpts&quot;: utils.get_id(points, suffix),
+                      &quot;idline&quot;: utils.get_id(line),
+                      &quot;idpatch&quot;: utils.get_id(patch)}
+
+
+fig, ax = plt.subplots()
+
+Path = mpath.Path
+path_data = [
+    (Path.MOVETO, (1.58, -2.57)),
+    (Path.CURVE4, (0.35, -1.1)),
+    (Path.CURVE4, (-1.75, 2.0)),
+    (Path.CURVE4, (0.375, 2.0)),
+    (Path.LINETO, (0.85, 1.15)),
+    (Path.CURVE4, (2.2, 3.2)),
+    (Path.CURVE4, (3, 0.05)),
+    (Path.CURVE4, (2.0, -0.5)),
+    (Path.CLOSEPOLY, (1.58, -2.57)),
+    ]
+codes, verts = zip(*path_data)
+path = mpath.Path(verts, codes)
+patch = mpatches.PathPatch(path, facecolor=&#39;r&#39;, alpha=0.5)
+ax.add_patch(patch)
+
+# plot control points and connecting lines
+x, y = zip(*path.vertices[:-1])
+points = ax.plot(x, y, &#39;go&#39;, ms=10)
+line = ax.plot(x, y, &#39;-k&#39;)
+
+ax.grid(True, color=&#39;gray&#39;, alpha=0.5)
+ax.axis(&#39;equal&#39;)
+ax.set_title(&quot;Drag Points to Change Path&quot;, fontsize=18)
+
+plugins.connect(fig, LinkedDragPlugin(points[0], line[0], patch))
+
+mpld3.show()
 </pre></div>
-</div>
 </div>
 
 
@@ -384,18 +374,18 @@ if(typeof(mpld3) !== "undefined" && mpld3._mpld3IsLoaded){
       <div class="bottomnav">
       
         <p>
-        «&#160;&#160;<a href="mpld3_logo.html">mpld3 Logo Idea</a>
+        «&#160;&#160;<a href="networkxd3forcelayout.html">&lt;no title&gt;</a>
         &#160;&#160;::&#160;&#160;
         <a class="uplink" href="../index.html">Contents</a>
         &#160;&#160;::&#160;&#160;
-        <a href="random_walk.html">Visualizing Random Walks</a>&#160;&#160;»
+        <a href="drag_points.html">&lt;no title&gt;</a>&#160;&#160;»
         </p>
 
       </div>
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2014, mpld3 developers.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.8.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.0.
     </div>
   </body>
 </html>

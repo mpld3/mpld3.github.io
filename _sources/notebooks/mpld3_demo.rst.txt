@@ -1,0 +1,14 @@
+
+mpld3_demo
+==========
+
+[
+:download:`mpld3_demo.html <rendered/mpld3_demo.html>`
+|
+:download:`mpld3_demo.ipynb <mpld3_demo.ipynb>`
+]
+
+.. raw:: html
+
+    <iframe src="../_downloads/mpld3_demo.html"
+      width="100%" height="400px"></iframe>

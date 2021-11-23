@@ -1,0 +1,14 @@
+
+sliderPlugin
+============
+
+[
+:download:`sliderPlugin.html <rendered/sliderPlugin.html>`
+|
+:download:`sliderPlugin.ipynb <sliderPlugin.ipynb>`
+]
+
+.. raw:: html
+
+    <iframe src="../_downloads/sliderPlugin.html"
+      width="100%" height="400px"></iframe>

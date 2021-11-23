@@ -1,0 +1,139 @@
+
+
+.. raw:: html
+
+    <style type="text/css">
+    .figure {
+        float: left;
+        margin: 10px;
+        width: 180px;
+        height: 200px;
+    }
+
+    .figure img {
+        display: inline;
+        width: 170px;
+        height: 170px;
+        opacity:0.4;
+        filter:alpha(opacity=40); /* For IE8 and earlier */
+    }
+
+    .figure img:hover
+    {
+        opacity:1.0;
+        filter:alpha(opacity=100); /* For IE8 and earlier */
+    }
+
+    .figure .caption {
+        width: 180px;
+        text-align: center !important;
+    }
+    </style>
+
+.. _example-gallery:
+
+Example Gallery
+===============
+
+
+
+.. toctree::
+   :hidden:
+
+   ./mouse_position
+
+   ./custom_plugin
+
+   ./networkxd3forcelayout
+
+   ./heart_path
+
+   ./drag_points
+
+   ./html_tooltips
+
+   ./interactive_legend
+
+   ./random_walk
+
+   ./scatter_tooltip
+
+   ./linked_brush
+
+   ./mpld3_logo
+
+
+
+
+
+.. figure:: ./mouse_position.png
+    :target: ./mouse_position.html
+    :align: center
+
+    :ref:`mouse_position`
+
+.. figure:: ./custom_plugin.png
+    :target: ./custom_plugin.html
+    :align: center
+
+    :ref:`custom_plugin`
+
+.. figure:: ./networkxd3forcelayout.png
+    :target: ./networkxd3forcelayout.html
+    :align: center
+
+    :ref:`networkxd3forcelayout`
+
+.. figure:: ./heart_path.png
+    :target: ./heart_path.html
+    :align: center
+
+    :ref:`heart_path`
+
+.. figure:: ./drag_points.png
+    :target: ./drag_points.html
+    :align: center
+
+    :ref:`drag_points`
+
+.. figure:: ./html_tooltips.png
+    :target: ./html_tooltips.html
+    :align: center
+
+    :ref:`html_tooltips`
+
+.. figure:: ./interactive_legend.png
+    :target: ./interactive_legend.html
+    :align: center
+
+    :ref:`interactive_legend`
+
+.. figure:: ./random_walk.png
+    :target: ./random_walk.html
+    :align: center
+
+    :ref:`random_walk`
+
+.. figure:: ./scatter_tooltip.png
+    :target: ./scatter_tooltip.html
+    :align: center
+
+    :ref:`scatter_tooltip`
+
+.. figure:: ./linked_brush.png
+    :target: ./linked_brush.html
+    :align: center
+
+    :ref:`linked_brush`
+
+.. figure:: ./mpld3_logo.png
+    :target: ./mpld3_logo.html
+    :align: center
+
+    :ref:`mpld3_logo`
+
+
+
+.. raw:: html
+
+    <div style="clear: both"></div>
