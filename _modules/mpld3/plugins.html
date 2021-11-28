@@ -97,24 +97,24 @@
     <span class="n">fig</span><span class="o">.</span><span class="n">mpld3_plugins</span> <span class="o">=</span> <span class="p">[]</span></div>
 
 
-<div class="viewcode-block" id="PluginBase"><a class="viewcode-back" href="../../modules/API.html#mpld3.plugins.PluginBase">[docs]</a><span class="k">class</span> <span class="nc">PluginBase</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-<div class="viewcode-block" id="PluginBase.get_dict"><a class="viewcode-back" href="../../modules/API.html#mpld3.plugins.PluginBase.get_dict">[docs]</a>    <span class="k">def</span> <span class="nf">get_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict_</span></div>
+<span class="k">class</span> <span class="nc">PluginBase</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict_</span>
 
-<div class="viewcode-block" id="PluginBase.javascript"><a class="viewcode-back" href="../../modules/API.html#mpld3.plugins.PluginBase.javascript">[docs]</a>    <span class="k">def</span> <span class="nf">javascript</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">javascript</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;JAVASCRIPT&quot;</span><span class="p">):</span>
             <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;js_args_&quot;</span><span class="p">):</span>
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">JAVASCRIPT</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">js_args_</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">JAVASCRIPT</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="s2">&quot;&quot;</span></div>
+            <span class="k">return</span> <span class="s2">&quot;&quot;</span>
 
-<div class="viewcode-block" id="PluginBase.css"><a class="viewcode-back" href="../../modules/API.html#mpld3.plugins.PluginBase.css">[docs]</a>    <span class="k">def</span> <span class="nf">css</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">css</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;css_&quot;</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">css_</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="s2">&quot;&quot;</span></div></div>
+            <span class="k">return</span> <span class="s2">&quot;&quot;</span>
 
 
 <div class="viewcode-block" id="Reset"><a class="viewcode-back" href="../../modules/API.html#mpld3.plugins.Reset">[docs]</a><span class="k">class</span> <span class="nc">Reset</span><span class="p">(</span><span class="n">PluginBase</span><span class="p">):</span>
