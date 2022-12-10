@@ -2,10 +2,10 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>Frequently Asked Questions &#8212; Bringing Matplotlib to the Browser</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
@@ -14,7 +14,9 @@
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/theme_extras.js"></script>
     <link rel="shortcut icon" href="_static/favicon.png"/>
     <link rel="index" title="Index" href="genindex.html" />
@@ -43,9 +45,9 @@
         
         
   <section id="frequently-asked-questions">
-<span id="faq"></span><h1>Frequently Asked Questions<a class="headerlink" href="#frequently-asked-questions" title="Permalink to this headline">¶</a></h1>
+<span id="faq"></span><h1>Frequently Asked Questions<a class="headerlink" href="#frequently-asked-questions" title="Permalink to this heading">¶</a></h1>
 <section id="general">
-<h2>General<a class="headerlink" href="#general" title="Permalink to this headline">¶</a></h2>
+<h2>General<a class="headerlink" href="#general" title="Permalink to this heading">¶</a></h2>
 <ul>
 <li><p><strong>Does mpld3 work for large datasets?</strong></p>
 <p>Short answer: not really.  Mpld3, like matplolib itself, is designed for small to medium-scale visualizations, and this is unlikely to change. The reason is that mpld3 is built upon the foundation of HTML’s SVG, which is not particularly well-suited for large datasets. Plots with more than a few thousand elements will have noticeably slow response for interactive features.</p>
@@ -69,7 +71,7 @@
 </ul>
 </section>
 <section id="ipython-notebook">
-<h2>IPython Notebook<a class="headerlink" href="#ipython-notebook" title="Permalink to this headline">¶</a></h2>
+<h2>IPython Notebook<a class="headerlink" href="#ipython-notebook" title="Permalink to this heading">¶</a></h2>
 <ul>
 <li><p><strong>Why does IPython notebook freeze when I run an mpld3 example?</strong></p>
 <p>Short answer: This most often happens when someone uses <a class="reference internal" href="modules/API.html#mpld3.show" title="mpld3.show"><code class="xref py py-func docutils literal notranslate"><span class="pre">mpld3.show()</span></code></a> within the IPython notebook. Instead, you should use <a class="reference internal" href="modules/API.html#mpld3.display" title="mpld3.display"><code class="xref py py-func docutils literal notranslate"><span class="pre">mpld3.display()</span></code></a> or <a class="reference internal" href="modules/API.html#mpld3.enable_notebook" title="mpld3.enable_notebook"><code class="xref py py-func docutils literal notranslate"><span class="pre">mpld3.enable_notebook()</span></code></a>. See the <a class="reference internal" href="quickstart.html#quickstart-guide"><span class="std std-ref">Quick Start Guide</span></a> for a description of the various mpld3 functions.</p>
@@ -79,7 +81,7 @@
 </ul>
 </section>
 <section id="javascript">
-<h2>JavaScript<a class="headerlink" href="#javascript" title="Permalink to this headline">¶</a></h2>
+<h2>JavaScript<a class="headerlink" href="#javascript" title="Permalink to this heading">¶</a></h2>
 <ul>
 <li><p><strong>Where is the mpld3 JavaScript library located?</strong></p>
 <p>There is a local copy of the mpld3 library bundled with the package, which you can find in <code class="docutils literal notranslate"><span class="pre">mpld3/js/mpld3.v0.2.js</span></code> where <code class="docutils literal notranslate"><span class="pre">v0.2</span></code> indicates the library version, and matches the version of the mpld3 Python package. This local copy is used with the command <code class="docutils literal notranslate"><span class="pre">mpld3.show</span></code>, so that no internet connection is needed. Online copies of the library can be found at <a class="reference external" href="https://mpld3.github.io/js/mpld3.v0.2.js">https://mpld3.github.io/js/mpld3.v0.2.js</a>. This is automatically used within the IPython notebook, and commands like <a class="reference internal" href="modules/API.html#mpld3.save_html" title="mpld3.save_html"><code class="xref py py-func docutils literal notranslate"><span class="pre">mpld3.save_html()</span></code></a>, <a class="reference internal" href="modules/API.html#mpld3.fig_to_html" title="mpld3.fig_to_html"><code class="xref py py-func docutils literal notranslate"><span class="pre">mpld3.fig_to_html()</span></code></a>, etc.</p>
@@ -91,7 +93,7 @@
 </ul>
 </section>
 <section id="troubleshooting">
-<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline">¶</a></h2>
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this heading">¶</a></h2>
 <ul>
 <li><p><strong>Why is the notebook behavior breaking when I update mpld3?</strong></p>
 <p>Short answer: you must make sure that your notebook is pointing to the correct JavaScript libraries. The best way to do this is to follow the following steps:</p>
@@ -125,7 +127,7 @@
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2014, mpld3 developers.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>

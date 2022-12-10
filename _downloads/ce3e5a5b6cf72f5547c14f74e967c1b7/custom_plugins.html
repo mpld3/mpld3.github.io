@@ -36,6 +36,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 .highlight .m { color: var(--jp-mirror-editor-number-color) } /* Literal.Number */
 .highlight .s { color: var(--jp-mirror-editor-string-color) } /* Literal.String */
 .highlight .ow { color: var(--jp-mirror-editor-operator-color); font-weight: bold } /* Operator.Word */
+.highlight .pm { color: var(--jp-mirror-editor-punctuation-color) } /* Punctuation.Marker */
 .highlight .w { color: var(--jp-mirror-editor-variable-color) } /* Text.Whitespace */
 .highlight .mb { color: var(--jp-mirror-editor-number-color) } /* Literal.Number.Bin */
 .highlight .mf { color: var(--jp-mirror-editor-number-color) } /* Literal.Number.Float */
@@ -14464,10 +14465,6 @@ a.anchor-link {
   display: none;
 }
 
-.highlight  {
-  margin: 0.4em;
-}
-
 /* Input area styling */
 .jp-InputArea {
   overflow: hidden;
@@ -14477,9 +14474,26 @@ a.anchor-link {
   overflow: hidden;
 }
 
-.CodeMirror pre {
+.CodeMirror.cm-s-jupyter .highlight pre {
+/* weird, but --jp-code-padding defined to be 5px but 4px horizontal padding is hardcoded for pre.CodeMirror-line */
+  padding: var(--jp-code-padding) 4px;
   margin: 0;
-  padding: 0;
+
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+
+}
+
+.jp-OutputArea-output pre {
+  line-height: inherit;
+  font-family: inherit;
+}
+
+.jp-RenderedText pre {
+  color: var(--jp-content-font-color1);
+  font-size: var(--jp-code-font-size);
 }
 
 /* Using table instead of flexbox so that we can use break-inside property */
@@ -14523,6 +14537,10 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 /* Hiding the collapser by default */
 .jp-Collapser {
   display: none;
+}
+
+@page {
+    margin: 0.5in; /* Margin for each printed piece of paper */
 }
 
 @media print {
@@ -14662,9 +14680,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 
 
 <div class="jp-OutputArea jp-Cell-outputArea">
-
 <div class="jp-OutputArea-child">
-
     
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
@@ -14772,9 +14788,7 @@ if(typeof(mpld3) !== "undefined" && mpld3._mpld3IsLoaded){
 
 
 <div class="jp-OutputArea jp-Cell-outputArea">
-
 <div class="jp-OutputArea-child">
-
     
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
@@ -14872,9 +14886,7 @@ if(typeof(mpld3) !== "undefined" && mpld3._mpld3IsLoaded){
 
 
 <div class="jp-OutputArea jp-Cell-outputArea">
-
 <div class="jp-OutputArea-child">
-
     
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
@@ -14996,9 +15008,7 @@ if(typeof(mpld3) !== "undefined" && mpld3._mpld3IsLoaded){
 
 
 <div class="jp-OutputArea jp-Cell-outputArea">
-
 <div class="jp-OutputArea-child">
-
     
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
@@ -15098,7 +15108,7 @@ if(typeof(mpld3) !== "undefined" && mpld3._mpld3IsLoaded){
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>First, let's do a silly plugin which writes "hello world" on the figure:</p>
+<p>First, let's do a silly plugin which writes &quot;hello world&quot; on the figure:</p>
 
 </div>
 </div>
@@ -15150,9 +15160,7 @@ if(typeof(mpld3) !== "undefined" && mpld3._mpld3IsLoaded){
 
 
 <div class="jp-OutputArea jp-Cell-outputArea">
-
 <div class="jp-OutputArea-child">
-
     
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
@@ -15268,7 +15276,7 @@ if(typeof(mpld3) !== "undefined" && mpld3._mpld3IsLoaded){
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>It worked! Notice here that the "hello world" text <em>did not come from Python</em>, but from the javascript code defined in the plugin.  The code in the <code>JAVASCRIPT</code> class variable is injected into the javascript which defines the figure, which we can see by calling <code>`fig_to_html</code> explicitly. If you were to copy this code into an html file and open it with your browser, it would show the above figure.</p>
+<p>It worked! Notice here that the &quot;hello world&quot; text <em>did not come from Python</em>, but from the javascript code defined in the plugin.  The code in the <code>JAVASCRIPT</code> class variable is injected into the javascript which defines the figure, which we can see by calling ``fig_to_html` explicitly. If you were to copy this code into an html file and open it with your browser, it would show the above figure.</p>
 
 </div>
 </div>
@@ -15295,9 +15303,7 @@ if(typeof(mpld3) !== "undefined" && mpld3._mpld3IsLoaded){
 
 
 <div class="jp-OutputArea jp-Cell-outputArea">
-
 <div class="jp-OutputArea-child">
-
     
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
@@ -15354,7 +15360,7 @@ if(typeof(mpld3) !== "undefined" && mpld3._mpld3IsLoaded){
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p>There, right in the middle of our script, is our <code>HelloWorld</code> plugin definition!</p>
-<p>Note also that in the JSON definition at the bottom of the output, we see the following piece: <code>"plugins": [..., {"type": "helloworld"}]</code>. This is what actually tells the <code>draw_figure</code> command that we want to connect the <code>HelloWorld</code> plugin to the figure.</p>
+<p>Note also that in the JSON definition at the bottom of the output, we see the following piece: <code>&quot;plugins&quot;: [..., {&quot;type&quot;: &quot;helloworld&quot;}]</code>. This is what actually tells the <code>draw_figure</code> command that we want to connect the <code>HelloWorld</code> plugin to the figure.</p>
 
 </div>
 </div>
@@ -15380,7 +15386,7 @@ if(typeof(mpld3) !== "undefined" && mpld3._mpld3IsLoaded){
 <p>Let's take a look at the <code>HelloWorld</code> javascript code.  First we have this piece:</p>
 <div class="highlight"><pre><span></span><span class="nx">mpld3</span><span class="p">.</span><span class="nx">register_plugin</span><span class="p">(</span><span class="s2">&quot;helloworld&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">HelloWorld</span><span class="p">);</span><span class="w"></span>
 </pre></div>
-<p>This is the first piece of code you should have for every plugin. The function <code>register_plugin(key, object)</code> associates a <code>key</code> with a given plugin object, so that this key can be referenced in the figure JSON, as we saw above with the <code>"helloworld"</code> key.</p>
+<p>This is the first piece of code you should have for every plugin. The function <code>register_plugin(key, object)</code> associates a <code>key</code> with a given plugin object, so that this key can be referenced in the figure JSON, as we saw above with the <code>&quot;helloworld&quot;</code> key.</p>
 <div class="highlight"><pre><span></span><span class="nx">HelloWorld</span><span class="p">.</span><span class="nx">prototype</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Object</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">mpld3</span><span class="p">.</span><span class="nx">Plugin</span><span class="p">.</span><span class="nx">prototype</span><span class="p">);</span><span class="w"></span>
 <span class="nx">HelloWorld</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="kr">constructor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">HelloWorld</span><span class="p">;</span><span class="w"></span>
 <span class="kd">function</span><span class="w"> </span><span class="nx">HelloWorld</span><span class="p">(</span><span class="nx">fig</span><span class="p">,</span><span class="w"> </span><span class="nx">props</span><span class="p">){</span><span class="w"></span>
@@ -15417,7 +15423,7 @@ if(typeof(mpld3) !== "undefined" && mpld3._mpld3IsLoaded){
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dict_</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;helloworld&quot;</span><span class="p">}</span>
 </pre></div>
-<p>The <code>__init__</code> function simply defines a class member <code>dict_</code>, which is a JSON serializable dictionary that is used to pass options from Python to javascript. When the plugin is connected to a figure, a JSON representation of <code>dict_</code> will be put in the <code>"plugins"</code> list, as we saw in the printout above.  Every plugin should have a <code>"type"</code> element in the <code>dict_</code>, which should match the key used in <code>mpld3.register_plugin</code> on the javascript side.</p>
+<p>The <code>__init__</code> function simply defines a class member <code>dict_</code>, which is a JSON serializable dictionary that is used to pass options from Python to javascript. When the plugin is connected to a figure, a JSON representation of <code>dict_</code> will be put in the <code>&quot;plugins&quot;</code> list, as we saw in the printout above.  Every plugin should have a <code>&quot;type&quot;</code> element in the <code>dict_</code>, which should match the key used in <code>mpld3.register_plugin</code> on the javascript side.</p>
 <p>That's all there is to it!</p>
 
 </div>
@@ -15497,9 +15503,7 @@ if(typeof(mpld3) !== "undefined" && mpld3._mpld3IsLoaded){
 
 
 <div class="jp-OutputArea jp-Cell-outputArea">
-
 <div class="jp-OutputArea-child">
-
     
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
@@ -15610,7 +15614,7 @@ if(typeof(mpld3) !== "undefined" && mpld3._mpld3IsLoaded){
 <p>There are just a couple extra pieces here beyond what we saw in the previous example.  On the javascript side, we have this addition to the class prototype definition:</p>
 <div class="highlight"><pre><span></span><span class="nx">ClickInfo</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">requiredProps</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">];</span><span class="w"></span>
 </pre></div>
-<p>This tells us that the plugin expects to be passed a property named <code>"id"</code>, which in this case points to the plot elements that are the subject of the interaction.  This id is generated by the python script, and we can find it using the <code>utils.get_id</code> utility:</p>
+<p>This tells us that the plugin expects to be passed a property named <code>&quot;id&quot;</code>, which in this case points to the plot elements that are the subject of the interaction.  This id is generated by the python script, and we can find it using the <code>utils.get_id</code> utility:</p>
 
 </div>
 </div>
@@ -15637,9 +15641,7 @@ if(typeof(mpld3) !== "undefined" && mpld3._mpld3IsLoaded){
 
 
 <div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
     
     <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[9]:</div>
 
@@ -15668,7 +15670,7 @@ if(typeof(mpld3) !== "undefined" && mpld3._mpld3IsLoaded){
 <span class="nx">obj</span><span class="p">.</span><span class="nx">elements</span><span class="p">().</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;mousedown&quot;</span><span class="p">,</span><span class="w"></span>
 <span class="w">                  </span><span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span><span class="w"> </span><span class="nx">i</span><span class="p">){</span><span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;clicked on points[&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">&quot;]&quot;</span><span class="p">);});</span><span class="w"></span>
 </pre></div>
-<p>The <code>mpld3.get_element</code> function in javascript essentially does the opposite of the <code>utils.get_id</code> function in Python: it maps from the id to the Javascript object containing the points.  Once the elements of this plot object are accessed, all it takes is a simple <code>on("mousedown", ...)</code> command to add the desired behavior.</p>
+<p>The <code>mpld3.get_element</code> function in javascript essentially does the opposite of the <code>utils.get_id</code> function in Python: it maps from the id to the Javascript object containing the points.  Once the elements of this plot object are accessed, all it takes is a simple <code>on(&quot;mousedown&quot;, ...)</code> command to add the desired behavior.</p>
 
 </div>
 </div>

@@ -36,6 +36,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 .highlight .m { color: var(--jp-mirror-editor-number-color) } /* Literal.Number */
 .highlight .s { color: var(--jp-mirror-editor-string-color) } /* Literal.String */
 .highlight .ow { color: var(--jp-mirror-editor-operator-color); font-weight: bold } /* Operator.Word */
+.highlight .pm { color: var(--jp-mirror-editor-punctuation-color) } /* Punctuation.Marker */
 .highlight .w { color: var(--jp-mirror-editor-variable-color) } /* Text.Whitespace */
 .highlight .mb { color: var(--jp-mirror-editor-number-color) } /* Literal.Number.Bin */
 .highlight .mf { color: var(--jp-mirror-editor-number-color) } /* Literal.Number.Float */
@@ -14464,10 +14465,6 @@ a.anchor-link {
   display: none;
 }
 
-.highlight  {
-  margin: 0.4em;
-}
-
 /* Input area styling */
 .jp-InputArea {
   overflow: hidden;
@@ -14477,9 +14474,26 @@ a.anchor-link {
   overflow: hidden;
 }
 
-.CodeMirror pre {
+.CodeMirror.cm-s-jupyter .highlight pre {
+/* weird, but --jp-code-padding defined to be 5px but 4px horizontal padding is hardcoded for pre.CodeMirror-line */
+  padding: var(--jp-code-padding) 4px;
   margin: 0;
-  padding: 0;
+
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+
+}
+
+.jp-OutputArea-output pre {
+  line-height: inherit;
+  font-family: inherit;
+}
+
+.jp-RenderedText pre {
+  color: var(--jp-content-font-color1);
+  font-size: var(--jp-code-font-size);
 }
 
 /* Using table instead of flexbox so that we can use break-inside property */
@@ -14523,6 +14537,10 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 /* Hiding the collapser by default */
 .jp-Collapser {
   display: none;
+}
+
+@page {
+    margin: 0.5in; /* Margin for each printed piece of paper */
 }
 
 @media print {
@@ -14589,12 +14607,12 @@ The points are drag/drop-able by the user of the notebook and upon dropping the 
 <p>The model can be pretty much any $R \to R$ function, with any number of parameters.</p>
 <p>In what follows you will see it :</p>
 <ul>
-<li>(partially) applied to an "first order exponential response to an Heavyside function" (for lack of better wording on my side);</li>
+<li>(partially) applied to an &quot;first order exponential response to an Heavyside function&quot; (for lack of better wording on my side);</li>
 <li>applied to an arc-tangente.</li>
 </ul>
-<h2 id="Architecture">Architecture<a class="anchor-link" href="#Architecture">&#182;</a></h2><p>Here is how things are organized :</p>
+<h2 id="Architecture">Architecture<a class="anchor-link" href="#Architecture">&#182;</a></h2><p>Here is how things are organized :
+0. code copyied from the ClickInfo/DragPoints examples on the mpld3 side will generate updates when the user drag and drop the circles;</p>
 <ol>
-<li>code copyied from the ClickInfo/DragPoints examples on the mpld3 side will generate updates when the user drag and drop the circles;</li>
 <li>these updates are the new coordinates of a given point of the cloud;</li>
 <li>the update trigger the 'change' event on a text widget from IPython (code taken from the custom widget example);</li>
 <li>IPython cogs and wheels transmit the update back to the IPython server side;</li>
@@ -14757,18 +14775,17 @@ The points are drag/drop-able by the user of the notebook and upon dropping the 
 
 
 <div class="jp-OutputArea jp-Cell-outputArea">
-
 <div class="jp-OutputArea-child">
-
     
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
 
 
 
-<div id="6c8a79bf-b057-4ad3-adc7-a143bb1b1999" class="jp-RenderedJavaScript jp-OutputArea-output " data-mime-type="application/javascript">
+
+<div id="b5d5c5bb-ae2a-4afe-9bb7-81c393a8fd34" class="jp-RenderedJavaScript jp-OutputArea-output " data-mime-type="application/javascript">
 <script type="text/javascript">
-var element = document.getElementById('6c8a79bf-b057-4ad3-adc7-a143bb1b1999');
+var element = document.getElementById('b5d5c5bb-ae2a-4afe-9bb7-81c393a8fd34');
 //widget javascript side
 require(["widgets/js/widget", "widgets/js/manager"], function(widget, manager){
     // is based on the DatePickerView
@@ -14984,9 +15001,7 @@ require(["widgets/js/widget", "widgets/js/manager"], function(widget, manager){
 
 
 <div class="jp-OutputArea jp-Cell-outputArea">
-
 <div class="jp-OutputArea-child">
-
     
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
@@ -14996,9 +15011,7 @@ require(["widgets/js/widget", "widgets/js/manager"], function(widget, manager){
 </pre>
 </div>
 </div>
-
 <div class="jp-OutputArea-child">
-
     
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
@@ -15227,9 +15240,7 @@ DragPlugin.prototype.draw = function(){
 
 
 <div class="jp-OutputArea jp-Cell-outputArea">
-
 <div class="jp-OutputArea-child">
-
     
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 

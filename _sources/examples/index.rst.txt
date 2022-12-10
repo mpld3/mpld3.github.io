@@ -40,49 +40,37 @@ Example Gallery
 .. toctree::
    :hidden:
 
-   ./mouse_position
-
-   ./custom_plugin
-
-   ./networkxd3forcelayout
+   ./mpld3_logo
 
    ./heart_path
 
-   ./drag_points
+   ./linked_brush
+
+   ./networkxd3forcelayout
 
    ./html_tooltips
 
-   ./interactive_legend
+   ./drag_points
 
    ./random_walk
 
+   ./custom_plugin
+
    ./scatter_tooltip
 
-   ./linked_brush
+   ./mouse_position
 
-   ./mpld3_logo
-
-
+   ./interactive_legend
 
 
 
-.. figure:: ./mouse_position.png
-    :target: ./mouse_position.html
+
+
+.. figure:: ./mpld3_logo.png
+    :target: ./mpld3_logo.html
     :align: center
 
-    :ref:`mouse_position`
-
-.. figure:: ./custom_plugin.png
-    :target: ./custom_plugin.html
-    :align: center
-
-    :ref:`custom_plugin`
-
-.. figure:: ./networkxd3forcelayout.png
-    :target: ./networkxd3forcelayout.html
-    :align: center
-
-    :ref:`networkxd3forcelayout`
+    :ref:`mpld3_logo`
 
 .. figure:: ./heart_path.png
     :target: ./heart_path.html
@@ -90,11 +78,17 @@ Example Gallery
 
     :ref:`heart_path`
 
-.. figure:: ./drag_points.png
-    :target: ./drag_points.html
+.. figure:: ./linked_brush.png
+    :target: ./linked_brush.html
     :align: center
 
-    :ref:`drag_points`
+    :ref:`linked_brush`
+
+.. figure:: ./networkxd3forcelayout.png
+    :target: ./networkxd3forcelayout.html
+    :align: center
+
+    :ref:`networkxd3forcelayout`
 
 .. figure:: ./html_tooltips.png
     :target: ./html_tooltips.html
@@ -102,11 +96,11 @@ Example Gallery
 
     :ref:`html_tooltips`
 
-.. figure:: ./interactive_legend.png
-    :target: ./interactive_legend.html
+.. figure:: ./drag_points.png
+    :target: ./drag_points.html
     :align: center
 
-    :ref:`interactive_legend`
+    :ref:`drag_points`
 
 .. figure:: ./random_walk.png
     :target: ./random_walk.html
@@ -114,23 +108,29 @@ Example Gallery
 
     :ref:`random_walk`
 
+.. figure:: ./custom_plugin.png
+    :target: ./custom_plugin.html
+    :align: center
+
+    :ref:`custom_plugin`
+
 .. figure:: ./scatter_tooltip.png
     :target: ./scatter_tooltip.html
     :align: center
 
     :ref:`scatter_tooltip`
 
-.. figure:: ./linked_brush.png
-    :target: ./linked_brush.html
+.. figure:: ./mouse_position.png
+    :target: ./mouse_position.html
     :align: center
 
-    :ref:`linked_brush`
+    :ref:`mouse_position`
 
-.. figure:: ./mpld3_logo.png
-    :target: ./mpld3_logo.html
+.. figure:: ./interactive_legend.png
+    :target: ./interactive_legend.html
     :align: center
 
-    :ref:`mpld3_logo`
+    :ref:`interactive_legend`
 
 
 

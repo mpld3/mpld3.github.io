@@ -8,11 +8,11 @@ Notebook Examples
    
    ./custom_plugins
    
-   ./mpld3_demo
-   
-   ./interactive_legend
-   
    ./sliderPlugin
    
+   ./mpld3_demo
+   
    ./custom_widgin_general
+   
+   ./interactive_legend
    
