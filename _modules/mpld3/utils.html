@@ -1,29 +1,23 @@
 
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>mpld3.utils &#8212; Bringing Matplotlib to the Browser</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/mpld3.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mpld3.css?v=f78f1748" />
     <link rel="stylesheet" href="../../_static/print.css" type="text/css" />
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/documentation_options.js?v=f1e22e58"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/theme_extras.js"></script>
-    <link rel="shortcut icon" href="../../_static/favicon.png"/>
+    <link rel="icon" href="../../_static/favicon.png"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
   </head><body>
-      <div class="header"><a href="../../index.html">
-          <img class="leftlogo" src="../../_static/mpld3-medium.png" alt="Logo"/>
-        </a><h1 class="heading"><a href="../../index.html">
+      <div class="header"><h1 class="heading"><a href="../../index.html">
           <span>Bringing Matplotlib to the Browser</span></a></h1>
         <h2 class="heading"><span>mpld3.utils</span></h2>
       </div>
@@ -44,19 +38,26 @@
 <span class="sd">Utility routines for the mpld3 package</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">urls</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
+<span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">path</span>
+<span class="kn">import</span> <span class="nn">csv</span>
+<span class="kn">import</span> <span class="nn">inspect</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">urls</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="c1"># Make sure that DeprecationWarning gets printed</span>
 <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;always&#39;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">DeprecationWarning</span><span class="p">,</span> <span class="n">module</span><span class="o">=</span><span class="s1">&#39;mpld3&#39;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="html_id_ok"><a class="viewcode-back" href="../../modules/API.html#mpld3.utils.html_id_ok">[docs]</a><span class="k">def</span> <span class="nf">html_id_ok</span><span class="p">(</span><span class="n">objid</span><span class="p">,</span> <span class="n">html5</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Check whether objid is valid as an HTML id attribute.</span>
+<div class="viewcode-block" id="html_id_ok">
+<a class="viewcode-back" href="../../modules/API.html#mpld3.utils.html_id_ok">[docs]</a>
+<span class="k">def</span> <span class="nf">html_id_ok</span><span class="p">(</span><span class="n">objid</span><span class="p">,</span> <span class="n">html5</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check whether objid is valid as an HTML id attribute.</span>
 
 <span class="sd">    If html5 == True, then use the more liberal html5 rules.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -66,8 +67,11 @@
         <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;^[a-zA-Z][a-zA-Z0-9\-\.\:\_]*$&quot;</span><span class="p">,</span> <span class="n">objid</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="get_id"><a class="viewcode-back" href="../../modules/API.html#mpld3.utils.get_id">[docs]</a><span class="k">def</span> <span class="nf">get_id</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;el&quot;</span><span class="p">,</span> <span class="n">warn_on_invalid</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Get a unique id for the object&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="get_id">
+<a class="viewcode-back" href="../../modules/API.html#mpld3.utils.get_id">[docs]</a>
+<span class="k">def</span> <span class="nf">get_id</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;el&quot;</span><span class="p">,</span> <span class="n">warn_on_invalid</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get a unique id for the object&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">suffix</span><span class="p">:</span>
         <span class="n">suffix</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">prefix</span><span class="p">:</span>
@@ -81,8 +85,11 @@
     <span class="k">return</span> <span class="n">objid</span></div>
 
 
-<div class="viewcode-block" id="deprecated"><a class="viewcode-back" href="../../modules/API.html#mpld3.utils.deprecated">[docs]</a><span class="k">def</span> <span class="nf">deprecated</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">old_name</span><span class="p">,</span> <span class="n">new_name</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Decorator to mark functions as deprecated.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="deprecated">
+<a class="viewcode-back" href="../../modules/API.html#mpld3.utils.deprecated">[docs]</a>
+<span class="k">def</span> <span class="nf">deprecated</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">old_name</span><span class="p">,</span> <span class="n">new_name</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Decorator to mark functions as deprecated.&quot;&quot;&quot;</span>
     <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">new_func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">((</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2"> is deprecated and will be removed.  &quot;</span>
@@ -94,8 +101,11 @@
     <span class="k">return</span> <span class="n">new_func</span></div>
 
 
-<div class="viewcode-block" id="write_ipynb_local_js"><a class="viewcode-back" href="../../modules/API.html#mpld3.utils.write_ipynb_local_js">[docs]</a><span class="k">def</span> <span class="nf">write_ipynb_local_js</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">d3_src</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mpld3_src</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="write_ipynb_local_js">
+<a class="viewcode-back" href="../../modules/API.html#mpld3.utils.write_ipynb_local_js">[docs]</a>
+<span class="k">def</span> <span class="nf">write_ipynb_local_js</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">d3_src</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mpld3_src</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Write the mpld3 and d3 javascript libraries to the given file location.</span>
 
 <span class="sd">    This utility is used by the IPython notebook tools to enable easy use</span>
@@ -150,7 +160,7 @@
         <span class="n">prefix</span> <span class="o">=</span> <span class="s1">&#39;/nbextensions/&#39;</span>
 
         <span class="k">def</span> <span class="nf">_install_nbextension</span><span class="p">(</span><span class="n">extensions</span><span class="p">):</span>
-            <span class="sd">&quot;&quot;&quot;Wrapper for IPython.html.install_nbextension.&quot;&quot;&quot;</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Wrapper for IPython.html.install_nbextension.&quot;&quot;&quot;</span>
             <span class="kn">import</span> <span class="nn">IPython</span>
             <span class="k">if</span> <span class="n">IPython</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">extension</span> <span class="ow">in</span> <span class="n">extensions</span><span class="p">:</span>
@@ -190,6 +200,36 @@
 
 
     <span class="k">return</span> <span class="n">prefix</span> <span class="o">+</span> <span class="n">d3js</span><span class="p">,</span> <span class="n">prefix</span> <span class="o">+</span> <span class="n">mpld3js</span></div>
+
+
+
+<div class="viewcode-block" id="load_test_dataset">
+<a class="viewcode-back" href="../../modules/API.html#mpld3.utils.load_test_dataset">[docs]</a>
+<span class="k">def</span> <span class="nf">load_test_dataset</span><span class="p">(</span><span class="n">dataset</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Loads test data from included CSV files.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dataset : string</span>
+<span class="sd">        The name of the dataset. Available options are: &quot;iris&quot;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">curr_dir</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getfile</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="kc">None</span><span class="p">))</span>  <span class="c1"># oof</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">curr_dir</span><span class="p">,</span> <span class="s2">&quot;testdata&quot;</span><span class="p">,</span> <span class="n">dataset</span> <span class="o">+</span> <span class="s2">&quot;.csv&quot;</span><span class="p">),</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csv_file</span><span class="p">:</span>
+        <span class="n">data_file</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">csv_file</span><span class="p">)</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">data_file</span><span class="p">)</span>
+        <span class="n">n_samples</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">temp</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">n_features</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">temp</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">target_names</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">temp</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">n_samples</span><span class="p">,</span> <span class="n">n_features</span><span class="p">))</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">n_samples</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ir</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data_file</span><span class="p">):</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">ir</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+            <span class="n">target</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">ir</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">target_names</span></div>
+
 </pre></div>
 
       </div>
@@ -202,8 +242,8 @@
       </div>
 
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2014, mpld3 developers.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    &#169; Copyright 2014, mpld3 developers.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     </div>
   </body>
 </html>

@@ -1,29 +1,23 @@
 
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>mpld3.plugins &#8212; Bringing Matplotlib to the Browser</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/mpld3.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mpld3.css?v=f78f1748" />
     <link rel="stylesheet" href="../../_static/print.css" type="text/css" />
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/documentation_options.js?v=f1e22e58"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/theme_extras.js"></script>
-    <link rel="shortcut icon" href="../../_static/favicon.png"/>
+    <link rel="icon" href="../../_static/favicon.png"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
   </head><body>
-      <div class="header"><a href="../../index.html">
-          <img class="leftlogo" src="../../_static/mpld3-medium.png" alt="Logo"/>
-        </a><h1 class="heading"><a href="../../index.html">
+      <div class="header"><h1 class="heading"><a href="../../index.html">
           <span>Bringing Matplotlib to the Browser</span></a></h1>
         <h2 class="heading"><span>mpld3.plugins</span></h2>
       </div>
@@ -64,14 +58,19 @@
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">get_id</span>
 
 
-<div class="viewcode-block" id="get_plugins"><a class="viewcode-back" href="../../modules/API.html#mpld3.plugins.get_plugins">[docs]</a><span class="k">def</span> <span class="nf">get_plugins</span><span class="p">(</span><span class="n">fig</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Get the list of plugins in the figure&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="get_plugins">
+<a class="viewcode-back" href="../../modules/API.html#mpld3.plugins.get_plugins">[docs]</a>
+<span class="k">def</span> <span class="nf">get_plugins</span><span class="p">(</span><span class="n">fig</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the list of plugins in the figure&quot;&quot;&quot;</span>
     <span class="n">connect</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">fig</span><span class="o">.</span><span class="n">mpld3_plugins</span></div>
 
 
-<div class="viewcode-block" id="connect"><a class="viewcode-back" href="../../modules/API.html#mpld3.plugins.connect">[docs]</a><span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="o">*</span><span class="n">plugins</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Connect one or more plugins to a figure</span>
+
+<div class="viewcode-block" id="connect">
+<a class="viewcode-back" href="../../modules/API.html#mpld3.plugins.connect">[docs]</a>
+<span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="o">*</span><span class="n">plugins</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Connect one or more plugins to a figure</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -98,9 +97,13 @@
         <span class="n">fig</span><span class="o">.</span><span class="n">mpld3_plugins</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">plugin</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="clear"><a class="viewcode-back" href="../../modules/API.html#mpld3.plugins.clear">[docs]</a><span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="n">fig</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Clear all plugins from the figure, including defaults&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="clear">
+<a class="viewcode-back" href="../../modules/API.html#mpld3.plugins.clear">[docs]</a>
+<span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="n">fig</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Clear all plugins from the figure, including defaults&quot;&quot;&quot;</span>
     <span class="n">fig</span><span class="o">.</span><span class="n">mpld3_plugins</span> <span class="o">=</span> <span class="p">[]</span></div>
+
 
 
 <span class="k">class</span> <span class="nc">PluginBase</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -123,13 +126,18 @@
             <span class="k">return</span> <span class="s2">&quot;&quot;</span>
 
 
-<div class="viewcode-block" id="Reset"><a class="viewcode-back" href="../../modules/API.html#mpld3.plugins.Reset">[docs]</a><span class="k">class</span> <span class="nc">Reset</span><span class="p">(</span><span class="n">PluginBase</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A Plugin to add a reset button&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Reset">
+<a class="viewcode-back" href="../../modules/API.html#mpld3.plugins.Reset">[docs]</a>
+<span class="k">class</span> <span class="nc">Reset</span><span class="p">(</span><span class="n">PluginBase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A Plugin to add a reset button&quot;&quot;&quot;</span>
     <span class="n">dict_</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;reset&quot;</span><span class="p">}</span></div>
 
 
-<div class="viewcode-block" id="MousePosition"><a class="viewcode-back" href="../../modules/API.html#mpld3.plugins.MousePosition">[docs]</a><span class="k">class</span> <span class="nc">MousePosition</span><span class="p">(</span><span class="n">PluginBase</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A Plugin to display coordinates for the current mouse position</span>
+
+<div class="viewcode-block" id="MousePosition">
+<a class="viewcode-back" href="../../modules/API.html#mpld3.plugins.MousePosition">[docs]</a>
+<span class="k">class</span> <span class="nc">MousePosition</span><span class="p">(</span><span class="n">PluginBase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A Plugin to display coordinates for the current mouse position</span>
 
 <span class="sd">    Example</span>
 <span class="sd">    -------</span>
@@ -147,8 +155,11 @@
                       <span class="s2">&quot;fmt&quot;</span><span class="p">:</span> <span class="n">fmt</span><span class="p">}</span></div>
 
 
-<div class="viewcode-block" id="Zoom"><a class="viewcode-back" href="../../modules/API.html#mpld3.plugins.Zoom">[docs]</a><span class="k">class</span> <span class="nc">Zoom</span><span class="p">(</span><span class="n">PluginBase</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A Plugin to add zoom behavior to the plot</span>
+
+<div class="viewcode-block" id="Zoom">
+<a class="viewcode-back" href="../../modules/API.html#mpld3.plugins.Zoom">[docs]</a>
+<span class="k">class</span> <span class="nc">Zoom</span><span class="p">(</span><span class="n">PluginBase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A Plugin to add zoom behavior to the plot</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -170,8 +181,11 @@
                       <span class="s2">&quot;enabled&quot;</span><span class="p">:</span> <span class="n">enabled</span><span class="p">}</span></div>
 
 
-<div class="viewcode-block" id="BoxZoom"><a class="viewcode-back" href="../../modules/API.html#mpld3.plugins.BoxZoom">[docs]</a><span class="k">class</span> <span class="nc">BoxZoom</span><span class="p">(</span><span class="n">PluginBase</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A Plugin to add box-zoom behavior to the plot</span>
+
+<div class="viewcode-block" id="BoxZoom">
+<a class="viewcode-back" href="../../modules/API.html#mpld3.plugins.BoxZoom">[docs]</a>
+<span class="k">class</span> <span class="nc">BoxZoom</span><span class="p">(</span><span class="n">PluginBase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A Plugin to add box-zoom behavior to the plot</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -193,8 +207,11 @@
                       <span class="s2">&quot;enabled&quot;</span><span class="p">:</span> <span class="n">enabled</span><span class="p">}</span></div>
 
 
-<div class="viewcode-block" id="PointLabelTooltip"><a class="viewcode-back" href="../../modules/API.html#mpld3.plugins.PointLabelTooltip">[docs]</a><span class="k">class</span> <span class="nc">PointLabelTooltip</span><span class="p">(</span><span class="n">PluginBase</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A Plugin to enable a tooltip: text which hovers over points.</span>
+
+<div class="viewcode-block" id="PointLabelTooltip">
+<a class="viewcode-back" href="../../modules/API.html#mpld3.plugins.PointLabelTooltip">[docs]</a>
+<span class="k">class</span> <span class="nc">PointLabelTooltip</span><span class="p">(</span><span class="n">PluginBase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A Plugin to enable a tooltip: text which hovers over points.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -233,8 +250,11 @@
                       <span class="s2">&quot;location&quot;</span><span class="p">:</span> <span class="n">location</span><span class="p">}</span></div>
 
 
-<div class="viewcode-block" id="LineLabelTooltip"><a class="viewcode-back" href="../../modules/API.html#mpld3.plugins.LineLabelTooltip">[docs]</a><span class="k">class</span> <span class="nc">LineLabelTooltip</span><span class="p">(</span><span class="n">PluginBase</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A Plugin to enable a tooltip: text which hovers over a line.</span>
+
+<div class="viewcode-block" id="LineLabelTooltip">
+<a class="viewcode-back" href="../../modules/API.html#mpld3.plugins.LineLabelTooltip">[docs]</a>
+<span class="k">class</span> <span class="nc">LineLabelTooltip</span><span class="p">(</span><span class="n">PluginBase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A Plugin to enable a tooltip: text which hovers over a line.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -269,8 +289,9 @@
                       <span class="s2">&quot;location&quot;</span><span class="p">:</span> <span class="n">location</span><span class="p">}</span></div>
 
 
+
 <span class="k">class</span> <span class="nc">LinkedBrush</span><span class="p">(</span><span class="n">PluginBase</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A Plugin to enable linked brushing between plots</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A Plugin to enable linked brushing between plots</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -318,8 +339,10 @@
                       <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">get_id</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">suffix</span><span class="p">)}</span>
 
 
-<div class="viewcode-block" id="PointHTMLTooltip"><a class="viewcode-back" href="../../modules/API.html#mpld3.plugins.PointHTMLTooltip">[docs]</a><span class="k">class</span> <span class="nc">PointHTMLTooltip</span><span class="p">(</span><span class="n">PluginBase</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A Plugin to enable an HTML tooltip:</span>
+<div class="viewcode-block" id="PointHTMLTooltip">
+<a class="viewcode-back" href="../../modules/API.html#mpld3.plugins.PointHTMLTooltip">[docs]</a>
+<span class="k">class</span> <span class="nc">PointHTMLTooltip</span><span class="p">(</span><span class="n">PluginBase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A Plugin to enable an HTML tooltip:</span>
 <span class="sd">    formated text which hovers over points.</span>
 
 <span class="sd">    Parameters</span>
@@ -409,8 +432,9 @@
                       <span class="s2">&quot;voffset&quot;</span><span class="p">:</span> <span class="n">voffset</span><span class="p">}</span></div>
 
 
+
 <span class="k">class</span> <span class="nc">LineHTMLTooltip</span><span class="p">(</span><span class="n">PluginBase</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A Plugin to enable an HTML tooltip:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A Plugin to enable an HTML tooltip:</span>
 <span class="sd">    formated text which hovers over points.</span>
 
 <span class="sd">    Parameters</span>
@@ -487,7 +511,7 @@
 
 
 <span class="k">class</span> <span class="nc">InteractiveLegendPlugin</span><span class="p">(</span><span class="n">PluginBase</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A plugin for an interactive legends.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A plugin for an interactive legends.</span>
 
 <span class="sd">    Inspired by http://bl.ocks.org/simzou/6439398</span>
 
@@ -729,7 +753,7 @@
                       <span class="s2">&quot;legend_offset&quot;</span><span class="p">:</span> <span class="n">legend_offset</span><span class="p">}</span>
 
     <span class="k">def</span> <span class="nf">_determine_mpld3ids</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plot_elements</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Helper function to get the mpld3_id for each</span>
 <span class="sd">        of the specified elements.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -763,7 +787,7 @@
 
 
 <span class="k">class</span> <span class="nc">PointClickableHTMLTooltip</span><span class="p">(</span><span class="n">PluginBase</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A plugin for pop-up windows with data with rich HTML</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A plugin for pop-up windows with data with rich HTML</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -863,7 +887,7 @@
 
 
 <span class="k">class</span> <span class="nc">MouseXPosition</span><span class="p">(</span><span class="n">PluginBase</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Like MousePosition, but only show the X coordinate&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Like MousePosition, but only show the X coordinate&quot;&quot;&quot;</span>
 
     <span class="n">JAVASCRIPT</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">  mpld3.register_plugin(&quot;mousexposition&quot;, MouseXPositionPlugin);</span>
@@ -894,7 +918,7 @@
 <span class="s2">      });</span>
 <span class="s2">    }</span>
 <span class="s2">  };&quot;&quot;&quot;</span>
-    <span class="sd">&quot;&quot;&quot;A Plugin to display coordinates for the current mouse position</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A Plugin to display coordinates for the current mouse position</span>
 
 <span class="sd">    Example</span>
 <span class="sd">    -------</span>
@@ -924,8 +948,8 @@
       </div>
 
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2014, mpld3 developers.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    &#169; Copyright 2014, mpld3 developers.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     </div>
   </body>
 </html>
